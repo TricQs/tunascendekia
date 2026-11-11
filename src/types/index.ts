@@ -10,13 +10,23 @@ export interface FormDataType {
   paketPilihan: string;
 }
 
+export interface AlgorithmStep {
+  stepNumber: number;
+  title: string;
+  formula: string;
+  explanation: string;
+  highlightBadge: string;
+}
+
 export interface HotsTopic {
   id: 'math' | 'science' | 'tka';
   label: string;
   tag: string;
   level: string;
   question: string;
-  stepHtml: string;
+  algorithmName: string;
+  finalAnswer: string;
+  steps: AlgorithmStep[];
 }
 
 export interface PillarCardData {
@@ -52,4 +62,3 @@ export interface FaqItemData {
   question: string;
   answer: string;
 }
-

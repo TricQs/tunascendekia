@@ -6,24 +6,132 @@ export const HOTS_TOPICS: HotsTopic[] = [
     label: 'Matematika OSN',
     tag: '⚡ BEDAH SOAL HOTS • TEORI BILANGAN',
     level: 'Level: OSN Provinsi',
-    question: 'Tentukan banyaknya pasangan bilangan bulat positif (a, b) sehingga KPK(a, b) + FPB(a, b) = a · b − 2026.',
-    stepHtml: '<strong>Konsep Kunci (Bukan Hafalan):</strong> Misalkan d = FPB(a, b), maka a = d·x dan b = d·y dengan FPB(x, y) = 1. Substitusi menghasilkan faktorisasi aljabar terstruktur: <strong>(d·x − 1)(d·y − 1) = d·x·y − d + 1</strong>.',
+    question:
+      'Tentukan banyaknya pasangan bilangan bulat positif (a, b) sehingga KPK(a, b) + FPB(a, b) = a · b − 2026.',
+    algorithmName: 'Algoritma Parameterisasi FPB & Dekomposisi Prima',
+    finalAnswer: '8 Pasangan Solusi (a, b)',
+    steps: [
+      {
+        stepNumber: 1,
+        title: 'Parameterisasi Koprima (Reduksi FPB)',
+        formula: 'd = FPB(a, b)  ⇒  a = d·x,  b = d·y   dengan FPB(x, y) = 1',
+        explanation:
+          'Substitusi KPK(a, b) = d·x·y ke persamaan awal menghasilkan bentuk terfaktorisasi terhadap variabel d.',
+        highlightBadge: 'Langkah 1/4 • Reduksi Variabel',
+      },
+      {
+        stepNumber: 2,
+        title: 'Uji Keterbagian & Pemangkasan Ruang Cari',
+        formula: 'd · (d·x·y − x·y − 1) = 2026 = 2 × 1013',
+        explanation:
+          'Karena d wajib membagi 2026, ruang pencarian dipangkas drastis menjadi 4 kandidat faktor saja: d ∈ {1, 2, 1013, 2026}.',
+        highlightBadge: 'Langkah 2/4 • Prune Search Space',
+      },
+      {
+        stepNumber: 3,
+        title: 'Eliminasi Cabang & Faktorisasi Prima',
+        formula: 'Uji d = 2  ⇒  x·y − 1 = 1013  ⇒  x·y = 1014 = 2¹ × 3¹ × 13²',
+        explanation:
+          'Kandidat d = 1, 1013, 2026 tidak menghasilkan bilangan bulat. Untuk d = 2 diperoleh x·y = 1014 yang memiliki 3 blok faktor prima saling lepas.',
+        highlightBadge: 'Langkah 3/4 • Dekomposisi Prima',
+      },
+      {
+        stepNumber: 4,
+        title: 'Kombinatorika Pasangan Koprima',
+        formula: 'Banyak Solusi = 2ᵏ = 2³ = 8 pasangan (a, b)',
+        explanation:
+          'Karena FPB(x, y) = 1, ketiga blok prima {2, 3, 169} didistribusikan secara independen ke x atau y, menghasilkan tepat 8 pasangan solusi.',
+        highlightBadge: 'Langkah 4/4 • Solusi Terverifikasi',
+      },
+    ],
   },
   {
     id: 'science',
     label: 'Fisika & Sains',
     tag: '🔬 BEDAH SOAL HOTS • MEKANIKA & ENERGI',
     level: 'Level: OSN Kota / Provinsi',
-    question: 'Sebuah balok bermassa m meluncur tanpa gesekan pada lintasan lengkung lalu memasuki bidang kasar dengan koefisien gesek μ(x) = μ₀·x. Tentukan jarak henti maksimum!',
-    stepHtml: '<strong>Konsep Kunci (Deep Concept):</strong> Gunakan Teorema Usaha-Energi dengan integrasi gaya non-konservatif: <strong>m·g·h = ∫ μ₀·x·m·g dx = ½ μ₀·m·g·x²</strong>, menghasilkan <strong>x = √(2h / μ₀)</strong>.',
+    question:
+      'Sebuah balok bermassa m meluncur tanpa gesekan dari ketinggian h lalu memasuki bidang kasar dengan koefisien gesek μ(x) = μ₀·x. Tentukan jarak henti maksimum!',
+    algorithmName: 'Algoritma Integrasi Usaha Non-Konservatif',
+    finalAnswer: 'x_maks = √(2h / μ₀)',
+    steps: [
+      {
+        stepNumber: 1,
+        title: 'Konservasi Energi Mekanik Awal',
+        formula: 'E_p(awal) = m·g·h  →  E_k(0) = ½·m·v₀² = m·g·h',
+        explanation:
+          'Saat balok menuruni lintasan lengkung licin hingga titik x = 0, seluruh energi potensial berubah menjadi energi kinetik maksimum.',
+        highlightBadge: 'Langkah 1/4 • Konversi Energi',
+      },
+      {
+        stepNumber: 2,
+        title: 'Pemodelan Gaya Gesek Variabel terhadap Posisi',
+        formula: 'f_k(x) = μ(x) · N = (μ₀ · x) · m · g',
+        explanation:
+          'Koefisien gesek meningkat secara linier terhadap posisi x, sehingga perlambatan tidak konstan dan harus dianalisis melalui grafik gaya.',
+        highlightBadge: 'Langkah 2/4 • Gaya Fungsi Posisi',
+      },
+      {
+        stepNumber: 3,
+        title: 'Integrasi Luas Daerah Usaha Disipasi',
+        formula: 'W_gesek = ∫₀ˣ (μ₀·m·g·x) dx = ½ · μ₀ · m · g · x²',
+        explanation:
+          'Total energi yang diserap lintasan kasar setara dengan luas segitiga di bawah kurva gaya gesek f_k(x) dari 0 hingga x.',
+        highlightBadge: 'Langkah 3/4 • Integrasi Kurva',
+      },
+      {
+        stepNumber: 4,
+        title: 'Titik Henti Maksimum (E_awal = W_gesek)',
+        formula: 'm·g·h = ½·μ₀·m·g·x²  ⇒  x_maks = √(2h / μ₀)',
+        explanation:
+          'Variabel massa m dan gravitasi g saling meniadakan, menghasilkan jarak henti eksak yang hanya bergantung pada h dan μ₀.',
+        highlightBadge: 'Langkah 4/4 • Ekuilibrium Energi',
+      },
+    ],
   },
   {
     id: 'tka',
     label: 'Penalaran TKA',
     tag: '🧠 BEDAH SOAL HOTS • PENALARAN KUANTITATIF TKA',
     level: 'Level: Seleksi Unggulan & PTN',
-    question: 'Jika rasio efisiensi panel A dan B adalah 3 : 5 sementara laju degradasi tahunannya masing-masing 4% dan 10%, pada tahun ke berapa output keduanya setara?',
-    stepHtml: '<strong>Konsep Kunci (Nalar Analitis):</strong> Pemodelan diskrit eksponensial <strong>3·(0,96)ⁿ = 5·(0,90)ⁿ</strong> diselesaikan dengan perbandingan rasio logaritmik cepat tanpa kalkulator.',
+    question:
+      'Jika rasio efisiensi panel A dan B adalah 3 : 5 sementara laju degradasi tahunannya masing-masing 4% dan 10%, pada tahun ke berapa output keduanya setara?',
+    algorithmName: 'Algoritma Fast Exponentiation & Konvergensi Rasio',
+    finalAnswer: 'Tahun ke-8 (n ≈ 7,92)',
+    steps: [
+      {
+        stepNumber: 1,
+        title: 'Pemodelan Peluruhan Eksponensial Diskrit',
+        formula: 'P_A(n) = 3 · (0,96)ⁿ   dan   P_B(n) = 5 · (0,90)ⁿ',
+        explanation:
+          'Degradasi 4% menyisakan efisiensi 96% per tahun, sedangkan degradasi 10% menyisakan 90% per tahun.',
+        highlightBadge: 'Langkah 1/4 • Formulasi Fungsi',
+      },
+      {
+        stepNumber: 2,
+        title: 'Normalisasi Rasio Pertumbuhan Relatif',
+        formula: '(0,96 / 0,90)ⁿ = 5 / 3  ⇒  (16 / 15)ⁿ ≈ 1,667',
+        explanation:
+          'Bagi kedua ruas sehingga membentuk basis pecahan tunggal 16/15 yang mudah diestimasi tanpa kalkulator.',
+        highlightBadge: 'Langkah 2/4 • Reduksi Rasio 16/15',
+      },
+      {
+        stepNumber: 3,
+        title: 'Iterasi Pangkat Dua (Binary Doubling)',
+        formula: 'n=2 → 1,138  |  n=4 → 1,294  |  n=8 → (1,294)² ≈ 1,675',
+        explanation:
+          'Kuadratkan nilai secara beruntun (n = 1 → 2 → 4 → 8) untuk melompati perhitungan manual satu per satu.',
+        highlightBadge: 'Langkah 3/4 • O(log n) Doubling',
+      },
+      {
+        stepNumber: 4,
+        title: 'Deteksi Titik Potong Kurva Efisiensi',
+        formula: '(16/15)⁸ ≈ 1,675 > 1,667  ⇒  Konvergen di Tahun ke-8',
+        explanation:
+          'Kurva efisiensi Panel A menyusul Panel B tepat menjelang akhir tahun ke-8, diselesaikan dalam waktu kurang dari 40 detik.',
+        highlightBadge: 'Langkah 4/4 • Titik Konvergensi',
+      },
+    ],
   },
 ];
 
@@ -165,4 +273,3 @@ export const FAQ_DATA: FaqItemData[] = [
       'Siswa cukup menggunakan laptop, PC, atau tablet yang terhubung dengan koneksi internet stabil serta aplikasi Zoom. Seluruh modul dan simulasi CBT dapat diakses langsung melalui browser tanpa instalasi software tambahan yang berat.',
   },
 ];
-

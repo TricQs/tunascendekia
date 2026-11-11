@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { HOTS_TOPICS } from '../data/content';
-import { HotsTopic } from '../types';
+import React from 'react';
 import { ArrowRightIcon, ZoomLiveIcon, MedalAwardIcon, CheckIcon } from './Icons';
+import { ZoomAlgorithmVisualizer } from './ZoomAlgorithmVisualizer';
 
 interface HeroSectionProps {
   onDaftarTestClick: () => void;
@@ -12,10 +11,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   onDaftarTestClick,
   onLihatPaketClick,
 }) => {
-  const [activeTopicId, setActiveTopicId] = useState<'math' | 'science' | 'tka'>('math');
-  const currentTopic: HotsTopic =
-    HOTS_TOPICS.find((t) => t.id === activeTopicId) || HOTS_TOPICS[0];
-
   return (
     <section className="hero-section" id="beranda">
       <div className="container">
@@ -67,93 +62,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </div>
           </div>
 
-          {/* Hero Right Visual: Flat UI Mockup of Live Interactive Zoom Class */}
+          {/* Hero Right Visual: Interactive Live Zoom Class + Step-by-Step Algorithm Visualizer */}
           <div className="hero-visual">
-            <div className="zoom-mockup-card" aria-label="Simulasi Kelas Interaktif Zoom TunasCendekia">
-              {/* Zoom Topbar */}
-              <div className="zoom-topbar">
-                <div className="window-dots" aria-hidden="true">
-                  <span className="window-dot dot-red" />
-                  <span className="window-dot dot-amber" />
-                  <span className="window-dot dot-green" />
-                </div>
-                <div className="zoom-session-badge">
-                  <span className="live-pulse" />
-                  <span>LIVE ZOOM INTERAKTIF • 2 ARAH</span>
-                </div>
-                <div className="zoom-Capacity-pill">12/15 Siswa Aktif</div>
-              </div>
-
-              {/* Zoom Body */}
-              <div className="zoom-body">
-                {/* Topic Switcher Tabs */}
-                <div className="mockup-tabs" role="tablist" aria-label="Contoh Bedah Soal HOTS">
-                  {HOTS_TOPICS.map((topic) => (
-                    <button
-                      key={topic.id}
-                      type="button"
-                      className={`mockup-tab ${activeTopicId === topic.id ? 'active' : ''}`}
-                      onClick={() => setActiveTopicId(topic.id)}
-                      role="tab"
-                      aria-selected={activeTopicId === topic.id}
-                    >
-                      {topic.label}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Whiteboard HOTS Problem Breakdown */}
-                <div className="hots-whiteboard">
-                  <div className="whiteboard-header">
-                    <span className="hots-tag">{currentTopic.tag}</span>
-                    <span className="hots-level">{currentTopic.level}</span>
-                  </div>
-                  <p className="hots-question">{currentTopic.question}</p>
-                  <div
-                    className="hots-step-box"
-                    dangerouslySetInnerHTML={{ __html: currentTopic.stepHtml }}
-                  />
-                </div>
-
-                {/* Mentor & Student Cluster Row */}
-                <div className="zoom-participants">
-                  <div className="mentor-tile">
-                    <div className="mentor-avatar" aria-hidden="true">KA</div>
-                    <div className="mentor-info">
-                      <h4>Kak Kevin Ardiansyah, S.Si.</h4>
-                      <p>🥇 Medalis Emas OSN Matematika</p>
-                    </div>
-                  </div>
-
-                  <div className="student-cluster">
-                    <div className="avatar-stack" aria-hidden="true">
-                      <span className="student-dot" style={{ background: '#10B981', color: '#090D16' }}>RA</span>
-                      <span className="student-dot" style={{ background: '#F59E0B', color: '#090D16' }}>DN</span>
-                      <span className="student-dot" style={{ background: '#38BDF8', color: '#090D16' }}>SF</span>
-                      <span className="student-dot" style={{ background: '#A78BFA', color: '#090D16' }}>MK</span>
-                      <span className="student-dot" style={{ background: '#334155', color: '#FFFFFF' }}>+8</span>
-                    </div>
-                    <span className="student-cluster-label">✋ 3 Siswa sedang diskusi interaktif</span>
-                  </div>
-                </div>
-
-                {/* Achievement Badges Strip */}
-                <div className="achievement-float">
-                  <div className="achievement-item">
-                    <span className="achievement-badge-icon badge-gold">
-                      <MedalAwardIcon size={16} color="#F59E0B" />
-                    </span>
-                    <span>Alumni Lolos OSN-K &amp; OSN-P</span>
-                  </div>
-                  <div className="achievement-item">
-                    <span className="achievement-badge-icon badge-emerald">
-                      <CheckIcon size={14} color="#10B981" />
-                    </span>
-                    <span>Skor Diagnostik TKA +38%</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ZoomAlgorithmVisualizer />
           </div>
         </div>
 
@@ -214,4 +125,3 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     </section>
   );
 };
-
