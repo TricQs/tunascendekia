@@ -481,3 +481,4 @@ export const ZoomAlgorithmVisualizer: React.FC = () => {
     </div>
   );
 };
+
