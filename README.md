@@ -92,3 +92,4 @@ Proyek ini dibangun mengikuti panduan kualitas dari framework [anti-slop](https:
 <p align="center">
   © 2026 TunasCendekia. All Rights Reserved.
 </p>
+
