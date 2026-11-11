@@ -56,7 +56,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onCobaKelasClick }) => {
           aria-label="TunasCendekia Beranda"
         >
           <img
-            src="/logo.webp"
+            src="/logo.png"
             alt="Logo Resmi TunasCendekia"
             className="brand-logo-img"
             width={40}

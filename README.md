@@ -1,7 +1,7 @@
 # TunasCendekia — E-Learning Platform
 
 <p align="center">
-  <img src="public/logo.webp" alt="TunasCendekia Logo" width="120" />
+  <img src="public/logo.png" alt="TunasCendekia Logo" width="120" />
 </p>
 
 <p align="center">
