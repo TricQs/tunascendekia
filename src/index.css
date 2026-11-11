@@ -670,229 +670,214 @@ button {
   color: #FFFFFF;
 }
 
-.hots-whiteboard {
-  background-color: #FFFFFF;
-  color: var(--navy-900);
+/* Brilliant.org-Style Interactive Moving Geometry Whiteboard */
+.brilliant-board {
+  background-color: #FAF9F6;
+  color: #111827;
   border-radius: var(--radius-md);
-  padding: 15px;
+  padding: 16px;
   margin-bottom: 12px;
-  border: 1px solid var(--navy-200);
+  border: 1.5px solid var(--navy-200);
 }
 
-.whiteboard-header {
+.brilliant-board-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.hots-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 3px 9px;
-  border-radius: 6px;
-  font-size: 0.7rem;
-  font-weight: 800;
-  background-color: var(--gold-100);
-  color: var(--gold-700);
-}
-
-.hots-level {
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--emerald-700);
-}
-
-.hots-question {
-  font-size: 0.83rem;
-  font-weight: 700;
-  color: var(--navy-900);
+  gap: 10px;
   margin-bottom: 10px;
-  line-height: 1.42;
-}
-
-/* Algorithm Visualization Canvas */
-.algo-canvas-wrapper {
-  background-color: var(--bg-slate);
-  border: 1px solid var(--navy-200);
-  border-radius: 10px;
-  padding: 10px 12px;
-}
-
-.algo-canvas-topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 8px;
   flex-wrap: wrap;
 }
 
-.algo-canvas-title {
-  font-size: 0.74rem;
-  color: var(--navy-700);
-}
-
-.algo-canvas-title strong {
-  color: var(--navy-900);
+.brilliant-step-caption {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: -0.01em;
 }
 
 .algo-step-badge {
   font-size: 0.68rem;
   font-weight: 800;
-  padding: 2px 8px;
+  padding: 3px 9px;
   border-radius: 6px;
   background-color: var(--emerald-100);
   color: var(--emerald-700);
 }
 
-.algo-svg-stage {
+.brilliant-stage {
   background-color: #FFFFFF;
-  border: 1px solid var(--navy-200);
-  border-radius: 8px;
-  padding: 4px;
-  margin-bottom: 10px;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 12px 14px 14px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.algo-svg {
+.brilliant-svg {
   width: 100%;
+  max-width: 420px;
   height: auto;
   display: block;
+  overflow: visible;
 }
 
-.algo-node {
-  opacity: 0.32;
-  transition: opacity 320ms ease, transform 320ms ease;
+/* Crisp Geometric Shapes (2.5px Solid Black Border like Brilliant.org) */
+.geo-shape {
+  stroke: #111827;
+  stroke-width: 2.5px;
+  stroke-linejoin: round;
+  transition: fill 500ms ease, stroke 400ms ease;
 }
 
-.algo-node.visible {
+.geo-blue {
+  fill: #2563EB;
+}
+
+.geo-blue-seamless {
+  fill: #2563EB;
+  stroke-width: 0;
+}
+
+.geo-blue-accent {
+  fill: #3B82F6;
+}
+
+.geo-gold {
+  fill: #EAA124;
+}
+
+.geo-gold-bright {
+  fill: #F59E0B;
+}
+
+.geo-emerald {
+  fill: #10B981;
+}
+
+/* Smooth Choreographed Motion for Moving / Rotating Geometric Pieces */
+.geo-moving-piece {
+  transition:
+    transform 820ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 450ms ease;
+  will-change: transform, opacity;
+}
+
+.geo-b2-piece {
+  transition:
+    transform 750ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 450ms ease;
+  will-change: transform, opacity;
+}
+
+/* Dimension Callipers (|---- a ----|) */
+.caliper-line,
+.caliper-tick {
+  stroke: #111827;
+  stroke-width: 2px;
+  stroke-linecap: round;
+  transition: all 650ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.brilliant-math-var {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-style: italic;
+  font-size: 16px;
+  font-weight: 700;
+  fill: #111827;
+  transition: all 650ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.brilliant-math-var-sm {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-style: italic;
+  font-size: 13.5px;
+  font-weight: 700;
+  fill: #111827;
+}
+
+.brilliant-block-label-light {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-weight: 700;
+  font-size: 15px;
+  fill: #FFFFFF;
+}
+
+.brilliant-block-label-dark {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-weight: 700;
+  font-size: 15px;
+  fill: #111827;
+}
+
+.slice-dashed-line {
+  stroke: #FFFFFF;
+  stroke-width: 2.2px;
+  stroke-dasharray: 5 4;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.slice-dashed-line.visible {
   opacity: 1;
 }
 
-.algo-node.focused rect:first-child {
-  stroke-width: 2.5px;
+/* Synchronized Brilliant.org Bottom Equation Bar */
+.brilliant-equation-bar {
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px solid #F1F5F9;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
-.node-box-navy {
-  fill: var(--navy-900);
-  stroke: var(--navy-700);
-  stroke-width: 1.5;
-}
-
-.node-box-slate {
-  fill: var(--bg-slate);
-  stroke: var(--navy-300);
-  stroke-width: 1.5;
-}
-
-.node-box-emerald-soft {
-  fill: var(--emerald-50);
-  stroke: var(--emerald-500);
-  stroke-width: 1.5;
-}
-
-.node-box-gold {
-  fill: var(--gold-50);
-  stroke: var(--gold-500);
-  stroke-width: 1.8;
-}
-
-.algo-edge {
-  stroke: var(--navy-300);
-  stroke-width: 2;
-  stroke-dasharray: 4 3;
-  fill: none;
-  transition: stroke 300ms ease;
-}
-
-.algo-edge.edge-active {
-  stroke: var(--emerald-500);
-  stroke-width: 2.5;
-  stroke-dasharray: none;
-}
-
-.svg-label-light {
-  fill: var(--navy-200);
-  font-size: 9.5px;
+.brilliant-eq-row {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-style: italic;
+  font-size: 1.35rem;
   font-weight: 700;
+  letter-spacing: 0.01em;
 }
 
-.svg-label-dark {
-  fill: var(--navy-700);
-  font-size: 9.5px;
-  font-weight: 700;
+.eq-term {
+  position: relative;
+  padding-bottom: 4px;
+  transition: color 350ms ease;
 }
 
-.svg-label-emerald {
-  fill: var(--emerald-700);
-  font-size: 9.5px;
-  font-weight: 800;
+.eq-term.eq-active {
+  color: #111827;
 }
 
-.svg-label-gold-dark {
-  fill: var(--gold-700);
-  font-size: 9.5px;
-  font-weight: 800;
+.eq-term.eq-active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2.5px;
+  background-color: #111827;
+  border-radius: 2px;
 }
 
-.svg-math-gold {
-  fill: var(--gold-400);
-  font-size: 10px;
-  font-weight: 800;
+.eq-term.eq-done {
+  color: #334155;
 }
 
-.svg-big-formula {
-  fill: var(--navy-900);
-  font-size: 18px;
-  font-weight: 800;
+.eq-term.eq-muted,
+.eq-op.eq-muted {
+  color: #CBD5E1;
 }
 
-.svg-sub-dark {
-  fill: var(--navy-600);
-  font-size: 9px;
-  font-weight: 600;
-}
-
-.pill-candidate {
-  fill: var(--navy-200);
-}
-
-.pill-pruned {
-  fill: #FEE2E2;
-  stroke: #EF4444;
-  stroke-width: 1;
-}
-
-.pill-valid {
-  fill: var(--emerald-500);
-}
-
-.svg-pill-text {
-  fill: var(--navy-700);
-  font-size: 8.5px;
-  font-weight: 700;
-}
-
-.svg-pill-text-valid {
-  fill: #FFFFFF;
-  font-size: 9px;
-  font-weight: 800;
-}
-
-.prime-block {
-  fill: var(--navy-900);
-}
-
-.prime-text {
-  fill: var(--emerald-400);
-  font-size: 9px;
-  font-weight: 800;
-}
-
-.physics-block-group {
-  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+.eq-op.eq-done {
+  color: #111827;
 }
 
 /* Step Pills & Playback Controls */
@@ -965,12 +950,12 @@ button {
 
 .hots-step-box {
   background-color: #FFFFFF;
-  border-left: 3.5px solid var(--emerald-500);
-  padding: 10px 12px;
+  border-left: 3.5px solid #2563EB;
+  padding: 9px 12px;
   border-radius: 0 8px 8px 0;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--navy-700);
-  line-height: 1.48;
+  line-height: 1.45;
   border-top: 1px solid var(--navy-200);
   border-right: 1px solid var(--navy-200);
   border-bottom: 1px solid var(--navy-200);
@@ -981,17 +966,19 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   flex-wrap: wrap;
 }
 
-.step-box-title {
-  color: var(--navy-900);
+.step-formula-inline {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 700;
   font-size: 0.8rem;
+  color: var(--navy-900);
 }
 
 .step-ans-preview {
-  font-size: 0.7rem;
+  font-size: 0.69rem;
   font-weight: 800;
   color: var(--gold-700);
   background-color: var(--gold-50);
@@ -1000,21 +987,9 @@ button {
   border-radius: 5px;
 }
 
-.step-formula-code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 0.76rem;
-  font-weight: 700;
-  color: var(--emerald-400);
-  background-color: var(--navy-900);
-  padding: 6px 10px;
-  border-radius: 6px;
-  margin-bottom: 6px;
-  overflow-x: auto;
-}
-
 .step-explanation-text {
-  font-size: 0.76rem;
-  color: var(--navy-700);
+  font-size: 0.75rem;
+  color: var(--navy-600);
   margin: 0;
 }
 
@@ -1042,8 +1017,9 @@ button {
 @media (prefers-reduced-motion: reduce) {
   .live-pulse,
   .voice-wave i,
-  .physics-block-group,
-  .algo-node {
+  .geo-moving-piece,
+  .geo-b2-piece,
+  .caliper-line {
     animation: none !important;
     transition: none !important;
   }

@@ -13,14 +13,14 @@ export const ZoomAlgorithmVisualizer: React.FC = () => {
     HOTS_TOPICS.find((t) => t.id === activeTopicId) || HOTS_TOPICS[0];
   const currentStep = currentTopic.steps[currentStepIndex] || currentTopic.steps[0];
 
-  // Auto-advance step-by-step animation every 3.6 seconds when playing
+  // Continuous Brilliant.org-style step animation loop
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!isPlaying || prefersReducedMotion) return;
 
     const timer = window.setInterval(() => {
       setCurrentStepIndex((prev) => (prev + 1) % currentTopic.steps.length);
-    }, 3600);
+    }, 2600);
 
     return () => window.clearInterval(timer);
   }, [isPlaying, activeTopicId, currentTopic.steps.length]);
@@ -28,6 +28,7 @@ export const ZoomAlgorithmVisualizer: React.FC = () => {
   const handleTopicChange = (topicId: 'math' | 'science' | 'tka') => {
     setActiveTopicId(topicId);
     setCurrentStepIndex(0);
+    setIsPlaying(true);
   };
 
   const handlePrevStep = () => {
@@ -59,9 +60,8 @@ export const ZoomAlgorithmVisualizer: React.FC = () => {
       </div>
 
       <div className="zoom-body">
-        {/* 2. Realistic Zoom Video Gallery Strip (Mentor + Students) */}
+        {/* 2. Realistic Zoom Video Gallery Strip */}
         <div className="zoom-video-gallery" aria-label="Galeri Video Peserta Zoom">
-          {/* Active Speaker: Mentor Video Feed */}
           <div className="zoom-video-tile mentor-cam active-speaker">
             <img
               src="/mentor-zoom.jpg"
@@ -85,7 +85,6 @@ export const ZoomAlgorithmVisualizer: React.FC = () => {
             </div>
           </div>
 
-          {/* Student 1 Video Feed */}
           <div className="zoom-video-tile student-cam">
             <img
               src="/student-zoom-1.jpg"
@@ -102,7 +101,6 @@ export const ZoomAlgorithmVisualizer: React.FC = () => {
             </div>
           </div>
 
-          {/* Student 2 Video Feed */}
           <div className="zoom-video-tile student-cam">
             <img
               src="/student-zoom-2.jpg"
@@ -121,7 +119,7 @@ export const ZoomAlgorithmVisualizer: React.FC = () => {
         </div>
 
         {/* 3. Topic Switcher Tabs */}
-        <div className="mockup-tabs" role="tablist" aria-label="Pilih Topik Algoritma Soal HOTS">
+        <div className="mockup-tabs" role="tablist" aria-label="Pilih Topik Visualisasi">
           {HOTS_TOPICS.map((topic) => (
             <button
               key={topic.id}
@@ -136,324 +134,515 @@ export const ZoomAlgorithmVisualizer: React.FC = () => {
           ))}
         </div>
 
-        {/* 4. Interactive Zoom Screen-Share Whiteboard + Step-by-Step Algorithm Visualizer */}
-        <div className="hots-whiteboard">
-          <div className="whiteboard-header">
-            <span className="hots-tag">{currentTopic.tag}</span>
-            <span className="hots-level">{currentTopic.level}</span>
+        {/* 4. Brilliant.org-Style Interactive Moving Geometry Whiteboard */}
+        <div className="brilliant-board">
+          <div className="brilliant-board-top">
+            <span className="brilliant-step-caption">{currentStep.title}</span>
+            <span className="algo-step-badge">{currentStep.highlightBadge}</span>
           </div>
 
-          <p className="hots-question">{currentTopic.question}</p>
+          {/* Moving SVG Stage (Brilliant.org Style) */}
+          <div className="brilliant-stage">
+            {activeTopicId === 'math' && (
+              <svg
+                viewBox="0 0 420 185"
+                className="brilliant-svg"
+                role="img"
+                aria-label="Animasi pembuktian geometri a kuadrat dikurang b kuadrat"
+              >
+                {/* Top Dimension Calliper Bar: a -> a + b */}
+                <g className="caliper-group">
+                  <line
+                    x1="130"
+                    y1="20"
+                    x2={currentStepIndex === 3 ? 286 : 244}
+                    y2="20"
+                    className="caliper-line"
+                  />
+                  <line x1="130" y1="14" x2="130" y2="26" className="caliper-tick" />
+                  <line
+                    x1={currentStepIndex === 3 ? 286 : 244}
+                    y1="14"
+                    x2={currentStepIndex === 3 ? 286 : 244}
+                    y2="26"
+                    className="caliper-tick"
+                  />
+                  <text
+                    x={currentStepIndex === 3 ? 208 : 187}
+                    y="13"
+                    textAnchor="middle"
+                    className="brilliant-math-var"
+                  >
+                    {currentStepIndex === 3 ? 'a + b' : 'a'}
+                  </text>
+                </g>
 
-          {/* Animated SVG Algorithm Visualizer Canvas */}
-          <div className="algo-canvas-wrapper" aria-label={currentTopic.algorithmName}>
-            <div className="algo-canvas-topbar">
-              <span className="algo-canvas-title">
-                📐 Visualisasi Algoritma: <strong>{currentTopic.algorithmName}</strong>
-              </span>
-              <span className="algo-step-badge">{currentStep.highlightBadge}</span>
-            </div>
+                {/* Left Vertical Calliper Bar: a -> a - b */}
+                <g className="caliper-group">
+                  <line
+                    x1="112"
+                    y1="34"
+                    x2="112"
+                    y2={currentStepIndex === 0 ? 148 : 106}
+                    className="caliper-line"
+                  />
+                  <line x1="106" y1="34" x2="118" y2="34" className="caliper-tick" />
+                  <line
+                    x1="106"
+                    y1={currentStepIndex === 0 ? 148 : 106}
+                    x2="118"
+                    y2={currentStepIndex === 0 ? 148 : 106}
+                    className="caliper-tick"
+                  />
+                  <text
+                    x="98"
+                    y={currentStepIndex === 0 ? 95 : 74}
+                    textAnchor="end"
+                    className="brilliant-math-var"
+                  >
+                    {currentStepIndex === 0 ? 'a' : 'a − b'}
+                  </text>
+                </g>
 
-            {/* Dynamic SVG Visualization per Topic & Step */}
-            <div className="algo-svg-stage">
-              {activeTopicId === 'math' && (
-                <svg
-                  viewBox="0 0 480 148"
-                  className="algo-svg"
-                  role="img"
-                  aria-label="Diagram pohon faktorisasi algoritma teori bilangan"
+                {/* Main Top Rectangle: width a (114), height a - b (72) at (130, 34) */}
+                <rect
+                  x="130"
+                  y="34"
+                  width="114"
+                  height="72"
+                  className="geo-shape geo-blue"
+                />
+
+                {/* Moving Bottom-Left Strip: originally 72 x 42 at (130, 106).
+                    In Step 2 it detaches & rotates -90deg;
+                    In Step 3 it docks at (244, 34) with size 42 x 72! */}
+                <g
+                  className="geo-moving-piece"
+                  style={{
+                    transform:
+                      currentStepIndex <= 1
+                        ? 'translate(130px, 106px) rotate(0deg)'
+                        : currentStepIndex === 2
+                        ? 'translate(256px, 126px) rotate(-90deg)'
+                        : 'translate(244px, 106px) rotate(-90deg)',
+                  }}
                 >
-                  {/* Step 1: Root Equation & GCD Parameterization */}
-                  <g className={`algo-node ${currentStepIndex >= 0 ? 'visible' : ''} ${currentStepIndex === 0 ? 'focused' : ''}`}>
-                    <rect x="10" y="12" width="136" height="44" rx="8" className="node-box-navy" />
-                    <text x="78" y="30" textAnchor="middle" className="svg-label-light">Input Persamaan</text>
-                    <text x="78" y="46" textAnchor="middle" className="svg-math-gold">KPK + FPB = ab − 2026</text>
-                  </g>
-
-                  {/* Arrow 1 -> 2 */}
-                  <path
-                    d="M 146 34 L 176 34"
-                    className={`algo-edge ${currentStepIndex >= 1 ? 'edge-active' : ''}`}
+                  <rect
+                    x="0"
+                    y="0"
+                    width="72"
+                    height="42"
+                    className={`geo-shape ${currentStepIndex >= 2 ? 'geo-blue-accent' : 'geo-blue'}`}
                   />
+                </g>
 
-                  {/* Step 2: Divisor Search Space Pruning */}
-                  <g className={`algo-node ${currentStepIndex >= 1 ? 'visible' : ''} ${currentStepIndex === 1 ? 'focused' : ''}`}>
-                    <rect x="176" y="10" width="144" height="48" rx="8" className="node-box-slate" />
-                    <text x="248" y="27" textAnchor="middle" className="svg-label-dark">Uji Faktor d | 2026</text>
-                    <g transform="translate(184, 33)">
-                      <rect x="0" y="0" width="26" height="18" rx="4" className={currentStepIndex >= 2 ? 'pill-pruned' : 'pill-candidate'} />
-                      <text x="13" y="13" textAnchor="middle" className="svg-pill-text">d=1</text>
+                {/* Dashed Slice Line between Top Rectangle and Bottom Strip */}
+                <line
+                  x1="130"
+                  y1="106"
+                  x2="202"
+                  y2="106"
+                  className={`slice-dashed-line ${currentStepIndex === 1 || currentStepIndex === 2 ? 'visible' : ''}`}
+                />
 
-                      <rect x="30" y="0" width="28" height="18" rx="4" className={currentStepIndex >= 2 ? 'pill-valid' : 'pill-candidate'} />
-                      <text x="44" y="13" textAnchor="middle" className="svg-pill-text-valid">d=2</text>
-
-                      <rect x="62" y="0" width="32" height="18" rx="4" className={currentStepIndex >= 2 ? 'pill-pruned' : 'pill-candidate'} />
-                      <text x="78" y="13" textAnchor="middle" className="svg-pill-text">1013</text>
-
-                      <rect x="98" y="0" width="32" height="18" rx="4" className={currentStepIndex >= 2 ? 'pill-pruned' : 'pill-candidate'} />
-                      <text x="114" y="13" textAnchor="middle" className="svg-pill-text">2026</text>
-                    </g>
-                  </g>
-
-                  {/* Arrow 2 -> 3 */}
-                  <path
-                    d="M 248 58 L 248 84"
-                    className={`algo-edge ${currentStepIndex >= 2 ? 'edge-active' : ''}`}
+                {/* Corner Square b^2 (42 x 42 at 202, 106):
+                    Step 0: Seamless blue part of a^2
+                    Step 1: Turns Gold & slides out to show - b^2
+                    Step 2 & 3: Fades away */}
+                <g
+                  className="geo-b2-piece"
+                  style={{
+                    transform:
+                      currentStepIndex === 0
+                        ? 'translate(202px, 106px) scale(1)'
+                        : currentStepIndex === 1
+                        ? 'translate(216px, 118px) scale(1)'
+                        : 'translate(236px, 134px) scale(0.6)',
+                    opacity: currentStepIndex >= 2 ? 0 : 1,
+                  }}
+                >
+                  <rect
+                    x="0"
+                    y="0"
+                    width="42"
+                    height="42"
+                    className={`geo-shape ${currentStepIndex === 0 ? 'geo-blue-seamless' : 'geo-gold'}`}
                   />
-
-                  {/* Step 3: Prime Power Blocks of xy = 1014 */}
-                  <g className={`algo-node ${currentStepIndex >= 2 ? 'visible' : ''} ${currentStepIndex === 2 ? 'focused' : ''}`}>
-                    <rect x="10" y="84" width="290" height="52" rx="8" className="node-box-emerald-soft" />
-                    <text x="155" y="101" textAnchor="middle" className="svg-label-emerald">
-                      Cabang Valid (d = 2) ⇒ x · y = 1014 (Faktor Prima Saling Lepas)
+                  {currentStepIndex === 1 && (
+                    <text x="21" y="26" textAnchor="middle" className="brilliant-math-var-sm">
+                      b²
                     </text>
-                    <g transform="translate(32, 108)">
-                      <rect x="0" y="0" width="68" height="20" rx="5" className="prime-block" />
-                      <text x="34" y="14" textAnchor="middle" className="prime-text">Blok p₁ = 2¹</text>
+                  )}
+                </g>
 
-                      <text x="78" y="14" textAnchor="middle" className="svg-label-dark">×</text>
+                {/* Outer Border of Complete a x a Square in Step 0 so it looks like 1 solid blue square */}
+                <rect
+                  x="130"
+                  y="34"
+                  width="114"
+                  height="114"
+                  fill="none"
+                  stroke="#111827"
+                  strokeWidth="2.5"
+                  style={{ opacity: currentStepIndex === 0 ? 1 : 0, transition: 'opacity 300ms ease' }}
+                />
 
-                      <rect x="88" y="0" width="68" height="20" rx="5" className="prime-block" />
-                      <text x="122" y="14" textAnchor="middle" className="prime-text">Blok p₂ = 3¹</text>
-
-                      <text x="166" y="14" textAnchor="middle" className="svg-label-dark">×</text>
-
-                      <rect x="176" y="0" width="76" height="20" rx="5" className="prime-block" />
-                      <text x="214" y="14" textAnchor="middle" className="prime-text">Blok p₃ = 13²</text>
-                    </g>
+                {/* Bottom Caliper for b when in Step 1 or Step 3 */}
+                {currentStepIndex === 1 && (
+                  <g className="caliper-group">
+                    <line x1="216" y1="168" x2="258" y2="168" className="caliper-line" />
+                    <line x1="216" y1="163" x2="216" y2="173" className="caliper-tick" />
+                    <line x1="258" y1="163" x2="258" y2="173" className="caliper-tick" />
+                    <text x="237" y="181" textAnchor="middle" className="brilliant-math-var-sm">
+                      b
+                    </text>
                   </g>
+                )}
 
-                  {/* Arrow 3 -> 4 */}
-                  <path
-                    d="M 300 110 L 332 110"
-                    className={`algo-edge ${currentStepIndex >= 3 ? 'edge-active' : ''}`}
+                {currentStepIndex === 3 && (
+                  <g className="caliper-group">
+                    <line x1="130" y1="118" x2="244" y2="118" className="caliper-line" />
+                    <line x1="130" y1="113" x2="130" y2="123" className="caliper-tick" />
+                    <line x1="244" y1="113" x2="244" y2="123" className="caliper-tick" />
+                    <text x="187" y="133" textAnchor="middle" className="brilliant-math-var-sm">
+                      a
+                    </text>
+
+                    <line x1="244" y1="118" x2="286" y2="118" className="caliper-line" />
+                    <line x1="286" y1="113" x2="286" y2="123" className="caliper-tick" />
+                    <text x="265" y="133" textAnchor="middle" className="brilliant-math-var-sm">
+                      b
+                    </text>
+                  </g>
+                )}
+              </svg>
+            )}
+
+            {activeTopicId === 'science' && (
+              <svg
+                viewBox="0 0 420 185"
+                className="brilliant-svg"
+                role="img"
+                aria-label="Animasi transformasi segitiga kecepatan menjadi persegi panjang"
+              >
+                {/* Bottom Width Calliper: w / t */}
+                <g className="caliper-group">
+                  <line x1="120" y1="146" x2="280" y2="146" className="caliper-line" />
+                  <line x1="120" y1="140" x2="120" y2="152" className="caliper-tick" />
+                  <line x1="280" y1="140" x2="280" y2="152" className="caliper-tick" />
+                  <text x="200" y="164" textAnchor="middle" className="brilliant-math-var">
+                    t
+                  </text>
+                </g>
+
+                {/* Right Vertical Height Calliper: v0 -> 1/2 v0 */}
+                <g className="caliper-group">
+                  <line
+                    x1="296"
+                    y1={currentStepIndex === 0 ? 38 : 84}
+                    x2="296"
+                    y2="130"
+                    className="caliper-line"
                   />
+                  <line
+                    x1="290"
+                    y1={currentStepIndex === 0 ? 38 : 84}
+                    x2="302"
+                    y2={currentStepIndex === 0 ? 38 : 84}
+                    className="caliper-tick"
+                  />
+                  <line x1="290" y1="130" x2="302" y2="130" className="caliper-tick" />
+                  <text
+                    x="308"
+                    y={currentStepIndex === 0 ? 88 : 111}
+                    textAnchor="start"
+                    className="brilliant-math-var"
+                  >
+                    {currentStepIndex === 0 ? 'v₀' : '½ v₀'}
+                  </text>
+                </g>
 
-                  {/* Step 4: Combinatorial Output 2^3 = 8 */}
-                  <g className={`algo-node ${currentStepIndex >= 3 ? 'visible' : ''} ${currentStepIndex === 3 ? 'focused' : ''}`}>
-                    <rect x="332" y="12" width="138" height="124" rx="10" className="node-box-gold" />
-                    <text x="401" y="34" textAnchor="middle" className="svg-label-gold-dark">Distribusi Koprima</text>
-                    <text x="401" y="58" textAnchor="middle" className="svg-big-formula">2³ = 8</text>
-                    <text x="401" y="78" textAnchor="middle" className="svg-sub-dark">Pasangan (x, y)</text>
-                    <rect x="346" y="92" width="110" height="30" rx="6" className="pill-valid" />
-                    <text x="401" y="111" textAnchor="middle" className="svg-pill-text-valid">✓ 8 Solusi (a, b)</text>
-                  </g>
-                </svg>
+                {/* Bottom Trapezoid Base of Triangle (from y=84 to y=130, x=120..280) */}
+                <polygon
+                  points="120,84 200,84 280,130 120,130"
+                  className="geo-shape geo-gold"
+                />
+
+                {/* Top Triangle Peak (from y=38 to y=84, x=120..200) that rotates 180 deg around (200, 84)! */}
+                <g
+                  className="geo-moving-piece"
+                  style={{
+                    transformOrigin: '200px 84px',
+                    transform:
+                      currentStepIndex <= 1
+                        ? 'rotate(0deg)'
+                        : currentStepIndex === 2
+                        ? 'rotate(115deg)'
+                        : 'rotate(180deg)',
+                  }}
+                >
+                  <polygon
+                    points="120,38 200,84 120,84"
+                    className={`geo-shape ${currentStepIndex >= 2 ? 'geo-gold-bright' : 'geo-gold'}`}
+                  />
+                </g>
+
+                {/* Horizontal Slice Line at Half Height y=84 */}
+                {currentStepIndex >= 1 && currentStepIndex <= 2 && (
+                  <line
+                    x1="108"
+                    y1="84"
+                    x2="284"
+                    y2="84"
+                    className="slice-dashed-line visible"
+                  />
+                )}
+              </svg>
+            )}
+
+            {activeTopicId === 'tka' && (
+              <svg
+                viewBox="0 0 420 185"
+                className="brilliant-svg"
+                role="img"
+                aria-label="Animasi partisi deret geometri pada persegi satuan"
+              >
+                {/* Outer 1 x 1 Unit Square Frame (136 x 116 at 142, 22) */}
+                <rect
+                  x="142"
+                  y="22"
+                  width="136"
+                  height="116"
+                  fill="#FFFFFF"
+                  stroke="#111827"
+                  strokeWidth="2.5"
+                />
+
+                {/* Block 1: 1/2 (Left Half 68 x 116) */}
+                <rect
+                  x="142"
+                  y="22"
+                  width="68"
+                  height="116"
+                  className="geo-shape geo-blue"
+                />
+                <text x="176" y="85" textAnchor="middle" className="brilliant-block-label-light">
+                  ½
+                </text>
+
+                {/* Block 2: 1/4 (Top Right Quarter 68 x 58) */}
+                <g
+                  className="geo-moving-piece"
+                  style={{
+                    opacity: currentStepIndex >= 1 ? 1 : 0,
+                    transform:
+                      currentStepIndex >= 1 ? 'translate(0px, 0px)' : 'translate(24px, -18px)',
+                  }}
+                >
+                  <rect
+                    x="210"
+                    y="22"
+                    width="68"
+                    height="58"
+                    className="geo-shape geo-gold"
+                  />
+                  <text x="244" y="56" textAnchor="middle" className="brilliant-block-label-dark">
+                    ¼
+                  </text>
+                </g>
+
+                {/* Block 3: 1/8 (Bottom-Right Left Half 34 x 58) */}
+                <g
+                  className="geo-moving-piece"
+                  style={{
+                    opacity: currentStepIndex >= 2 ? 1 : 0,
+                    transform:
+                      currentStepIndex >= 2 ? 'translate(0px, 0px)' : 'translate(0px, 20px)',
+                  }}
+                >
+                  <rect
+                    x="210"
+                    y="80"
+                    width="34"
+                    height="58"
+                    className="geo-shape geo-emerald"
+                  />
+                  <text x="227" y="114" textAnchor="middle" className="brilliant-block-label-light">
+                    ⅛
+                  </text>
+                </g>
+
+                {/* Block 4: 1/16 + ... (Remaining 34 x 58) */}
+                <g
+                  className="geo-moving-piece"
+                  style={{
+                    opacity: currentStepIndex >= 2 ? 1 : 0,
+                    transform:
+                      currentStepIndex >= 2 ? 'translate(0px, 0px)' : 'translate(18px, 18px)',
+                  }}
+                >
+                  <rect
+                    x="244"
+                    y="80"
+                    width="34"
+                    height="29"
+                    className="geo-shape geo-blue-accent"
+                  />
+                  <text x="261" y="99" textAnchor="middle" className="brilliant-block-label-light" style={{ fontSize: '10px' }}>
+                    1/16
+                  </text>
+                </g>
+
+                <g
+                  className="geo-moving-piece"
+                  style={{
+                    opacity: currentStepIndex === 3 ? 1 : 0,
+                    transform:
+                      currentStepIndex === 3 ? 'scale(1)' : 'scale(0.5)',
+                    transformOrigin: '261px 123px',
+                  }}
+                >
+                  <rect
+                    x="244"
+                    y="109"
+                    width="34"
+                    height="29"
+                    className="geo-shape geo-gold-bright"
+                  />
+                  <text x="261" y="128" textAnchor="middle" className="brilliant-block-label-dark" style={{ fontSize: '10px' }}>
+                    •••
+                  </text>
+                </g>
+
+                {/* Bottom Calliper Bar */}
+                <g className="caliper-group">
+                  <line
+                    x1="142"
+                    y1="152"
+                    x2={currentStepIndex === 0 ? 210 : 278}
+                    y2="152"
+                    className="caliper-line"
+                  />
+                  <line x1="142" y1="146" x2="142" y2="158" className="caliper-tick" />
+                  <line
+                    x1={currentStepIndex === 0 ? 210 : 278}
+                    y1="146"
+                    x2={currentStepIndex === 0 ? 210 : 278}
+                    y2="158"
+                    className="caliper-tick"
+                  />
+                  <text
+                    x={currentStepIndex === 0 ? 176 : 210}
+                    y="170"
+                    textAnchor="middle"
+                    className="brilliant-math-var"
+                  >
+                    {currentStepIndex === 0 ? '½' : '1'}
+                  </text>
+                </g>
+              </svg>
+            )}
+
+            {/* Synchronized Brilliant.org Bottom Equation Bar (Underlined Active Term) */}
+            <div className="brilliant-equation-bar" aria-live="polite">
+              {activeTopicId === 'math' && (
+                <div className="brilliant-eq-row">
+                  <span className={`eq-term ${currentStepIndex <= 1 ? 'eq-active' : 'eq-done'}`}>
+                    a² {currentStepIndex >= 1 ? '− b²' : ''}
+                  </span>
+                  <span className={`eq-op ${currentStepIndex >= 2 ? 'eq-done' : 'eq-muted'}`}>=</span>
+                  <span className={`eq-term ${currentStepIndex >= 2 ? 'eq-active' : 'eq-muted'}`}>
+                    (a + b)(a − b)
+                  </span>
+                </div>
               )}
 
               {activeTopicId === 'science' && (
-                <svg
-                  viewBox="0 0 480 148"
-                  className="algo-svg"
-                  role="img"
-                  aria-label="Simulasi lintasan balok dan grafik integrasi usaha gesekan"
-                >
-                  {/* Left: Curved Ramp & Rough Surface */}
-                  <path
-                    d="M 18 22 Q 18 106 95 106 L 245 106"
-                    fill="none"
-                    stroke="#0F172A"
-                    strokeWidth="3"
-                  />
-                  {/* Rough surface hatch marks */}
-                  <path
-                    d="M 95 106 L 245 106"
-                    fill="none"
-                    stroke="#F59E0B"
-                    strokeWidth="4"
-                    strokeDasharray="6 4"
-                  />
-                  <text x="42" y="52" className="svg-label-dark">Licin (h)</text>
-                  <text x="165" y="125" textAnchor="middle" className="svg-label-gold-dark">
-                    Kasar: μ(x) = μ₀·x
-                  </text>
-
-                  {/* Animated Block Position depending on step */}
-                  <g
-                    className="physics-block-group"
-                    style={{
-                      transform:
-                        currentStepIndex === 0
-                          ? 'translate(22px, 24px)'
-                          : currentStepIndex === 1
-                          ? 'translate(96px, 84px)'
-                          : currentStepIndex === 2
-                          ? 'translate(152px, 84px)'
-                          : 'translate(206px, 84px)',
-                    }}
-                  >
-                    <rect x="0" y="0" width="26" height="20" rx="4" fill="#10B981" stroke="#047857" strokeWidth="2" />
-                    <text x="13" y="14" textAnchor="middle" className="svg-pill-text-valid">m</text>
-                  </g>
-
-                  {/* Right: Force vs Position Integral Graph */}
-                  <g transform="translate(275, 16)">
-                    <rect x="0" y="0" width="192" height="116" rx="8" className="node-box-slate" />
-                    <line x1="28" y1="92" x2="174" y2="92" stroke="#334155" strokeWidth="1.8" />
-                    <line x1="28" y1="92" x2="28" y2="18" stroke="#334155" strokeWidth="1.8" />
-                    <text x="34" y="26" className="svg-label-dark">f_k(x)</text>
-                    <text x="170" y="106" textAnchor="end" className="svg-label-dark">posisi x</text>
-
-                    {/* Shaded Integral Triangle */}
-                    <polygon
-                      points={
-                        currentStepIndex <= 1
-                          ? '28,92 68,92 68,72'
-                          : currentStepIndex === 2
-                          ? '28,92 124,92 124,44'
-                          : '28,92 162,92 162,24'
-                      }
-                      fill="rgba(16, 185, 129, 0.25)"
-                    />
-                    {/* Linear Force Line f_k = mu_0 m g x */}
-                    <line
-                      x1="28"
-                      y1="92"
-                      x2="162"
-                      y2="24"
-                      stroke="#059669"
-                      strokeWidth="2.5"
-                    />
-                    <text x="108" y="78" textAnchor="middle" className="svg-label-emerald">
-                      {currentStepIndex >= 2 ? 'W = ½μ₀mgx²' : 'f(x) = μ₀mgx'}
-                    </text>
-                    {currentStepIndex === 3 && (
-                      <text x="105" y="14" textAnchor="middle" className="svg-label-gold-dark">
-                        ✓ x_maks = √(2h/μ₀)
-                      </text>
-                    )}
-                  </g>
-                </svg>
+                <div className="brilliant-eq-row">
+                  <span className={`eq-term ${currentStepIndex <= 1 ? 'eq-active' : 'eq-done'}`}>
+                    Luas Δv-t
+                  </span>
+                  <span className={`eq-op ${currentStepIndex >= 2 ? 'eq-done' : 'eq-muted'}`}>=</span>
+                  <span className={`eq-term ${currentStepIndex >= 2 ? 'eq-active' : 'eq-muted'}`}>
+                    t × (½ v₀)
+                  </span>
+                </div>
               )}
 
               {activeTopicId === 'tka' && (
-                <svg
-                  viewBox="0 0 480 148"
-                  className="algo-svg"
-                  role="img"
-                  aria-label="Grafik konvergensi rasio eksponensial TKA"
-                >
-                  <rect x="10" y="10" width="286" height="126" rx="8" className="node-box-slate" />
-                  {/* Axes */}
-                  <line x1="38" y1="112" x2="276" y2="112" stroke="#334155" strokeWidth="1.8" />
-                  <line x1="38" y1="112" x2="38" y2="22" stroke="#334155" strokeWidth="1.8" />
-
-                  {/* Target threshold line 5/3 = 1.667 */}
-                  <line
-                    x1="38"
-                    y1="40"
-                    x2="276"
-                    y2="40"
-                    stroke="#F59E0B"
-                    strokeWidth="1.8"
-                    strokeDasharray="5 4"
-                  />
-                  <text x="272" y="34" textAnchor="end" className="svg-label-gold-dark">
-                    Target Rasio 5/3 ≈ 1,667
-                  </text>
-
-                  {/* Exponential Growth Curve (16/15)^n */}
-                  <path
-                    d="M 42 104 Q 125 94 185 72 T 254 38"
-                    fill="none"
-                    stroke="#10B981"
-                    strokeWidth="3"
-                  />
-
-                  {/* Binary Doubling Points */}
-                  <circle cx="68" cy="100" r="4.5" fill={currentStepIndex >= 1 ? '#059669' : '#94A3B8'} />
-                  <text x="68" y="125" textAnchor="middle" className="svg-label-dark">n=1</text>
-
-                  <circle cx="112" cy="92" r="4.5" fill={currentStepIndex >= 2 ? '#059669' : '#94A3B8'} />
-                  <text x="112" y="125" textAnchor="middle" className="svg-label-dark">n=2</text>
-
-                  <circle cx="174" cy="75" r="4.5" fill={currentStepIndex >= 2 ? '#059669' : '#94A3B8'} />
-                  <text x="174" y="125" textAnchor="middle" className="svg-label-dark">n=4</text>
-
-                  <circle
-                    cx="252"
-                    cy="39"
-                    r={currentStepIndex === 3 ? '7' : '5'}
-                    fill={currentStepIndex === 3 ? '#F59E0B' : '#10B981'}
-                  />
-                  <text x="252" y="125" textAnchor="middle" className="svg-label-emerald">n=8</text>
-
-                  {/* Right Summary Box */}
-                  <rect x="308" y="10" width="162" height="126" rx="8" className="node-box-navy" />
-                  <text x="389" y="32" textAnchor="middle" className="svg-label-light">Tabel Fast Doubling</text>
-                  <text x="322" y="54" className="svg-math-gold">n=1 : (16/15)¹ = 1,067</text>
-                  <text x="322" y="72" className="svg-math-gold">n=2 : (1,067)² = 1,138</text>
-                  <text x="322" y="90" className="svg-math-gold">n=4 : (1,138)² = 1,294</text>
-                  <text x="322" y="108" className="svg-pill-text-valid">n=8 : (1,294)² = 1,675</text>
-                  <text x="389" y="127" textAnchor="middle" className="svg-label-light">✓ Setara di Tahun ke-8</text>
-                </svg>
+                <div className="brilliant-eq-row">
+                  <span className={`eq-term ${currentStepIndex <= 2 ? 'eq-active' : 'eq-done'}`}>
+                    ½ {currentStepIndex >= 1 ? '+ ¼' : ''} {currentStepIndex >= 2 ? '+ ⅛ + …' : ''}
+                  </span>
+                  <span className={`eq-op ${currentStepIndex === 3 ? 'eq-done' : 'eq-muted'}`}>=</span>
+                  <span className={`eq-term ${currentStepIndex === 3 ? 'eq-active' : 'eq-muted'}`}>
+                    1
+                  </span>
+                </div>
               )}
             </div>
+          </div>
 
-            {/* Step Progress Pills & Playback Controls */}
-            <div className="algo-controls-row">
-              <div className="algo-step-pills" role="tablist" aria-label="Pilih Langkah Penyelesaian">
-                {currentTopic.steps.map((step, idx) => (
-                  <button
-                    key={step.stepNumber}
-                    type="button"
-                    className={`algo-step-pill ${currentStepIndex === idx ? 'active' : ''} ${idx < currentStepIndex ? 'done' : ''}`}
-                    onClick={() => {
-                      setIsPlaying(false);
-                      setCurrentStepIndex(idx);
-                    }}
-                    aria-label={`Langkah ${step.stepNumber}: ${step.title}`}
-                    aria-selected={currentStepIndex === idx}
-                    role="tab"
-                  >
-                    <span>Langkah {step.stepNumber}</span>
-                  </button>
-                ))}
-              </div>
-
-              <div className="algo-playback-btns">
+          {/* Interactive Stepper & Play/Pause Controls */}
+          <div className="algo-controls-row">
+            <div className="algo-step-pills" role="tablist" aria-label="Pilih Langkah Visualisasi">
+              {currentTopic.steps.map((step, idx) => (
                 <button
+                  key={step.stepNumber}
                   type="button"
-                  className="algo-ctrl-btn"
-                  onClick={handlePrevStep}
-                  aria-label="Langkah Sebelumnya"
+                  className={`algo-step-pill ${currentStepIndex === idx ? 'active' : ''} ${idx < currentStepIndex ? 'done' : ''}`}
+                  onClick={() => {
+                    setIsPlaying(false);
+                    setCurrentStepIndex(idx);
+                  }}
+                  aria-label={`Langkah ${step.stepNumber}`}
+                  aria-selected={currentStepIndex === idx}
+                  role="tab"
                 >
-                  ⏮
+                  <span>Langkah {step.stepNumber}</span>
                 </button>
-                <button
-                  type="button"
-                  className={`algo-ctrl-btn play-pause ${isPlaying ? 'playing' : ''}`}
-                  onClick={() => setIsPlaying((prev) => !prev)}
-                  aria-label={isPlaying ? 'Jeda Animasi Algoritma' : 'Putar Animasi Algoritma'}
-                >
-                  {isPlaying ? '⏸ Jeda' : '▶ Putar'}
-                </button>
-                <button
-                  type="button"
-                  className="algo-ctrl-btn"
-                  onClick={handleNextStep}
-                  aria-label="Langkah Selanjutnya"
-                >
-                  ⏭
-                </button>
-              </div>
+              ))}
             </div>
 
-            {/* Animated Step Detail & Math Formula Box */}
-            <div className="hots-step-box">
-              <div className="step-box-header">
-                <strong className="step-box-title">
-                  Langkah {currentStep.stepNumber}: {currentStep.title}
-                </strong>
-                <span className="step-ans-preview">🎯 Target: {currentTopic.finalAnswer}</span>
-              </div>
-              <div className="step-formula-code">{currentStep.formula}</div>
-              <p className="step-explanation-text">{currentStep.explanation}</p>
+            <div className="algo-playback-btns">
+              <button
+                type="button"
+                className="algo-ctrl-btn"
+                onClick={handlePrevStep}
+                aria-label="Langkah Sebelumnya"
+              >
+                ⏮
+              </button>
+              <button
+                type="button"
+                className={`algo-ctrl-btn play-pause ${isPlaying ? 'playing' : ''}`}
+                onClick={() => setIsPlaying((prev) => !prev)}
+                aria-label={isPlaying ? 'Jeda Animasi' : 'Putar Animasi'}
+              >
+                {isPlaying ? '⏸ Jeda' : '▶ Putar'}
+              </button>
+              <button
+                type="button"
+                className="algo-ctrl-btn"
+                onClick={handleNextStep}
+                aria-label="Langkah Selanjutnya"
+              >
+                ⏭
+              </button>
             </div>
+          </div>
+
+          {/* Concise Explanation & Target Answer Box */}
+          <div className="hots-step-box">
+            <div className="step-box-header">
+              <span className="step-formula-inline">{currentStep.formula}</span>
+              <span className="step-ans-preview">🎯 {currentTopic.finalAnswer}</span>
+            </div>
+            <p className="step-explanation-text">{currentStep.explanation}</p>
           </div>
         </div>
 
-        {/* 5. Zoom Bottom Interactive Toolbar & Achievement Strip */}
+        {/* 5. Zoom Bottom Interactive Toolbar */}
         <div className="achievement-float">
           <div className="achievement-item">
             <span className="achievement-badge-icon badge-gold">
@@ -481,4 +670,3 @@ export const ZoomAlgorithmVisualizer: React.FC = () => {
     </div>
   );
 };
-
