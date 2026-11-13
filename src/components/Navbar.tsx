@@ -1,28 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface NavbarProps {
-  onCobaKelasClick: () => void;
+  onTryFreeClick: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onCobaKelasClick }) => {
-  const [isScrolled, setIsScrolled] = useState(false);
+const NAV_ITEMS = [
+  { id: 'beranda', label: 'Beranda' },
+  { id: 'tentang-kami', label: 'Tentang Kami' },
+  { id: 'fitur-program', label: 'Fitur & Program' },
+  { id: 'paket-belajar', label: 'Paket Belajar' },
+  { id: 'faq', label: 'FAQ' },
+  { id: 'kontak', label: 'Kontak' },
+];
+
+export const Navbar: React.FC<NavbarProps> = ({ onTryFreeClick }) => {
+  const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('beranda');
+  const toggleBtnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 16);
 
-      const sections = ['beranda', 'tentang-kami', 'fitur-program', 'paket-belajar', 'faq', 'kontak'];
-      const scrollPosition = window.scrollY + 140;
-
-      for (const sectionId of sections) {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          const top = element.offsetTop;
-          const height = element.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveSection(sectionId);
+      const scrollPos = window.scrollY + 130;
+      for (const item of NAV_ITEMS) {
+        const sectionEl = document.getElementById(item.id);
+        if (sectionEl) {
+          const top = sectionEl.offsetTop;
+          const height = sectionEl.offsetHeight;
+          if (scrollPos >= top && scrollPos < top + height) {
+            setActiveSection(item.id);
             break;
           }
         }
@@ -33,153 +41,144 @@ export const Navbar: React.FC<NavbarProps> = ({ onCobaKelasClick }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavClick = (sectionId: string) => {
-    setActiveSection(sectionId);
+  // Body scroll lock & Escape handler while mobile drawer is open
+  useEffect(() => {
+    if (!mobileMenuOpen) {
+      document.body.style.overflow = '';
+      return;
+    }
+
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false);
+        toggleBtnRef.current?.focus();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [mobileMenuOpen]);
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+    e.preventDefault();
     setMobileMenuOpen(false);
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    setActiveSection(targetId);
+    const el = document.getElementById(targetId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
   return (
-    <header className={`navbar ${isScrolled ? 'scrolled' : ''}`} id="navbar">
-      <div className="container navbar-inner">
-        {/* Brand Logo with User-Supplied Graduation Cap + Sprout Logo */}
-        <a
-          href="#beranda"
-          className="brand-logo"
-          onClick={(e) => {
-            e.preventDefault();
-            handleNavClick('beranda');
-          }}
-          aria-label="TunasCendekia Beranda"
-        >
-          <img
-            src="/logo.png"
-            alt="Logo Resmi TunasCendekia"
-            className="brand-logo-img"
-            width={40}
-            height={40}
-          />
-          <span className="brand-text">
-            Tunas<span>Cendekia</span>
-          </span>
-        </a>
-
-        {/* Desktop Navigation Links */}
-        <nav aria-label="Navigasi Utama">
-          <ul className={`nav-links ${mobileMenuOpen ? 'open' : ''}`} id="navLinks">
-            <li>
-              <a
-                href="#beranda"
-                className={`nav-link ${activeSection === 'beranda' ? 'active' : ''}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick('beranda');
-                }}
-              >
-                Beranda
-              </a>
-            </li>
-            <li>
-              <a
-                href="#tentang-kami"
-                className={`nav-link ${activeSection === 'tentang-kami' ? 'active' : ''}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick('tentang-kami');
-                }}
-              >
-                Tentang Kami
-              </a>
-            </li>
-            <li>
-              <a
-                href="#fitur-program"
-                className={`nav-link ${activeSection === 'fitur-program' ? 'active' : ''}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick('fitur-program');
-                }}
-              >
-                Fitur &amp; Program
-              </a>
-            </li>
-            <li>
-              <a
-                href="#paket-belajar"
-                className={`nav-link ${activeSection === 'paket-belajar' ? 'active' : ''}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick('paket-belajar');
-                }}
-              >
-                Paket Belajar
-              </a>
-            </li>
-            <li>
-              <a
-                href="#faq"
-                className={`nav-link ${activeSection === 'faq' ? 'active' : ''}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick('faq');
-                }}
-              >
-                FAQ
-              </a>
-            </li>
-            <li>
-              <a
-                href="#kontak"
-                className={`nav-link ${activeSection === 'kontak' ? 'active' : ''}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick('kontak');
-                }}
-              >
-                Kontak
-              </a>
-            </li>
-          </ul>
-        </nav>
-
-        {/* Right CTA Button & Mobile Menu Toggle */}
-        <div className="nav-actions">
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={onCobaKelasClick}
+    <header className={`navbar ${scrolled ? 'scrolled' : ''}`}>
+      <div className="container">
+        <div className="navbar-inner">
+          {/* Brand Logo */}
+          <a
+            href="#beranda"
+            className="brand-logo"
+            aria-label="TunasCendekia Beranda"
+            onClick={(e) => handleNavClick(e, 'beranda')}
           >
-            Coba Kelas Gratis
-          </button>
+            <img
+              src="/logo.png"
+              alt="Logo Resmi TunasCendekia"
+              className="brand-logo-img"
+              width={40}
+              height={40}
+            />
+            <span className="brand-text">
+              Tunas<span>Cendekia</span>
+            </span>
+          </a>
 
-          <button
-            type="button"
-            className="mobile-menu-toggle"
-            aria-label={mobileMenuOpen ? 'Tutup Menu' : 'Buka Menu'}
-            aria-expanded={mobileMenuOpen}
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true">
+          {/* Navigation Links (Desktop Inline + Mobile Drawer) */}
+          <nav aria-label="Navigasi Utama">
+            <ul id="primary-navigation" className={`nav-links ${mobileMenuOpen ? 'open' : ''}`}>
+              {NAV_ITEMS.map((item) => (
+                <li key={item.id}>
+                  <a
+                    href={`#${item.id}`}
+                    className={`nav-link ${activeSection === item.id ? 'active' : ''}`}
+                    onClick={(e) => handleNavClick(e, item.id)}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+              {mobileMenuOpen && (
+                <li className="nav-mobile-cta">
+                  <button
+                    type="button"
+                    className="btn btn-primary btn-block"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onTryFreeClick();
+                    }}
+                  >
+                    Coba Kelas Gratis
+                  </button>
+                </li>
+              )}
+            </ul>
+          </nav>
+
+          {/* Right CTA & Mobile Toggle */}
+          <div className="nav-actions">
+            <button type="button" className="btn btn-primary" onClick={onTryFreeClick}>
+              Coba Kelas Gratis
+            </button>
+
+            <button
+              ref={toggleBtnRef}
+              type="button"
+              className="mobile-menu-toggle"
+              aria-label={mobileMenuOpen ? 'Tutup menu navigasi' : 'Buka menu navigasi'}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="primary-navigation"
+              onClick={() => setMobileMenuOpen((prev) => !prev)}
+            >
               {mobileMenuOpen ? (
-                <>
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
                   <line x1="18" y1="6" x2="6" y2="18" />
                   <line x1="6" y1="6" x2="18" y2="18" />
-                </>
+                </svg>
               ) : (
-                <>
+                <svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
                   <line x1="3" y1="6" x2="21" y2="6" />
                   <line x1="3" y1="12" x2="21" y2="12" />
                   <line x1="3" y1="18" x2="21" y2="18" />
-                </>
+                </svg>
               )}
-            </svg>
-          </button>
+            </button>
+          </div>
         </div>
       </div>
     </header>
   );
 };
-

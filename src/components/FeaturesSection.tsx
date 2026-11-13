@@ -1,42 +1,62 @@
 import React from 'react';
 import { FEATURES_DATA } from '../data/content';
-import { ZoomLiveIcon, CurriculumHotsIcon, SmallClassIcon, CbtAnalyticsIcon } from './Icons';
+import { FeatureCardData } from '../types';
+import {
+  CbtAnalyticsIcon,
+  CheckIcon,
+  CurriculumHotsIcon,
+  SmallClassIcon,
+  ZoomLiveIcon,
+} from './Icons';
+
+const renderFeatureIcon = (key: FeatureCardData['iconKey']) => {
+  switch (key) {
+    case 'zoom':
+      return <ZoomLiveIcon size={26} color="#10B981" />;
+    case 'curriculum':
+      return <CurriculumHotsIcon size={26} color="#F59E0B" />;
+    case 'group':
+      return <SmallClassIcon size={26} color="#10B981" />;
+    case 'analytics':
+      return <CbtAnalyticsIcon size={26} color="#F59E0B" />;
+  }
+};
 
 export const FeaturesSection: React.FC = () => {
   return (
     <section className="section" id="fitur-program">
       <div className="container">
         <div className="section-header">
-          <span className="section-tag">FITUR UNGGULAN &amp; MANFAAT</span>
+          <span className="section-tag">FITUR &amp; KEUNGGULAN</span>
           <h2 className="section-title">
-            Dirancang Khusus untuk Mencetak Problem Solver Tangguh
+            Dirancang Untuk Membangun Nalar Kritis, Bukan Sekadar Menghafal
           </h2>
           <p className="section-subtitle">
-            Setiap fitur di TunasCendekia dirancang untuk memberikan pengalaman belajar kompetitif yang efektif, terarah, dan nyaman dari rumah.
+            Setiap komponen kelas kami disusun agar siswa mampu menguasai konsep secara mendalam
+            dan orang tua menerima laporan perkembangan yang transparan.
           </p>
         </div>
 
         <div className="features-grid">
-          {FEATURES_DATA.map((feat) => (
-            <article key={feat.number} className="feature-card">
+          {FEATURES_DATA.map((feature) => (
+            <article key={feature.id} className="feature-card">
               <div>
                 <div className="feature-header">
                   <div className="feature-icon-box" aria-hidden="true">
-                    {feat.iconType === 'zoom' && <ZoomLiveIcon size={26} color="#10B981" />}
-                    {feat.iconType === 'curriculum' && <CurriculumHotsIcon size={26} color="#F59E0B" />}
-                    {feat.iconType === 'class' && <SmallClassIcon size={26} color="#10B981" />}
-                    {feat.iconType === 'cbt' && <CbtAnalyticsIcon size={26} color="#F59E0B" />}
+                    {renderFeatureIcon(feature.iconKey)}
                   </div>
                   <div>
-                    <div className="feature-number">{feat.number}</div>
-                    <h3 className="feature-title">{feat.title}</h3>
+                    <div className="feature-number">{feature.number}</div>
+                    <h3 className="feature-title">{feature.title}</h3>
                   </div>
                 </div>
-                <p className="feature-desc">{feat.description}</p>
+                <p className="feature-desc">{feature.description}</p>
               </div>
-
               <div className="benefit-badge">
-                <span>{feat.benefit}</span>
+                <span className="benefit-icon-check" aria-hidden="true">
+                  <CheckIcon size={14} color="#047857" />
+                </span>
+                <span>{feature.benefitText}</span>
               </div>
             </article>
           ))}
@@ -45,4 +65,3 @@ export const FeaturesSection: React.FC = () => {
     </section>
   );
 };
-

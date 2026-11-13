@@ -1,24 +1,89 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { FormDataType } from '../types';
-import { CheckIcon } from './Icons';
+import { CheckIcon, CloseIcon } from './Icons';
 
 interface ConfirmationModalProps {
   isOpen: boolean;
   onClose: () => void;
   data: FormDataType;
+  returnFocusToRef?: React.RefObject<HTMLButtonElement>;
 }
+
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   isOpen,
   onClose,
   data,
+  returnFocusToRef,
 }) => {
+  const modalCardRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const previousActiveRef = useRef<HTMLElement | null>(null);
+  const wasOpenRef = useRef<boolean>(false);
+
   useEffect(() => {
+    if (isOpen && !wasOpenRef.current) {
+      previousActiveRef.current = document.activeElement as HTMLElement | null;
+      wasOpenRef.current = true;
+      document.body.style.overflow = 'hidden';
+
+      const focusTimer = window.setTimeout(() => {
+        closeButtonRef.current?.focus();
+      }, 0);
+
+      return () => window.clearTimeout(focusTimer);
+    }
+
+    if (!isOpen && wasOpenRef.current) {
+      wasOpenRef.current = false;
+      document.body.style.overflow = '';
+      const targetToRestore = returnFocusToRef?.current ?? previousActiveRef.current;
+      targetToRestore?.focus();
+    }
+
+    return undefined;
+  }, [isOpen, returnFocusToRef]);
+
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === 'Escape') {
+        e.preventDefault();
         onClose();
+        return;
+      }
+
+      if (e.key === 'Tab' && modalCardRef.current) {
+        const focusables = Array.from(
+          modalCardRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
+        );
+        if (focusables.length === 0) return;
+
+        const firstEl = focusables[0];
+        const lastEl = focusables[focusables.length - 1];
+        const activeEl = document.activeElement;
+
+        if (e.shiftKey) {
+          if (activeEl === firstEl || !modalCardRef.current.contains(activeEl)) {
+            e.preventDefault();
+            lastEl.focus();
+          }
+        } else if (activeEl === lastEl || !modalCardRef.current.contains(activeEl)) {
+          e.preventDefault();
+          firstEl.focus();
+        }
       }
     };
+
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
@@ -26,12 +91,13 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   if (!isOpen) return null;
 
   const waMessage = encodeURIComponent(
-    `Halo Tim Akademik TunasCendekia! Saya ingin klaim Kelas Percobaan & Diagnostic Test Gratis.\n\n` +
-      `• Nama: ${data.namaLengkap}\n` +
-      `• Jenjang Kelas: ${data.jenjangKelas}\n` +
-      `• Bidang Minat: ${data.bidangMinat}\n` +
-      `• No. WhatsApp: ${data.nomorWhatsapp}\n` +
-      `• Program Pilihan: ${data.paketPilihan}`
+    `Halo Tim Akademik TunasCendekia! Saya ingin menjadwalkan Kelas Percobaan & Diagnostic Test Gratis.\n\n` +
+      `- Nama Orang Tua/Wali: ${data.namaOrangTua}\n` +
+      `- Nama & Kelas Siswa: ${data.namaDanKelasSiswa}\n` +
+      `- Jenjang: ${data.jenjang}\n` +
+      `- Target Program: ${data.targetProgram}\n` +
+      `- No. WhatsApp Aktif: ${data.nomorWhatsapp}\n` +
+      `- Program Pilihan: ${data.paketPilihan}`
   );
 
   return (
@@ -40,28 +106,43 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="modalTitle"
+      aria-describedby="modalDesc"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="modal-card">
+      <div className="modal-card" ref={modalCardRef}>
+        <button
+          ref={closeButtonRef}
+          type="button"
+          className="modal-close-x"
+          onClick={onClose}
+          aria-label="Tutup jendela konfirmasi"
+        >
+          <CloseIcon size={18} color="#475569" />
+        </button>
+
         <div className="modal-icon" aria-hidden="true">
-          <CheckIcon size={32} color="#10B981" />
+          <CheckIcon size={32} color="#047857" />
         </div>
-        <h4 id="modalTitle">Klaim Diagnostic Test Berhasil!</h4>
-        <p>
-          Terima kasih! Tim Konsultan Akademik TunasCendekia telah menerima data pendaftaran Anda.
+        <h4 id="modalTitle">Pendaftaran Diagnostic Test Diterima</h4>
+        <p id="modalDesc">
+          Data pendaftaran Anda sudah siap diteruskan kepada Konsultan Akademik TunasCendekia
+          untuk penjadwalan sesi Zoom.
         </p>
 
         <div className="modal-summary">
           <div>
-            <strong>Nama Orang Tua / Siswa:</strong> {data.namaLengkap}
+            <strong>Orang Tua / Wali:</strong> {data.namaOrangTua}
           </div>
           <div>
-            <strong>Jenjang Kelas:</strong> {data.jenjangKelas}
+            <strong>Siswa &amp; Kelas:</strong> {data.namaDanKelasSiswa}
           </div>
           <div>
-            <strong>Bidang Minat:</strong> {data.bidangMinat}
+            <strong>Jenjang Pendidikan:</strong> {data.jenjang}
+          </div>
+          <div>
+            <strong>Target Program:</strong> {data.targetProgram}
           </div>
           <div>
             <strong>Nomor WhatsApp:</strong> {data.nomorWhatsapp}
@@ -72,11 +153,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
         </div>
 
         <div className="modal-actions">
-          <button
-            type="button"
-            className="btn btn-secondary btn-block"
-            onClick={onClose}
-          >
+          <button type="button" className="btn btn-secondary btn-block" onClick={onClose}>
             Tutup
           </button>
           <a
@@ -92,4 +169,3 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
     </div>
   );
 };
-

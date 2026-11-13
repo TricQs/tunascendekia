@@ -1,16 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { WhatsAppIcon } from './Icons';
 
 export const FloatingActions: React.FC = () => {
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [footerClearancePx, setFooterClearancePx] = useState(0);
 
   useEffect(() => {
-    const handleScroll = () => {
+    let rafId = 0;
+
+    const updatePositions = () => {
       setShowBackToTop(window.scrollY > 400);
+
+      const footer = document.querySelector('.site-footer');
+      if (footer) {
+        const rect = footer.getBoundingClientRect();
+        const viewportH = window.innerHeight;
+        // Shift floating controls smoothly upward so they never obscure footer links or copyright
+        const overlap = Math.max(0, viewportH - rect.top);
+        setFooterClearancePx(overlap > 0 ? Math.ceil(overlap + 12) : 0);
+      }
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const handleScrollOrResize = () => {
+      if (rafId) return;
+      rafId = window.requestAnimationFrame(() => {
+        rafId = 0;
+        updatePositions();
+      });
+    };
+
+    updatePositions();
+    window.addEventListener('scroll', handleScrollOrResize, { passive: true });
+    window.addEventListener('resize', handleScrollOrResize, { passive: true });
+
+    return () => {
+      if (rafId) window.cancelAnimationFrame(rafId);
+      window.removeEventListener('scroll', handleScrollOrResize);
+      window.removeEventListener('resize', handleScrollOrResize);
+    };
   }, []);
 
   const scrollToTop = () => {
@@ -18,12 +45,18 @@ export const FloatingActions: React.FC = () => {
   };
 
   return (
-    <div className="floating-actions" aria-label="Aksi Cepat">
+    <div
+      className="floating-actions"
+      aria-label="Aksi Cepat"
+      style={{
+        bottom: `calc(${20 + footerClearancePx}px + env(safe-area-inset-bottom, 0px))`,
+      }}
+    >
       <button
         type="button"
         className={`back-to-top ${showBackToTop ? 'visible' : ''}`}
         onClick={scrollToTop}
-        aria-label="Kembali ke atas"
+        aria-label="Kembali ke atas halaman"
       >
         <svg
           width="20"
@@ -47,10 +80,9 @@ export const FloatingActions: React.FC = () => {
         className="floating-whatsapp"
         aria-label="Konsultasi Cepat via WhatsApp"
       >
-        <WhatsAppIcon size={20} color="#FFFFFF" />
+        <WhatsAppIcon size={18} color="#FFFFFF" />
         <span>Tanya via WhatsApp</span>
       </a>
     </div>
   );
 };
-

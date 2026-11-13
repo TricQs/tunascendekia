@@ -1,50 +1,148 @@
-import React, { useState, useEffect } from 'react';
-import { HOTS_TOPICS } from '../data/content';
-import { HotsTopic } from '../types';
-import { MedalAwardIcon, CheckIcon } from './Icons';
+import React, { useEffect, useState } from 'react';
+import { SANDBOX_PROBLEMS } from '../data/content';
+import { EducationLevel, QuizOption, SandboxProblemSet, SandboxState } from '../types';
+import {
+  CheckIcon,
+  HandRaiseIcon,
+  LightbulbIcon,
+  MedalAwardIcon,
+  PauseIcon,
+  PlayIcon,
+  StepNextIcon,
+  StepPrevIcon,
+} from './Icons';
 
-export const ZoomAlgorithmVisualizer: React.FC = () => {
-  const [activeTopicId, setActiveTopicId] = useState<'math' | 'science' | 'tka'>('math');
-  const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
-  const [isPlaying, setIsPlaying] = useState<boolean>(true);
+interface ZoomAlgorithmVisualizerProps {
+  onRequestDiagnosticForLevel: (level: EducationLevel) => void;
+}
+
+const SD_SHELL_COLORS = ['#0F172A', '#10B981', '#F59E0B', '#2563EB', '#047857'];
+
+export const ZoomAlgorithmVisualizer: React.FC<ZoomAlgorithmVisualizerProps> = ({
+  onRequestDiagnosticForLevel,
+}) => {
+  const [activeLevel, setActiveLevel] = useState<EducationLevel>('SMP');
+  const [stageIndex, setStageIndex] = useState<number>(0);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [handRaised, setHandRaised] = useState<boolean>(false);
 
-  const currentTopic: HotsTopic =
-    HOTS_TOPICS.find((t) => t.id === activeTopicId) || HOTS_TOPICS[0];
-  const currentStep = currentTopic.steps[currentStepIndex] || currentTopic.steps[0];
+  const currentProblem: SandboxProblemSet =
+    SANDBOX_PROBLEMS.find((p) => p.level === activeLevel) ?? SANDBOX_PROBLEMS[0];
 
-  // Continuous Brilliant.org-style step animation loop
+  const [paramValues, setParamValues] = useState<Record<EducationLevel, number>>({
+    SD: 4,
+    SMP: 4,
+    SMA: 8,
+  });
+
+  const [sandboxState, setSandboxState] = useState<SandboxState>('exploring');
+  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
+
+  const activeParam = paramValues[activeLevel];
+  const currentStage = currentProblem.stages[stageIndex] ?? currentProblem.stages[0];
+  const selectedOption: QuizOption | undefined = currentProblem.challengeOptions.find(
+    (opt) => opt.id === selectedOptionId
+  );
+
+  // Respect prefers-reduced-motion: only animate automatically when explicitly toggled on
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!isPlaying || prefersReducedMotion) return;
 
     const timer = window.setInterval(() => {
-      setCurrentStepIndex((prev) => (prev + 1) % currentTopic.steps.length);
-    }, 2600);
+      setStageIndex((prev) => (prev + 1) % currentProblem.stages.length);
+    }, 2800);
 
     return () => window.clearInterval(timer);
-  }, [isPlaying, activeTopicId, currentTopic.steps.length]);
+  }, [isPlaying, activeLevel, currentProblem.stages.length]);
 
-  const handleTopicChange = (topicId: 'math' | 'science' | 'tka') => {
-    setActiveTopicId(topicId);
-    setCurrentStepIndex(0);
-    setIsPlaying(true);
+  const handleLevelChange = (level: EducationLevel) => {
+    setActiveLevel(level);
+    setStageIndex(0);
+    setIsPlaying(false);
+    setSandboxState('exploring');
+    setSelectedOptionId(null);
   };
 
-  const handlePrevStep = () => {
-    setIsPlaying(false);
-    setCurrentStepIndex((prev) =>
-      prev === 0 ? currentTopic.steps.length - 1 : prev - 1
+  const handleTabKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, currentIdx: number) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      const nextIdx =
+        e.key === 'ArrowRight'
+          ? (currentIdx + 1) % SANDBOX_PROBLEMS.length
+          : (currentIdx - 1 + SANDBOX_PROBLEMS.length) % SANDBOX_PROBLEMS.length;
+      handleLevelChange(SANDBOX_PROBLEMS[nextIdx].level);
+    }
+  };
+
+  const handleParamChange = (nextVal: number) => {
+    const clamped = Math.max(
+      currentProblem.parameterMin,
+      Math.min(currentProblem.parameterMax, nextVal)
     );
+    setParamValues((prev) => ({
+      ...prev,
+      [activeLevel]: clamped,
+    }));
   };
 
-  const handleNextStep = () => {
+  const handleSelectAnswer = (option: QuizOption) => {
     setIsPlaying(false);
-    setCurrentStepIndex((prev) => (prev + 1) % currentTopic.steps.length);
+    setSelectedOptionId(option.id);
+    if (option.isCorrect) {
+      setSandboxState('answered-correct');
+      setStageIndex(2);
+    } else {
+      setSandboxState('answered-retry');
+    }
   };
+
+  const formatHalf = (val: number): string => {
+    const half = val / 2;
+    return Number.isInteger(half) ? `${half}` : half.toFixed(1);
+  };
+
+  // Precomputed geometry values for SMP diagram (a = 10cm, b = activeParam cm)
+  const smpScale = 11;
+  const smpA = 10 * smpScale;
+  const smpB = activeParam * smpScale;
+  const smpDiff = smpA - smpB;
+  const smpOriginX = 116;
+  const smpOriginY = 34;
+
+  // Precomputed geometry values for SMA diagram (t = 8s, v0 = activeParam m/s)
+  const smaBaseY = 140;
+  const smaH = activeParam * 9;
+  const smaHalfH = smaH / 2;
+  const smaMidY = smaBaseY - smaHalfH;
+
+  // Precomputed grid tiles for SD diagram (k = activeParam, 2..5)
+  const sdCell = 22;
+  const sdTiles: Array<{
+    key: string;
+    shell: number;
+    row: number;
+    col: number;
+    barIndex: number;
+  }> = [];
+  if (activeLevel === 'SD') {
+    for (let s = 0; s < activeParam; s++) {
+      let barIdx = 0;
+      for (let c = 0; c <= s; c++) {
+        sdTiles.push({ key: `r-${s}-${c}`, shell: s, row: s, col: c, barIndex: barIdx++ });
+      }
+      for (let r = s - 1; r >= 0; r--) {
+        sdTiles.push({ key: `c-${r}-${s}`, shell: s, row: r, col: s, barIndex: barIdx++ });
+      }
+    }
+  }
 
   return (
-    <div className="zoom-mockup-card" aria-label="Simulasi Kelas Interaktif Zoom TunasCendekia">
+    <div
+      className="zoom-mockup-card"
+      id="sandbox-interaktif"
+      aria-label="Simulasi Kelas Interaktif Zoom TunasCendekia"
+    >
       {/* 1. Zoom Window Top Bar */}
       <div className="zoom-topbar">
         <div className="window-dots" aria-hidden="true">
@@ -53,26 +151,26 @@ export const ZoomAlgorithmVisualizer: React.FC = () => {
           <span className="window-dot dot-green" />
         </div>
         <div className="zoom-session-badge">
-          <span className="live-pulse" />
-          <span>REC • LIVE ZOOM 2 ARAH</span>
+          <span className="live-pulse" aria-hidden="true" />
+          <span>SESI LIVE ZOOM 2 ARAH</span>
         </div>
-        <div className="zoom-Capacity-pill">12/15 Siswa Aktif</div>
+        <div className="zoom-Capacity-pill">Maks. 15 Siswa/Kelas</div>
       </div>
 
       <div className="zoom-body">
-        {/* 2. Realistic Zoom Video Gallery Strip */}
-        <div className="zoom-video-gallery" aria-label="Galeri Video Peserta Zoom">
+        {/* 2. Authentic Zoom Video Gallery Strip */}
+        <div className="zoom-video-gallery" aria-label="Suasana Kelas Zoom Kecil">
           <div className="zoom-video-tile mentor-cam active-speaker">
             <img
               src="/mentor-zoom.jpg"
-              alt="Kak Kevin Ardiansyah mengajar via Zoom"
+              alt="Mentor Alumni OSN mengajar tatap muka via Zoom"
               className="zoom-cam-img"
               width={320}
               height={180}
               fetchPriority="high"
             />
             <div className="zoom-cam-top-tag">
-              <span className="cam-medal-pill">🥇 Mentor OSN</span>
+              <span className="cam-medal-pill">Alumni Medalis OSN</span>
               <span className="voice-wave" aria-hidden="true">
                 <i />
                 <i />
@@ -88,13 +186,13 @@ export const ZoomAlgorithmVisualizer: React.FC = () => {
           <div className="zoom-video-tile student-cam">
             <img
               src="/student-zoom-1.jpg"
-              alt="Siswa SMA mengangkat tangan di kelas Zoom"
+              alt="Siswa mengangkat tangan berdiskusi dalam kelas Zoom"
               className="zoom-cam-img student-crop-1"
               width={200}
               height={150}
             />
             <div className="zoom-cam-top-tag">
-              <span className="cam-hand-pill">✋ Tanya Konsep</span>
+              <span className="cam-hand-pill">Diskusi Konsep</span>
             </div>
             <div className="zoom-cam-label">
               <span>Rania (SMA Kelas 11)</span>
@@ -104,13 +202,13 @@ export const ZoomAlgorithmVisualizer: React.FC = () => {
           <div className="zoom-video-tile student-cam">
             <img
               src="/student-zoom-2.jpg"
-              alt="Siswa SMP mencatat pembahasan soal di Zoom"
+              alt="Siswa mencatat penalaran soal di kelas interaktif"
               className="zoom-cam-img"
               width={200}
               height={150}
             />
             <div className="zoom-cam-top-tag">
-              <span className="cam-participants-pill">+10 Siswa</span>
+              <span className="cam-participants-pill">Kelas Kecil</span>
             </div>
             <div className="zoom-cam-label">
               <span>Dimas (SMP Kelas 8)</span>
@@ -118,488 +216,447 @@ export const ZoomAlgorithmVisualizer: React.FC = () => {
           </div>
         </div>
 
-        {/* 3. Topic Switcher Tabs */}
-        <div className="mockup-tabs" role="tablist" aria-label="Pilih Topik Visualisasi">
-          {HOTS_TOPICS.map((topic) => (
+        {/* 3. Accessible Education Level Switcher (role="tablist") */}
+        <div
+          className="mockup-tabs"
+          role="tablist"
+          aria-label="Pilih Jenjang Sandbox Konsep TKA dan OSN"
+        >
+          {SANDBOX_PROBLEMS.map((problem, idx) => (
             <button
-              key={topic.id}
+              key={problem.level}
+              id={`tab-level-${problem.level}`}
               type="button"
-              className={`mockup-tab ${activeTopicId === topic.id ? 'active' : ''}`}
-              onClick={() => handleTopicChange(topic.id)}
               role="tab"
-              aria-selected={activeTopicId === topic.id}
+              aria-selected={activeLevel === problem.level}
+              aria-controls="sandbox-tabpanel"
+              tabIndex={activeLevel === problem.level ? 0 : -1}
+              className={`mockup-tab ${activeLevel === problem.level ? 'active' : ''}`}
+              onClick={() => handleLevelChange(problem.level)}
+              onKeyDown={(e) => handleTabKeyDown(e, idx)}
             >
-              {topic.label}
+              {problem.tabLabel}
             </button>
           ))}
         </div>
 
-        {/* 4. Brilliant.org-Style Interactive Moving Geometry Whiteboard */}
-        <div className="brilliant-board">
+        {/* 4. Interactive Pedagogical Sandbox Panel */}
+        <div
+          id="sandbox-tabpanel"
+          role="tabpanel"
+          aria-labelledby={`tab-level-${activeLevel}`}
+          className="brilliant-board"
+        >
           <div className="brilliant-board-top">
-            <span className="brilliant-step-caption">{currentStep.title}</span>
-            <span className="algo-step-badge">{currentStep.highlightBadge}</span>
+            <div>
+              <span className="sandbox-track-meta">{currentProblem.trackLabel}</span>
+              <h2 className="brilliant-step-caption">{currentStage.title}</h2>
+            </div>
+            <span className="algo-step-badge">{currentStage.highlightBadge}</span>
           </div>
 
-          {/* Moving SVG Stage (Brilliant.org Style) */}
+          {/* Interactive Parameter Slider + Stepper */}
+          <div className="sandbox-param-bar">
+            <div className="sandbox-param-info">
+              <label htmlFor="sandbox-param-slider" className="sandbox-param-label">
+                {currentProblem.parameterLabel}:
+              </label>
+              <strong className="sandbox-param-value">
+                {activeParam} {currentProblem.parameterUnit}
+              </strong>
+            </div>
+
+            <div className="sandbox-param-controls">
+              <button
+                type="button"
+                className="param-step-btn"
+                onClick={() => handleParamChange(activeParam - 1)}
+                disabled={activeParam <= currentProblem.parameterMin}
+                aria-label={`Kurangi ${currentProblem.parameterLabel}`}
+              >
+                -
+              </button>
+              <input
+                id="sandbox-param-slider"
+                type="range"
+                className="sandbox-range-slider"
+                min={currentProblem.parameterMin}
+                max={currentProblem.parameterMax}
+                step={1}
+                value={activeParam}
+                onChange={(e) => handleParamChange(Number(e.target.value))}
+              />
+              <button
+                type="button"
+                className="param-step-btn"
+                onClick={() => handleParamChange(activeParam + 1)}
+                disabled={activeParam >= currentProblem.parameterMax}
+                aria-label={`Tambah ${currentProblem.parameterLabel}`}
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          {/* Moving Mathematical SVG Canvas */}
           <div className="brilliant-stage">
-            {activeTopicId === 'math' && (
+            {activeLevel === 'SD' && (
               <svg
-                viewBox="0 0 420 185"
+                viewBox="0 0 420 180"
                 className="brilliant-svg"
                 role="img"
-                aria-label="Animasi pembuktian geometri a kuadrat dikurang b kuadrat"
+                aria-label={`Visualisasi jumlah ${activeParam} bilangan ganjil pertama membentuk persegi ${activeParam} kali ${activeParam}`}
               >
-                {/* Top Dimension Calliper Bar: a -> a + b */}
+                {sdTiles.map((tile) => {
+                  const rowCount = tile.shell * 2 + 1;
+                  const barTotalW = rowCount * (sdCell + 2);
+                  const barStartX = 210 - barTotalW / 2;
+                  const sqSize = activeParam * sdCell;
+                  const sqOriginX = 210 - sqSize / 2;
+                  const sqOriginY = 92 - sqSize / 2;
+
+                  const posX =
+                    stageIndex === 0
+                      ? barStartX + tile.barIndex * (sdCell + 2)
+                      : stageIndex === 1
+                      ? sqOriginX + tile.col * sdCell + tile.shell * 5
+                      : sqOriginX + tile.col * sdCell;
+
+                  const posY =
+                    stageIndex === 0
+                      ? 22 + tile.shell * (sdCell + 7)
+                      : stageIndex === 1
+                      ? sqOriginY + tile.row * sdCell + tile.shell * 5
+                      : sqOriginY + tile.row * sdCell;
+
+                  const fillColor = SD_SHELL_COLORS[tile.shell % SD_SHELL_COLORS.length];
+
+                  return (
+                    <rect
+                      key={tile.key}
+                      x="0"
+                      y="0"
+                      width={sdCell - 1.5}
+                      height={sdCell - 1.5}
+                      rx="3"
+                      fill={fillColor}
+                      stroke="#111827"
+                      strokeWidth="1.5"
+                      className="geo-moving-piece"
+                      style={{
+                        transform: `translate(${posX}px, ${posY}px)`,
+                      }}
+                    />
+                  );
+                })}
+
+                {/* Outer k x k Caliper Dimension on Stage 2 */}
+                {stageIndex === 2 && (
+                  <g className="caliper-group">
+                    <line
+                      x1={210 - (activeParam * sdCell) / 2}
+                      y1={92 + (activeParam * sdCell) / 2 + 12}
+                      x2={210 + (activeParam * sdCell) / 2}
+                      y2={92 + (activeParam * sdCell) / 2 + 12}
+                      className="caliper-line"
+                    />
+                    <text
+                      x="210"
+                      y={92 + (activeParam * sdCell) / 2 + 27}
+                      textAnchor="middle"
+                      className="brilliant-math-var-sm"
+                    >
+                      k = {activeParam} ({activeParam * activeParam} ubin)
+                    </text>
+                  </g>
+                )}
+              </svg>
+            )}
+
+            {activeLevel === 'SMP' && (
+              <svg
+                viewBox="0 0 420 180"
+                className="brilliant-svg"
+                role="img"
+                aria-label={`Pembuktian geometri selisih kuadrat dengan a = 10 cm dan b = ${activeParam} cm`}
+              >
+                {/* Top Horizontal Caliper: a -> a + b */}
                 <g className="caliper-group">
                   <line
-                    x1="130"
-                    y1="20"
-                    x2={currentStepIndex === 3 ? 286 : 244}
-                    y2="20"
+                    x1={smpOriginX}
+                    y1="18"
+                    x2={stageIndex === 2 ? smpOriginX + smpA + smpB : smpOriginX + smpA}
+                    y2="18"
                     className="caliper-line"
                   />
-                  <line x1="130" y1="14" x2="130" y2="26" className="caliper-tick" />
+                  <line x1={smpOriginX} y1="13" x2={smpOriginX} y2="23" className="caliper-tick" />
                   <line
-                    x1={currentStepIndex === 3 ? 286 : 244}
-                    y1="14"
-                    x2={currentStepIndex === 3 ? 286 : 244}
-                    y2="26"
+                    x1={stageIndex === 2 ? smpOriginX + smpA + smpB : smpOriginX + smpA}
+                    y1="13"
+                    x2={stageIndex === 2 ? smpOriginX + smpA + smpB : smpOriginX + smpA}
+                    y2="23"
                     className="caliper-tick"
                   />
                   <text
-                    x={currentStepIndex === 3 ? 208 : 187}
-                    y="13"
+                    x={
+                      stageIndex === 2
+                        ? smpOriginX + (smpA + smpB) / 2
+                        : smpOriginX + smpA / 2
+                    }
+                    y="12"
                     textAnchor="middle"
-                    className="brilliant-math-var"
+                    className="brilliant-math-var-sm"
                   >
-                    {currentStepIndex === 3 ? 'a + b' : 'a'}
+                    {stageIndex === 2 ? `a + b = ${10 + activeParam}` : 'a = 10'}
                   </text>
                 </g>
 
-                {/* Left Vertical Calliper Bar: a -> a - b */}
+                {/* Left Vertical Caliper: a -> a - b */}
                 <g className="caliper-group">
                   <line
-                    x1="112"
-                    y1="34"
-                    x2="112"
-                    y2={currentStepIndex === 0 ? 148 : 106}
+                    x1={smpOriginX - 16}
+                    y1={smpOriginY}
+                    x2={smpOriginX - 16}
+                    y2={stageIndex === 0 ? smpOriginY + smpA : smpOriginY + smpDiff}
                     className="caliper-line"
                   />
-                  <line x1="106" y1="34" x2="118" y2="34" className="caliper-tick" />
                   <line
-                    x1="106"
-                    y1={currentStepIndex === 0 ? 148 : 106}
-                    x2="118"
-                    y2={currentStepIndex === 0 ? 148 : 106}
+                    x1={smpOriginX - 21}
+                    y1={smpOriginY}
+                    x2={smpOriginX - 11}
+                    y2={smpOriginY}
+                    className="caliper-tick"
+                  />
+                  <line
+                    x1={smpOriginX - 21}
+                    y1={stageIndex === 0 ? smpOriginY + smpA : smpOriginY + smpDiff}
+                    x2={smpOriginX - 11}
+                    y2={stageIndex === 0 ? smpOriginY + smpA : smpOriginY + smpDiff}
                     className="caliper-tick"
                   />
                   <text
-                    x="98"
-                    y={currentStepIndex === 0 ? 95 : 74}
+                    x={smpOriginX - 28}
+                    y={stageIndex === 0 ? smpOriginY + smpA / 2 + 4 : smpOriginY + smpDiff / 2 + 4}
                     textAnchor="end"
-                    className="brilliant-math-var"
+                    className="brilliant-math-var-sm"
                   >
-                    {currentStepIndex === 0 ? 'a' : 'a − b'}
+                    {stageIndex === 0 ? 'a = 10' : `a - b = ${10 - activeParam}`}
                   </text>
                 </g>
 
-                {/* Main Top Rectangle: width a (114), height a - b (72) at (130, 34) */}
+                {/* Top Main Rectangle a x (a - b) */}
                 <rect
-                  x="130"
-                  y="34"
-                  width="114"
-                  height="72"
+                  x={smpOriginX}
+                  y={smpOriginY}
+                  width={smpA}
+                  height={smpDiff}
                   className="geo-shape geo-blue"
                 />
 
-                {/* Moving Bottom-Left Strip: originally 72 x 42 at (130, 106).
-                    In Step 2 it detaches & rotates -90deg;
-                    In Step 3 it docks at (244, 34) with size 42 x 72! */}
+                {/* Moving Bottom-Left Strip (a - b) x b */}
                 <g
                   className="geo-moving-piece"
                   style={{
                     transform:
-                      currentStepIndex <= 1
-                        ? 'translate(130px, 106px) rotate(0deg)'
-                        : currentStepIndex === 2
-                        ? 'translate(256px, 126px) rotate(-90deg)'
-                        : 'translate(244px, 106px) rotate(-90deg)',
+                      stageIndex <= 1
+                        ? `translate(${smpOriginX}px, ${smpOriginY + smpDiff}px) rotate(0deg)`
+                        : `translate(${smpOriginX + smpA}px, ${smpOriginY + smpDiff}px) rotate(-90deg)`,
                   }}
                 >
                   <rect
                     x="0"
                     y="0"
-                    width="72"
-                    height="42"
-                    className={`geo-shape ${currentStepIndex >= 2 ? 'geo-blue-accent' : 'geo-blue'}`}
+                    width={smpDiff}
+                    height={smpB}
+                    className={`geo-shape ${stageIndex === 2 ? 'geo-emerald' : 'geo-blue-accent'}`}
                   />
                 </g>
 
-                {/* Dashed Slice Line between Top Rectangle and Bottom Strip */}
-                <line
-                  x1="130"
-                  y1="106"
-                  x2="202"
-                  y2="106"
-                  className={`slice-dashed-line ${currentStepIndex === 1 || currentStepIndex === 2 ? 'visible' : ''}`}
-                />
-
-                {/* Corner Square b^2 (42 x 42 at 202, 106):
-                    Step 0: Seamless blue part of a^2
-                    Step 1: Turns Gold & slides out to show - b^2
-                    Step 2 & 3: Fades away */}
+                {/* Corner b^2 Square */}
                 <g
                   className="geo-b2-piece"
                   style={{
                     transform:
-                      currentStepIndex === 0
-                        ? 'translate(202px, 106px) scale(1)'
-                        : currentStepIndex === 1
-                        ? 'translate(216px, 118px) scale(1)'
-                        : 'translate(236px, 134px) scale(0.6)',
-                    opacity: currentStepIndex >= 2 ? 0 : 1,
+                      stageIndex === 0
+                        ? `translate(${smpOriginX + smpDiff}px, ${smpOriginY + smpDiff}px) scale(1)`
+                        : stageIndex === 1
+                        ? `translate(${smpOriginX + smpDiff + 16}px, ${smpOriginY + smpDiff + 14}px) scale(1)`
+                        : `translate(${smpOriginX + smpDiff + 26}px, ${smpOriginY + smpDiff + 22}px) scale(0.5)`,
+                    opacity: stageIndex === 2 ? 0 : 1,
                   }}
                 >
                   <rect
                     x="0"
                     y="0"
-                    width="42"
-                    height="42"
-                    className={`geo-shape ${currentStepIndex === 0 ? 'geo-blue-seamless' : 'geo-gold'}`}
+                    width={smpB}
+                    height={smpB}
+                    className={`geo-shape ${stageIndex === 0 ? 'geo-blue-seamless' : 'geo-gold'}`}
                   />
-                  {currentStepIndex === 1 && (
-                    <text x="21" y="26" textAnchor="middle" className="brilliant-math-var-sm">
-                      b²
+                  {stageIndex === 1 && (
+                    <text
+                      x={smpB / 2}
+                      y={smpB / 2 + 5}
+                      textAnchor="middle"
+                      className="brilliant-math-var-sm"
+                    >
+                      b²={activeParam * activeParam}
                     </text>
                   )}
                 </g>
 
-                {/* Outer Border of Complete a x a Square in Step 0 so it looks like 1 solid blue square */}
+                {/* Solid outer outline on Stage 0 */}
                 <rect
-                  x="130"
-                  y="34"
-                  width="114"
-                  height="114"
+                  x={smpOriginX}
+                  y={smpOriginY}
+                  width={smpA}
+                  height={smpA}
                   fill="none"
                   stroke="#111827"
-                  strokeWidth="2.5"
-                  style={{ opacity: currentStepIndex === 0 ? 1 : 0, transition: 'opacity 300ms ease' }}
+                  strokeWidth="2.4"
+                  style={{ opacity: stageIndex === 0 ? 1 : 0, transition: 'opacity 250ms ease' }}
                 />
-
-                {/* Bottom Caliper for b when in Step 1 or Step 3 */}
-                {currentStepIndex === 1 && (
-                  <g className="caliper-group">
-                    <line x1="216" y1="168" x2="258" y2="168" className="caliper-line" />
-                    <line x1="216" y1="163" x2="216" y2="173" className="caliper-tick" />
-                    <line x1="258" y1="163" x2="258" y2="173" className="caliper-tick" />
-                    <text x="237" y="181" textAnchor="middle" className="brilliant-math-var-sm">
-                      b
-                    </text>
-                  </g>
-                )}
-
-                {currentStepIndex === 3 && (
-                  <g className="caliper-group">
-                    <line x1="130" y1="118" x2="244" y2="118" className="caliper-line" />
-                    <line x1="130" y1="113" x2="130" y2="123" className="caliper-tick" />
-                    <line x1="244" y1="113" x2="244" y2="123" className="caliper-tick" />
-                    <text x="187" y="133" textAnchor="middle" className="brilliant-math-var-sm">
-                      a
-                    </text>
-
-                    <line x1="244" y1="118" x2="286" y2="118" className="caliper-line" />
-                    <line x1="286" y1="113" x2="286" y2="123" className="caliper-tick" />
-                    <text x="265" y="133" textAnchor="middle" className="brilliant-math-var-sm">
-                      b
-                    </text>
-                  </g>
-                )}
               </svg>
             )}
 
-            {activeTopicId === 'science' && (
+            {activeLevel === 'SMA' && (
               <svg
-                viewBox="0 0 420 185"
+                viewBox="0 0 420 180"
                 className="brilliant-svg"
                 role="img"
-                aria-label="Animasi transformasi segitiga kecepatan menjadi persegi panjang"
+                aria-label={`Transformasi grafik kecepatan terhadap waktu dengan v0 = ${activeParam} m/s`}
               >
-                {/* Bottom Width Calliper: w / t */}
+                {/* Bottom Time Axis Calliper t = 8s */}
                 <g className="caliper-group">
-                  <line x1="120" y1="146" x2="280" y2="146" className="caliper-line" />
-                  <line x1="120" y1="140" x2="120" y2="152" className="caliper-tick" />
-                  <line x1="280" y1="140" x2="280" y2="152" className="caliper-tick" />
-                  <text x="200" y="164" textAnchor="middle" className="brilliant-math-var">
-                    t
+                  <line x1="112" y1="154" x2="288" y2="154" className="caliper-line" />
+                  <line x1="112" y1="149" x2="112" y2="159" className="caliper-tick" />
+                  <line x1="288" y1="149" x2="288" y2="159" className="caliper-tick" />
+                  <text x="200" y="170" textAnchor="middle" className="brilliant-math-var-sm">
+                    t = 8 detik
                   </text>
                 </g>
 
-                {/* Right Vertical Height Calliper: v0 -> 1/2 v0 */}
+                {/* Right Height Calliper: v0 -> 1/2 v0 */}
                 <g className="caliper-group">
                   <line
-                    x1="296"
-                    y1={currentStepIndex === 0 ? 38 : 84}
-                    x2="296"
-                    y2="130"
+                    x1="304"
+                    y1={stageIndex === 0 ? smaBaseY - smaH : smaMidY}
+                    x2="304"
+                    y2={smaBaseY}
                     className="caliper-line"
                   />
                   <line
-                    x1="290"
-                    y1={currentStepIndex === 0 ? 38 : 84}
-                    x2="302"
-                    y2={currentStepIndex === 0 ? 38 : 84}
+                    x1="299"
+                    y1={stageIndex === 0 ? smaBaseY - smaH : smaMidY}
+                    x2="309"
+                    y2={stageIndex === 0 ? smaBaseY - smaH : smaMidY}
                     className="caliper-tick"
                   />
-                  <line x1="290" y1="130" x2="302" y2="130" className="caliper-tick" />
+                  <line x1="299" y1={smaBaseY} x2="309" y2={smaBaseY} className="caliper-tick" />
                   <text
-                    x="308"
-                    y={currentStepIndex === 0 ? 88 : 111}
+                    x="316"
+                    y={stageIndex === 0 ? smaBaseY - smaH / 2 + 4 : smaMidY + smaHalfH / 2 + 4}
                     textAnchor="start"
-                    className="brilliant-math-var"
+                    className="brilliant-math-var-sm"
                   >
-                    {currentStepIndex === 0 ? 'v₀' : '½ v₀'}
+                    {stageIndex === 0 ? `v₀ = ${activeParam} m/s` : `½ v₀ = ${formatHalf(activeParam)} m/s`}
                   </text>
                 </g>
 
-                {/* Bottom Trapezoid Base of Triangle (from y=84 to y=130, x=120..280) */}
+                {/* Bottom Trapezoid Base */}
                 <polygon
-                  points="120,84 200,84 280,130 120,130"
+                  points={`112,${smaMidY} 200,${smaMidY} 288,${smaBaseY} 112,${smaBaseY}`}
                   className="geo-shape geo-gold"
                 />
 
-                {/* Top Triangle Peak (from y=38 to y=84, x=120..200) that rotates 180 deg around (200, 84)! */}
+                {/* Top Triangle Peak rotating 180deg around (200, smaMidY) */}
                 <g
                   className="geo-moving-piece"
                   style={{
-                    transformOrigin: '200px 84px',
+                    transformOrigin: `200px ${smaMidY}px`,
                     transform:
-                      currentStepIndex <= 1
+                      stageIndex === 0
                         ? 'rotate(0deg)'
-                        : currentStepIndex === 2
-                        ? 'rotate(115deg)'
+                        : stageIndex === 1
+                        ? 'rotate(75deg)'
                         : 'rotate(180deg)',
                   }}
                 >
                   <polygon
-                    points="120,38 200,84 120,84"
-                    className={`geo-shape ${currentStepIndex >= 2 ? 'geo-gold-bright' : 'geo-gold'}`}
+                    points={`112,${smaBaseY - smaH} 200,${smaMidY} 112,${smaMidY}`}
+                    className={`geo-shape ${stageIndex === 2 ? 'geo-emerald' : 'geo-gold-bright'}`}
                   />
                 </g>
 
-                {/* Horizontal Slice Line at Half Height y=84 */}
-                {currentStepIndex >= 1 && currentStepIndex <= 2 && (
+                {/* Midpoint Slice Line */}
+                {stageIndex === 1 && (
                   <line
-                    x1="108"
-                    y1="84"
-                    x2="284"
-                    y2="84"
+                    x1="100"
+                    y1={smaMidY}
+                    x2="294"
+                    y2={smaMidY}
                     className="slice-dashed-line visible"
+                    style={{ stroke: '#0F172A' }}
                   />
                 )}
               </svg>
             )}
 
-            {activeTopicId === 'tka' && (
-              <svg
-                viewBox="0 0 420 185"
-                className="brilliant-svg"
-                role="img"
-                aria-label="Animasi partisi deret geometri pada persegi satuan"
-              >
-                {/* Outer 1 x 1 Unit Square Frame (136 x 116 at 142, 22) */}
-                <rect
-                  x="142"
-                  y="22"
-                  width="136"
-                  height="116"
-                  fill="#FFFFFF"
-                  stroke="#111827"
-                  strokeWidth="2.5"
-                />
-
-                {/* Block 1: 1/2 (Left Half 68 x 116) */}
-                <rect
-                  x="142"
-                  y="22"
-                  width="68"
-                  height="116"
-                  className="geo-shape geo-blue"
-                />
-                <text x="176" y="85" textAnchor="middle" className="brilliant-block-label-light">
-                  ½
-                </text>
-
-                {/* Block 2: 1/4 (Top Right Quarter 68 x 58) */}
-                <g
-                  className="geo-moving-piece"
-                  style={{
-                    opacity: currentStepIndex >= 1 ? 1 : 0,
-                    transform:
-                      currentStepIndex >= 1 ? 'translate(0px, 0px)' : 'translate(24px, -18px)',
-                  }}
-                >
-                  <rect
-                    x="210"
-                    y="22"
-                    width="68"
-                    height="58"
-                    className="geo-shape geo-gold"
-                  />
-                  <text x="244" y="56" textAnchor="middle" className="brilliant-block-label-dark">
-                    ¼
-                  </text>
-                </g>
-
-                {/* Block 3: 1/8 (Bottom-Right Left Half 34 x 58) */}
-                <g
-                  className="geo-moving-piece"
-                  style={{
-                    opacity: currentStepIndex >= 2 ? 1 : 0,
-                    transform:
-                      currentStepIndex >= 2 ? 'translate(0px, 0px)' : 'translate(0px, 20px)',
-                  }}
-                >
-                  <rect
-                    x="210"
-                    y="80"
-                    width="34"
-                    height="58"
-                    className="geo-shape geo-emerald"
-                  />
-                  <text x="227" y="114" textAnchor="middle" className="brilliant-block-label-light">
-                    ⅛
-                  </text>
-                </g>
-
-                {/* Block 4: 1/16 + ... (Remaining 34 x 58) */}
-                <g
-                  className="geo-moving-piece"
-                  style={{
-                    opacity: currentStepIndex >= 2 ? 1 : 0,
-                    transform:
-                      currentStepIndex >= 2 ? 'translate(0px, 0px)' : 'translate(18px, 18px)',
-                  }}
-                >
-                  <rect
-                    x="244"
-                    y="80"
-                    width="34"
-                    height="29"
-                    className="geo-shape geo-blue-accent"
-                  />
-                  <text x="261" y="99" textAnchor="middle" className="brilliant-block-label-light" style={{ fontSize: '10px' }}>
-                    1/16
-                  </text>
-                </g>
-
-                <g
-                  className="geo-moving-piece"
-                  style={{
-                    opacity: currentStepIndex === 3 ? 1 : 0,
-                    transform:
-                      currentStepIndex === 3 ? 'scale(1)' : 'scale(0.5)',
-                    transformOrigin: '261px 123px',
-                  }}
-                >
-                  <rect
-                    x="244"
-                    y="109"
-                    width="34"
-                    height="29"
-                    className="geo-shape geo-gold-bright"
-                  />
-                  <text x="261" y="128" textAnchor="middle" className="brilliant-block-label-dark" style={{ fontSize: '10px' }}>
-                    •••
-                  </text>
-                </g>
-
-                {/* Bottom Calliper Bar */}
-                <g className="caliper-group">
-                  <line
-                    x1="142"
-                    y1="152"
-                    x2={currentStepIndex === 0 ? 210 : 278}
-                    y2="152"
-                    className="caliper-line"
-                  />
-                  <line x1="142" y1="146" x2="142" y2="158" className="caliper-tick" />
-                  <line
-                    x1={currentStepIndex === 0 ? 210 : 278}
-                    y1="146"
-                    x2={currentStepIndex === 0 ? 210 : 278}
-                    y2="158"
-                    className="caliper-tick"
-                  />
-                  <text
-                    x={currentStepIndex === 0 ? 176 : 210}
-                    y="170"
-                    textAnchor="middle"
-                    className="brilliant-math-var"
-                  >
-                    {currentStepIndex === 0 ? '½' : '1'}
-                  </text>
-                </g>
-              </svg>
-            )}
-
-            {/* Synchronized Brilliant.org Bottom Equation Bar (Underlined Active Term) */}
+            {/* Dynamic Serif Mathematical Readout Bar */}
             <div className="brilliant-equation-bar" aria-live="polite">
-              {activeTopicId === 'math' && (
+              {activeLevel === 'SD' && (
                 <div className="brilliant-eq-row">
-                  <span className={`eq-term ${currentStepIndex <= 1 ? 'eq-active' : 'eq-done'}`}>
-                    a² {currentStepIndex >= 1 ? '− b²' : ''}
+                  <span className={`eq-term ${stageIndex <= 1 ? 'eq-active' : 'eq-done'}`}>
+                    {Array.from({ length: activeParam }, (_, i) => 2 * i + 1).join(' + ')}
                   </span>
-                  <span className={`eq-op ${currentStepIndex >= 2 ? 'eq-done' : 'eq-muted'}`}>=</span>
-                  <span className={`eq-term ${currentStepIndex >= 2 ? 'eq-active' : 'eq-muted'}`}>
-                    (a + b)(a − b)
+                  <span className={`eq-op ${stageIndex === 2 ? 'eq-done' : 'eq-muted'}`}>=</span>
+                  <span className={`eq-term ${stageIndex === 2 ? 'eq-active' : 'eq-muted'}`}>
+                    {activeParam}² = {activeParam * activeParam}
                   </span>
                 </div>
               )}
 
-              {activeTopicId === 'science' && (
+              {activeLevel === 'SMP' && (
                 <div className="brilliant-eq-row">
-                  <span className={`eq-term ${currentStepIndex <= 1 ? 'eq-active' : 'eq-done'}`}>
-                    Luas Δv-t
+                  <span className={`eq-term ${stageIndex <= 1 ? 'eq-active' : 'eq-done'}`}>
+                    10² − {activeParam}²
                   </span>
-                  <span className={`eq-op ${currentStepIndex >= 2 ? 'eq-done' : 'eq-muted'}`}>=</span>
-                  <span className={`eq-term ${currentStepIndex >= 2 ? 'eq-active' : 'eq-muted'}`}>
-                    t × (½ v₀)
+                  <span className={`eq-op ${stageIndex === 2 ? 'eq-done' : 'eq-muted'}`}>=</span>
+                  <span className={`eq-term ${stageIndex === 2 ? 'eq-active' : 'eq-muted'}`}>
+                    ({10 + activeParam})({10 - activeParam}) = {100 - activeParam * activeParam} cm²
                   </span>
                 </div>
               )}
 
-              {activeTopicId === 'tka' && (
+              {activeLevel === 'SMA' && (
                 <div className="brilliant-eq-row">
-                  <span className={`eq-term ${currentStepIndex <= 2 ? 'eq-active' : 'eq-done'}`}>
-                    ½ {currentStepIndex >= 1 ? '+ ¼' : ''} {currentStepIndex >= 2 ? '+ ⅛ + …' : ''}
+                  <span className={`eq-term ${stageIndex <= 1 ? 'eq-active' : 'eq-done'}`}>
+                    s = ½ · {activeParam} · 8
                   </span>
-                  <span className={`eq-op ${currentStepIndex === 3 ? 'eq-done' : 'eq-muted'}`}>=</span>
-                  <span className={`eq-term ${currentStepIndex === 3 ? 'eq-active' : 'eq-muted'}`}>
-                    1
+                  <span className={`eq-op ${stageIndex === 2 ? 'eq-done' : 'eq-muted'}`}>=</span>
+                  <span className={`eq-term ${stageIndex === 2 ? 'eq-active' : 'eq-muted'}`}>
+                    8 × {formatHalf(activeParam)} = {4 * activeParam} m
                   </span>
                 </div>
               )}
             </div>
           </div>
 
-          {/* Interactive Stepper & Play/Pause Controls */}
+          {/* 3-Stage Proof Stepper + Play/Pause Controls */}
           <div className="algo-controls-row">
-            <div className="algo-step-pills" role="tablist" aria-label="Pilih Langkah Visualisasi">
-              {currentTopic.steps.map((step, idx) => (
+            <div className="algo-step-pills" aria-label="Tahap Pembuktian Visual">
+              {currentProblem.stages.map((stage, idx) => (
                 <button
-                  key={step.stepNumber}
+                  key={stage.stageNumber}
                   type="button"
-                  className={`algo-step-pill ${currentStepIndex === idx ? 'active' : ''} ${idx < currentStepIndex ? 'done' : ''}`}
+                  className={`algo-step-pill ${stageIndex === idx ? 'active' : ''} ${
+                    idx < stageIndex ? 'done' : ''
+                  }`}
                   onClick={() => {
                     setIsPlaying(false);
-                    setCurrentStepIndex(idx);
+                    setStageIndex(idx);
                   }}
-                  aria-label={`Langkah ${step.stepNumber}`}
-                  aria-selected={currentStepIndex === idx}
-                  role="tab"
                 >
-                  <span>Langkah {step.stepNumber}</span>
+                  {stage.shortLabel}
                 </button>
               ))}
             </div>
@@ -608,62 +665,119 @@ export const ZoomAlgorithmVisualizer: React.FC = () => {
               <button
                 type="button"
                 className="algo-ctrl-btn"
-                onClick={handlePrevStep}
-                aria-label="Langkah Sebelumnya"
+                onClick={() => {
+                  setIsPlaying(false);
+                  setStageIndex((prev) =>
+                    prev === 0 ? currentProblem.stages.length - 1 : prev - 1
+                  );
+                }}
+                aria-label="Tahap Sebelumnya"
               >
-                ⏮
+                <StepPrevIcon size={13} />
               </button>
               <button
                 type="button"
                 className={`algo-ctrl-btn play-pause ${isPlaying ? 'playing' : ''}`}
                 onClick={() => setIsPlaying((prev) => !prev)}
-                aria-label={isPlaying ? 'Jeda Animasi' : 'Putar Animasi'}
+                aria-label={isPlaying ? 'Jeda Animasi Tahapan' : 'Putar Animasi Tahapan'}
               >
-                {isPlaying ? '⏸ Jeda' : '▶ Putar'}
+                {isPlaying ? <PauseIcon size={11} /> : <PlayIcon size={11} />}
+                <span>{isPlaying ? 'Jeda' : 'Putar'}</span>
               </button>
               <button
                 type="button"
                 className="algo-ctrl-btn"
-                onClick={handleNextStep}
-                aria-label="Langkah Selanjutnya"
+                onClick={() => {
+                  setIsPlaying(false);
+                  setStageIndex((prev) => (prev + 1) % currentProblem.stages.length);
+                }}
+                aria-label="Tahap Selanjutnya"
               >
-                ⏭
+                <StepNextIcon size={13} />
               </button>
             </div>
           </div>
 
-          {/* Concise Explanation & Target Answer Box */}
+          {/* Explanation Callout */}
           <div className="hots-step-box">
-            <div className="step-box-header">
-              <span className="step-formula-inline">{currentStep.formula}</span>
-              <span className="step-ans-preview">🎯 {currentTopic.finalAnswer}</span>
+            <p className="step-explanation-text">{currentStage.explanation}</p>
+          </div>
+
+          {/* Interactive Diagnostic Quick-Check */}
+          <div className="sandbox-quiz-box" aria-live="polite">
+            <div className="sandbox-quiz-q">{currentProblem.challengeQuestion}</div>
+            <div className="sandbox-quiz-options">
+              {currentProblem.challengeOptions.map((option) => {
+                const isSelected = selectedOptionId === option.id;
+                const optionStateClass =
+                  isSelected && option.isCorrect
+                    ? 'opt-correct'
+                    : isSelected && !option.isCorrect
+                    ? 'opt-retry'
+                    : '';
+
+                return (
+                  <button
+                    key={option.id}
+                    type="button"
+                    aria-pressed={isSelected}
+                    className={`sandbox-quiz-option ${optionStateClass}`}
+                    onClick={() => handleSelectAnswer(option)}
+                  >
+                    {option.label}
+                  </button>
+                );
+              })}
             </div>
-            <p className="step-explanation-text">{currentStep.explanation}</p>
+
+            {sandboxState === 'answered-correct' && (
+              <div className="sandbox-feedback sandbox-feedback-success">
+                <p>{currentProblem.correctExplanation}</p>
+                <button
+                  type="button"
+                  className="btn btn-primary btn-sm sandbox-cta-btn"
+                  onClick={() => onRequestDiagnosticForLevel(activeLevel)}
+                >
+                  <span>Petakan Kemampuan Anak di Sesi Diagnostik</span>
+                </button>
+              </div>
+            )}
+
+            {sandboxState === 'answered-retry' && selectedOption && (
+              <div className="sandbox-feedback sandbox-feedback-hint">
+                <span className="hint-icon-wrap" aria-hidden="true">
+                  <LightbulbIcon size={16} color="#92400E" />
+                </span>
+                <p>{selectedOption.feedbackHint}</p>
+              </div>
+            )}
           </div>
         </div>
 
         {/* 5. Zoom Bottom Interactive Toolbar */}
         <div className="achievement-float">
           <div className="achievement-item">
-            <span className="achievement-badge-icon badge-gold">
+            <span className="achievement-badge-icon badge-gold" aria-hidden="true">
               <MedalAwardIcon size={16} color="#F59E0B" />
             </span>
-            <span>Alumni Lolos OSN-K &amp; OSN-P</span>
+            <span>Bimbingan Alumni OSN</span>
           </div>
 
           <button
             type="button"
             className={`zoom-raise-hand-btn ${handRaised ? 'raised' : ''}`}
             onClick={() => setHandRaised((prev) => !prev)}
+            aria-pressed={handRaised}
           >
-            <span>{handRaised ? '✋ Tangan Diangkat (Mentor Merespons)' : '✋ Simulasi Angkat Tangan'}</span>
+            <HandRaiseIcon size={14} color="currentColor" />
+            <span>{handRaised ? 'Tangan Diangkat (Aktif Diskusi)' : 'Simulasi Angkat Tangan'}</span>
           </button>
 
           <div className="achievement-item">
-            <span className="achievement-badge-icon badge-emerald">
+            <span className="achievement-badge-icon badge-emerald" aria-hidden="true">
               <CheckIcon size={14} color="#10B981" />
             </span>
-            <span>Skor Diagnostik TKA +38%</span>
+            <span>Klinik Soal Mingguan</span>
           </div>
         </div>
       </div>

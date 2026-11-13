@@ -17,6 +17,10 @@ export const FaqSection: React.FC = () => {
           <h2 className="section-title">
             Pertanyaan yang Sering Diajukan Orang Tua &amp; Siswa
           </h2>
+          <p className="section-subtitle">
+            Informasi lengkap mengenai alur sesi Zoom, batasan kuota kelas, seleksi pengajar, hingga
+            kebijakan penjadwalan ulang.
+          </p>
         </div>
 
         <div className="faq-container">
@@ -41,10 +45,12 @@ export const FaqSection: React.FC = () => {
                   id={`faq-panel-${item.id}`}
                   role="region"
                   aria-labelledby={`faq-trigger-${item.id}`}
-                  className="faq-panel"
-                  style={{ maxHeight: isOpen ? '300px' : '0' }}
+                  className={`faq-panel-grid ${isOpen ? 'open' : ''}`}
+                  hidden={!isOpen}
                 >
-                  <div className="faq-answer">{item.answer}</div>
+                  <div className="faq-panel-inner">
+                    <div className="faq-answer">{item.answer}</div>
+                  </div>
                 </div>
               </div>
             );
@@ -54,4 +60,3 @@ export const FaqSection: React.FC = () => {
     </section>
   );
 };
-

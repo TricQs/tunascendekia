@@ -1,42 +1,50 @@
 import React from 'react';
-import { ArrowRightIcon, ZoomLiveIcon, MedalAwardIcon, CheckIcon } from './Icons';
+import { EducationLevel } from '../types';
+import {
+  ArrowRightIcon,
+  CheckIcon,
+  CurriculumHotsIcon,
+  MedalAwardIcon,
+  SmallClassIcon,
+  ZoomLiveIcon,
+} from './Icons';
 import { ZoomAlgorithmVisualizer } from './ZoomAlgorithmVisualizer';
 
 interface HeroSectionProps {
-  onDaftarTestClick: () => void;
-  onLihatPaketClick: () => void;
+  onCtaClick: () => void;
+  onSecondaryClick: () => void;
+  onRequestDiagnosticForLevel: (level: EducationLevel) => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
-  onDaftarTestClick,
-  onLihatPaketClick,
+  onCtaClick,
+  onSecondaryClick,
+  onRequestDiagnosticForLevel,
 }) => {
   return (
     <section className="hero-section" id="beranda">
       <div className="container">
         <div className="hero-grid">
-          {/* Hero Left Content */}
+          {/* Hero Editorial Copy Column */}
           <div className="hero-content">
             <div className="hero-badge">
-              <span>🏆 Platform Spesialis Persiapan TKA &amp; OSN #1 di Indonesia</span>
+              <MedalAwardIcon size={16} color="#B45309" />
+              <span>Program Spesialis Persiapan TKA &amp; OSN SD, SMP, SMA</span>
             </div>
 
             <h1 className="hero-title">
-              Mengasah Nalar Juara, Mengantar Siswa ke{' '}
-              <span className="highlight-emerald">Panggung Prestasi</span>{' '}
-              <span className="highlight-gold">Nasional.</span>
+              Mengasah <span className="highlight-emerald">Nalar Juara</span>, Mengantar Siswa ke{' '}
+              <span className="highlight-gold">Panggung Prestasi Nasional.</span>
             </h1>
 
             <p className="hero-subtitle">
-              Bukan sekadar hafalan rumus cepat. TunasCendekia menghadirkan bimbingan belajar online interaktif dua arah via Zoom untuk siswa SD, SMP, dan SMA (dibimbing langsung oleh alumni peraih medali Olimpiade Sains Nasional).
+              Bukan sekadar hafalan rumus cepat. TunasCendekia menghadirkan bimbingan belajar daring
+              interaktif dua arah via Zoom untuk siswa SD, SMP, dan SMA, dibimbing langsung oleh
+              alumni peraih medali Olimpiade Sains Nasional.
             </p>
 
             <div className="hero-cta-group">
-              <button
-                type="button"
-                className="btn btn-primary btn-lg"
-                onClick={onDaftarTestClick}
-              >
+              <button type="button" className="btn btn-primary btn-lg" onClick={onCtaClick}>
                 <span>Daftar Diagnostic Test Gratis</span>
                 <ArrowRightIcon size={18} />
               </button>
@@ -44,7 +52,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <button
                 type="button"
                 className="btn btn-secondary btn-lg"
-                onClick={onLihatPaketClick}
+                onClick={onSecondaryClick}
               >
                 <span>Lihat Paket Program</span>
               </button>
@@ -52,36 +60,37 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
             <div className="hero-mini-note">
               <span>
-                <CheckIcon size={16} color="#10B981" />
-                Pemetaan Kemampuan Awal Gratis
+                <CheckIcon size={14} color="#047857" />
+                Diagnostic Test Awal Gratis
               </span>
               <span>
-                <CheckIcon size={16} color="#10B981" />
-                Kurikulum Resmi Silabus OSN-K/P/N &amp; TKA
+                <CheckIcon size={14} color="#047857" />
+                Kuota Kelas Kecil Zoom
+              </span>
+              <span>
+                <CheckIcon size={14} color="#047857" />
+                Evaluasi Berkala Orang Tua
               </span>
             </div>
           </div>
 
-          {/* Hero Right Visual: Interactive Live Zoom Class + Step-by-Step Algorithm Visualizer */}
+          {/* Right Column: Interactive Pedagogical Sandbox */}
           <div className="hero-visual">
-            <ZoomAlgorithmVisualizer />
+            <ZoomAlgorithmVisualizer
+              onRequestDiagnosticForLevel={onRequestDiagnosticForLevel}
+            />
           </div>
         </div>
 
         {/* Trust Indicators / Stats Bar below Hero */}
-        <div className="stats-bar" aria-label="Indikator Kepercayaan TunasCendekia">
+        <div className="stats-bar" aria-label="Keunggulan Utama Program">
           <div className="stats-grid">
             <div className="stat-card">
               <div className="stat-icon" aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                  <circle cx="9" cy="7" r="4" />
-                  <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                </svg>
+                <SmallClassIcon size={22} color="#10B981" />
               </div>
               <div>
-                <div className="stat-value">10–15 Siswa</div>
+                <div className="stat-value">10-15 Siswa</div>
                 <div className="stat-label">Maksimal per Kelas Zoom</div>
               </div>
             </div>
@@ -91,21 +100,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <MedalAwardIcon size={22} color="#F59E0B" />
               </div>
               <div>
-                <div className="stat-value">100% Medalis &amp; Pakar</div>
-                <div className="stat-label">Mentor Olimpiade Berpengalaman</div>
+                <div className="stat-value">Alumni Medalis</div>
+                <div className="stat-label">Mentor OSN Berpengalaman</div>
               </div>
             </div>
 
             <div className="stat-card">
               <div className="stat-icon" aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                  <polygon points="12 2 2 7 12 12 22 7 12 2" />
-                  <polyline points="2 17 12 22 22 17" />
-                  <polyline points="2 12 12 17 22 12" />
-                </svg>
+                <CurriculumHotsIcon size={22} color="#10B981" />
               </div>
               <div>
-                <div className="stat-value">SD – SMP – SMA</div>
+                <div className="stat-value">SD, SMP, SMA</div>
                 <div className="stat-label">Kurikulum Berjenjang Terstruktur</div>
               </div>
             </div>

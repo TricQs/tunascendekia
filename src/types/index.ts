@@ -1,60 +1,103 @@
-export type JenjangType = 'SD' | 'SMP' | 'SMA';
+export type EducationLevel = 'SD' | 'SMP' | 'SMA';
 
-export type BidangMinatType = 'Matematika' | 'IPA-Sains' | 'IPS' | 'TKA Umum';
+export type ProgramTrack = 'TKA' | 'OSN';
+
+export type TargetProgramChoice = 'TKA' | 'OSN' | 'TKA & OSN';
+
+export type BillingCycle = 'bulanan' | 'semester';
+
+export type SandboxState = 'exploring' | 'answered-correct' | 'answered-retry';
+
+export interface SelectedConsultationProgram {
+  level: EducationLevel;
+  track: ProgramTrack;
+  planName: string;
+  billingCycle: BillingCycle;
+}
 
 export interface FormDataType {
-  namaLengkap: string;
-  jenjangKelas: JenjangType | '';
-  bidangMinat: BidangMinatType | '';
+  namaOrangTua: string;
+  namaDanKelasSiswa: string;
   nomorWhatsapp: string;
+  jenjang: EducationLevel | '';
+  targetProgram: TargetProgramChoice | '';
   paketPilihan: string;
 }
 
-export interface AlgorithmStep {
-  stepNumber: number;
+export type FormFieldKey = keyof Pick<
+  FormDataType,
+  'namaOrangTua' | 'namaDanKelasSiswa' | 'nomorWhatsapp' | 'jenjang' | 'targetProgram'
+>;
+
+export type FormStatus = 'idle' | 'error' | 'submitting' | 'submitted';
+
+export interface ProofStage {
+  stageNumber: 1 | 2 | 3;
+  shortLabel: string;
   title: string;
-  formula: string;
-  explanation: string;
   highlightBadge: string;
+  explanation: string;
 }
 
-export interface HotsTopic {
-  id: 'math' | 'science' | 'tka';
+export interface QuizOption {
+  id: string;
   label: string;
-  tag: string;
-  level: string;
-  question: string;
-  algorithmName: string;
-  finalAnswer: string;
-  steps: AlgorithmStep[];
+  isCorrect: boolean;
+  feedbackHint: string;
+}
+
+export interface SandboxProblemSet {
+  level: EducationLevel;
+  tabLabel: string;
+  gradeRangeLabel: string;
+  trackLabel: string;
+  conceptTitle: string;
+  parameterLabel: string;
+  parameterUnit: string;
+  parameterMin: number;
+  parameterMax: number;
+  parameterDefault: number;
+  stages: [ProofStage, ProofStage, ProofStage];
+  challengeQuestion: string;
+  challengeOptions: [QuizOption, QuizOption, QuizOption];
+  correctExplanation: string;
 }
 
 export interface PillarCardData {
-  id: JenjangType;
+  id: string;
+  stepLabel: string;
   title: string;
-  badge: string;
   description: string;
+  jenjangValue: EducationLevel;
+  iconKey: 'seedling' | 'compass' | 'graduation';
 }
 
 export interface FeatureCardData {
+  id: string;
   number: string;
   title: string;
   description: string;
-  benefit: string;
-  iconType: 'zoom' | 'curriculum' | 'class' | 'cbt';
+  benefitText: string;
+  iconKey: 'zoom' | 'curriculum' | 'group' | 'analytics';
 }
 
-export interface PricingCardData {
+export interface PricingTierData {
   id: string;
+  track: ProgramTrack;
+  level: EducationLevel;
   name: string;
   target: string;
-  priceMain: string;
-  priceSub: string;
+  classQuota: string;
+  sessionQuotaMonthly: string;
+  sessionQuotaSemester: string;
+  mentorCredential: string;
+  monthlyPriceRp: number;
+  semesterPriceRp: number;
+  semesterSavingsLabel: string;
   features: string[];
-  ctaText: string;
   featured?: boolean;
-  popularRibbon?: string;
-  buttonVariant: 'navy' | 'primary' | 'gold';
+  ribbonLabel?: string;
+  buttonVariant: 'navy' | 'primary' | 'secondary';
 }
 
 export interface FaqItemData {
