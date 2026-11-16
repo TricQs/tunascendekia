@@ -288,20 +288,15 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             </form>
           </div>
 
-          <aside className="contact-info-card" aria-label="Kontak Resmi TunasCendekia">
-            <h3>Cari Tahu Lebih Lanjut</h3>
+          <aside className="contact-info-card" aria-label="Informasi Kontak TunasCendekia">
+            <h3>Hubungi Tim Akademik Kami</h3>
             <p>
-              Terhubung langsung dengan konsultan pendidikan kami untuk memilih program dari 9
-              jalur pembinaan SD, SMP, dan SMA.
+              Konsultasikan pilihan jenjang SD, SMP, atau SMA beserta jalur TKA, Olimpiade, atau
+              TKA + Olimpiade yang paling sesuai bagi putra/putri Anda.
             </p>
 
             <div className="contact-list">
-              <a
-                href="https://wa.me/6281234567890"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="contact-item"
-              >
+              <div className="contact-item">
                 <div className="contact-item-icon" aria-hidden="true">
                   <WhatsAppIcon size={20} color="#10B981" />
                 </div>
@@ -309,14 +304,9 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   <div className="contact-item-label">WhatsApp Konsultasi</div>
                   <div className="contact-item-value">+62 812-3456-7890</div>
                 </div>
-              </a>
+              </div>
 
-              <a
-                href="https://instagram.com/tunascendekia.id"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="contact-item"
-              >
+              <div className="contact-item">
                 <div className="contact-item-icon" aria-hidden="true">
                   <InstagramIcon size={20} color="#10B981" />
                 </div>
@@ -324,9 +314,9 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   <div className="contact-item-label">Instagram</div>
                   <div className="contact-item-value">@tunascendekia.id</div>
                 </div>
-              </a>
+              </div>
 
-              <a href="mailto:halo@tunascendekia.id" className="contact-item">
+              <div className="contact-item">
                 <div className="contact-item-icon" aria-hidden="true">
                   <EmailIcon size={20} color="#10B981" />
                 </div>
@@ -334,14 +324,9 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   <div className="contact-item-label">Email</div>
                   <div className="contact-item-value">halo@tunascendekia.id</div>
                 </div>
-              </a>
+              </div>
 
-              <a
-                href="https://www.tunascendekia.id"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="contact-item"
-              >
+              <div className="contact-item">
                 <div className="contact-item-icon" aria-hidden="true">
                   <GlobeIcon size={20} color="#10B981" />
                 </div>
@@ -349,7 +334,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   <div className="contact-item-label">Website</div>
                   <div className="contact-item-value">www.tunascendekia.id</div>
                 </div>
-              </a>
+              </div>
             </div>
 
             <div className="operational-hours">

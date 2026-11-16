@@ -86,13 +86,16 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onSelectPlan }) 
           ))}
         </div>
 
-        {/* Catalogue Filter Bar (Jenjang + Jalur + Billing Switch) */}
+        {/* Catalogue Filter Bar (Jenjang + Jalur + Billing Switch with Explicit Dividers) */}
         <div className="pricing-controls-panel" aria-label="Filter Katalog Program">
           <div className="pricing-filter-row">
             <div className="filter-group">
-              <span className="filter-group-label" id="catalogue-level-label">
-                1. Filter Jenjang
-              </span>
+              <div className="filter-group-header">
+                <span className="filter-step-num" aria-hidden="true">1</span>
+                <span className="filter-group-label" id="catalogue-level-label">
+                  Jenjang Pendidikan
+                </span>
+              </div>
               <div
                 className="segmented-control"
                 role="radiogroup"
@@ -113,10 +116,15 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onSelectPlan }) 
               </div>
             </div>
 
+            <div className="filter-divider" aria-hidden="true" />
+
             <div className="filter-group">
-              <span className="filter-group-label" id="catalogue-track-label">
-                2. Filter Jalur Persiapan
-              </span>
+              <div className="filter-group-header">
+                <span className="filter-step-num" aria-hidden="true">2</span>
+                <span className="filter-group-label" id="catalogue-track-label">
+                  Jalur Program
+                </span>
+              </div>
               <div
                 className="segmented-control"
                 role="radiogroup"
@@ -137,10 +145,15 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onSelectPlan }) 
               </div>
             </div>
 
+            <div className="filter-divider" aria-hidden="true" />
+
             <div className="filter-group billing-switch-group">
-              <span className="filter-group-label" id="billing-switch-label">
-                3. Siklus Pembayaran
-              </span>
+              <div className="filter-group-header">
+                <span className="filter-step-num" aria-hidden="true">3</span>
+                <span className="filter-group-label" id="billing-switch-label">
+                  Siklus Pembayaran
+                </span>
+              </div>
               <div className="billing-switch-row">
                 <span className={!isSemester ? 'billing-text-active' : 'billing-text-muted'}>
                   Bulanan

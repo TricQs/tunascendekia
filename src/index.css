@@ -1665,30 +1665,61 @@ button {
 
 .pricing-filter-row {
   display: grid;
-  grid-template-columns: 1fr 1.15fr auto;
-  gap: 18px;
-  align-items: end;
+  grid-template-columns: 1.05fr 1px 1.25fr 1px auto;
+  gap: 16px;
+  align-items: stretch;
 }
 
 .filter-group {
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  justify-content: space-between;
+  gap: 10px;
+  background-color: var(--bg-slate);
+  border: 1px solid var(--navy-200);
+  border-radius: var(--radius-sub);
+  padding: 12px 14px;
+}
+
+.filter-group-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-step-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: var(--navy-900);
+  color: #FFFFFF;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .filter-group-label {
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  color: var(--navy-600);
+  color: var(--navy-900);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+.filter-divider {
+  width: 1px;
+  background-color: var(--navy-300);
+  align-self: stretch;
 }
 
 .segmented-control {
   display: inline-flex;
   flex-wrap: wrap;
-  background-color: var(--bg-slate);
-  border: 1px solid var(--navy-200);
+  background-color: var(--bg-white);
+  border: 1px solid var(--navy-300);
   border-radius: var(--radius-btn);
   padding: 3px;
   gap: 3px;
@@ -2252,11 +2283,7 @@ button {
   border-radius: var(--radius-sub);
   background-color: var(--navy-800);
   border: 1px solid var(--navy-700);
-  transition: border-color var(--transition-fast);
-}
-
-.contact-item:hover {
-  border-color: var(--emerald-500);
+  cursor: default;
 }
 
 .contact-item-icon {
@@ -2508,7 +2535,12 @@ button {
 
   .pricing-filter-row {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 14px;
+  }
+
+  .filter-divider {
+    width: 100%;
+    height: 1px;
   }
 }
 
