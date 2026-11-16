@@ -495,11 +495,12 @@ export const ZoomAlgorithmVisualizer: React.FC<ZoomAlgorithmVisualizerProps> = (
                   {stageIndex === 1 && (
                     <text
                       x={smpB / 2}
-                      y={smpB / 2 + 5}
+                      y={smpB / 2 + 4}
                       textAnchor="middle"
                       className="brilliant-math-var-sm"
+                      style={{ fontSize: activeParam <= 2 ? '10px' : '12px' }}
                     >
-                      b²={activeParam * activeParam}
+                      {activeParam <= 2 ? 'b²' : `b²=${activeParam * activeParam}`}
                     </text>
                   )}
                 </g>
@@ -527,10 +528,10 @@ export const ZoomAlgorithmVisualizer: React.FC<ZoomAlgorithmVisualizerProps> = (
               >
                 {/* Bottom Time Axis Calliper t = 8s */}
                 <g className="caliper-group">
-                  <line x1="112" y1="154" x2="288" y2="154" className="caliper-line" />
-                  <line x1="112" y1="149" x2="112" y2="159" className="caliper-tick" />
-                  <line x1="288" y1="149" x2="288" y2="159" className="caliper-tick" />
-                  <text x="200" y="170" textAnchor="middle" className="brilliant-math-var-sm">
+                  <line x1="72" y1="154" x2="248" y2="154" className="caliper-line" />
+                  <line x1="72" y1="149" x2="72" y2="159" className="caliper-tick" />
+                  <line x1="248" y1="149" x2="248" y2="159" className="caliper-tick" />
+                  <text x="160" y="170" textAnchor="middle" className="brilliant-math-var-sm">
                     t = 8 detik
                   </text>
                 </g>
@@ -538,22 +539,22 @@ export const ZoomAlgorithmVisualizer: React.FC<ZoomAlgorithmVisualizerProps> = (
                 {/* Right Height Calliper: v0 -> 1/2 v0 */}
                 <g className="caliper-group">
                   <line
-                    x1="304"
+                    x1="264"
                     y1={stageIndex === 0 ? smaBaseY - smaH : smaMidY}
-                    x2="304"
+                    x2="264"
                     y2={smaBaseY}
                     className="caliper-line"
                   />
                   <line
-                    x1="299"
+                    x1="259"
                     y1={stageIndex === 0 ? smaBaseY - smaH : smaMidY}
-                    x2="309"
+                    x2="269"
                     y2={stageIndex === 0 ? smaBaseY - smaH : smaMidY}
                     className="caliper-tick"
                   />
-                  <line x1="299" y1={smaBaseY} x2="309" y2={smaBaseY} className="caliper-tick" />
+                  <line x1="259" y1={smaBaseY} x2="269" y2={smaBaseY} className="caliper-tick" />
                   <text
-                    x="316"
+                    x="276"
                     y={stageIndex === 0 ? smaBaseY - smaH / 2 + 4 : smaMidY + smaHalfH / 2 + 4}
                     textAnchor="start"
                     className="brilliant-math-var-sm"
@@ -564,15 +565,15 @@ export const ZoomAlgorithmVisualizer: React.FC<ZoomAlgorithmVisualizerProps> = (
 
                 {/* Bottom Trapezoid Base */}
                 <polygon
-                  points={`112,${smaMidY} 200,${smaMidY} 288,${smaBaseY} 112,${smaBaseY}`}
+                  points={`72,${smaMidY} 160,${smaMidY} 248,${smaBaseY} 72,${smaBaseY}`}
                   className="geo-shape geo-gold"
                 />
 
-                {/* Top Triangle Peak rotating 180deg around (200, smaMidY) */}
+                {/* Top Triangle Peak rotating 180deg around (160, smaMidY) */}
                 <g
                   className="geo-moving-piece"
                   style={{
-                    transformOrigin: `200px ${smaMidY}px`,
+                    transformOrigin: `160px ${smaMidY}px`,
                     transform:
                       stageIndex === 0
                         ? 'rotate(0deg)'
@@ -582,7 +583,7 @@ export const ZoomAlgorithmVisualizer: React.FC<ZoomAlgorithmVisualizerProps> = (
                   }}
                 >
                   <polygon
-                    points={`112,${smaBaseY - smaH} 200,${smaMidY} 112,${smaMidY}`}
+                    points={`72,${smaBaseY - smaH} 160,${smaMidY} 72,${smaMidY}`}
                     className={`geo-shape ${stageIndex === 2 ? 'geo-emerald' : 'geo-gold-bright'}`}
                   />
                 </g>
@@ -590,9 +591,9 @@ export const ZoomAlgorithmVisualizer: React.FC<ZoomAlgorithmVisualizerProps> = (
                 {/* Midpoint Slice Line */}
                 {stageIndex === 1 && (
                   <line
-                    x1="100"
+                    x1="62"
                     y1={smaMidY}
-                    x2="294"
+                    x2="254"
                     y2={smaMidY}
                     className="slice-dashed-line visible"
                     style={{ stroke: '#0F172A' }}
