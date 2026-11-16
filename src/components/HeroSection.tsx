@@ -29,7 +29,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <div className="hero-content">
             <div className="hero-badge">
               <MedalAwardIcon size={16} color="#B45309" />
-              <span>Program Spesialis Persiapan TKA &amp; OSN SD, SMP, SMA</span>
+              <span>Bimbel Online Persiapan TKA &amp; OSN (SD, SMP, SMA)</span>
             </div>
 
             <h1 className="hero-title">
@@ -38,9 +38,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </h1>
 
             <p className="hero-subtitle">
-              Bukan sekadar hafalan rumus cepat. TunasCendekia menghadirkan bimbingan belajar daring
-              interaktif dua arah via Zoom untuk siswa SD, SMP, dan SMA, dibimbing langsung oleh
-              alumni peraih medali Olimpiade Sains Nasional.
+              Ekosistem bimbel daring interaktif via Zoom dengan kurikulum khusus olimpiade &amp;
+              TKA, dibimbing langsung oleh mentor peraih medali nasional dengan pembahasan visual
+              interaktif.
             </p>
 
             <div className="hero-cta-group">
@@ -54,27 +54,27 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 className="btn btn-secondary btn-lg"
                 onClick={onSecondaryClick}
               >
-                <span>Lihat Paket Program</span>
+                <span>Jelajahi 9 Program</span>
               </button>
             </div>
 
             <div className="hero-mini-note">
               <span>
                 <CheckIcon size={14} color="#047857" />
-                Diagnostic Test Awal Gratis
+                3 Jenjang (SD, SMP, SMA)
               </span>
               <span>
                 <CheckIcon size={14} color="#047857" />
-                Kuota Kelas Kecil Zoom
+                3 Jalur: TKA, Olimpiade, TKA + Olimpiade
               </span>
               <span>
                 <CheckIcon size={14} color="#047857" />
-                Evaluasi Berkala Orang Tua
+                Belajar Terstruktur dari Rumah
               </span>
             </div>
           </div>
 
-          {/* Right Column: Interactive Pedagogical Sandbox */}
+          {/* Right Column: Visual Learning Sandbox */}
           <div className="hero-visual">
             <ZoomAlgorithmVisualizer
               onRequestDiagnosticForLevel={onRequestDiagnosticForLevel}
@@ -82,16 +82,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
         </div>
 
-        {/* Trust Indicators / Stats Bar below Hero */}
-        <div className="stats-bar" aria-label="Keunggulan Utama Program">
+        {/* Universal Value Guarantees Bar */}
+        <div className="stats-bar" aria-label="Fasilitas di Semua Program">
           <div className="stats-grid">
             <div className="stat-card">
               <div className="stat-icon" aria-hidden="true">
-                <SmallClassIcon size={22} color="#10B981" />
+                <ZoomLiveIcon size={22} color="#10B981" />
               </div>
               <div>
-                <div className="stat-value">10-15 Siswa</div>
-                <div className="stat-label">Maksimal per Kelas Zoom</div>
+                <div className="stat-value">Kelas Live Zoom</div>
+                <div className="stat-label">Tatap muka interaktif 2 arah</div>
               </div>
             </div>
 
@@ -100,8 +100,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <MedalAwardIcon size={22} color="#F59E0B" />
               </div>
               <div>
-                <div className="stat-value">Alumni Medalis</div>
-                <div className="stat-label">Mentor OSN Berpengalaman</div>
+                <div className="stat-value">Mentor Medalis</div>
+                <div className="stat-label">Alumni peraih medali olimpiade</div>
               </div>
             </div>
 
@@ -110,18 +110,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <CurriculumHotsIcon size={22} color="#10B981" />
               </div>
               <div>
-                <div className="stat-value">SD, SMP, SMA</div>
-                <div className="stat-label">Kurikulum Berjenjang Terstruktur</div>
+                <div className="stat-value">Visual Learning</div>
+                <div className="stat-label">Pembahasan visual interaktif</div>
               </div>
             </div>
 
             <div className="stat-card">
               <div className="stat-icon" aria-hidden="true">
-                <ZoomLiveIcon size={22} color="#F59E0B" />
+                <SmallClassIcon size={22} color="#F59E0B" />
               </div>
               <div>
-                <div className="stat-value">Live 2 Arah</div>
-                <div className="stat-label">Interaktif &amp; Klinik Soal Mingguan</div>
+                <div className="stat-value">Klinik Mingguan</div>
+                <div className="stat-label">Tanya-jawab soal sulit tiap minggu</div>
               </div>
             </div>
           </div>

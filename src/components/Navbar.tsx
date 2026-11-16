@@ -6,9 +6,9 @@ interface NavbarProps {
 
 const NAV_ITEMS = [
   { id: 'beranda', label: 'Beranda' },
-  { id: 'tentang-kami', label: 'Tentang Kami' },
-  { id: 'fitur-program', label: 'Fitur & Program' },
-  { id: 'paket-belajar', label: 'Paket Belajar' },
+  { id: 'tentang-kami', label: 'Visi & Solusi' },
+  { id: 'fitur-program', label: 'Keunggulan' },
+  { id: 'paket-belajar', label: 'Katalog 9 Program' },
   { id: 'faq', label: 'FAQ' },
   { id: 'kontak', label: 'Kontak' },
 ];
@@ -41,7 +41,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onTryFreeClick }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Body scroll lock & Escape handler while mobile drawer is open
   useEffect(() => {
     if (!mobileMenuOpen) {
       document.body.style.overflow = '';
@@ -78,7 +77,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onTryFreeClick }) => {
     <header className={`navbar ${scrolled ? 'scrolled' : ''}`}>
       <div className="container">
         <div className="navbar-inner">
-          {/* Brand Logo */}
           <a
             href="#beranda"
             className="brand-logo"
@@ -97,7 +95,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onTryFreeClick }) => {
             </span>
           </a>
 
-          {/* Navigation Links (Desktop Inline + Mobile Drawer) */}
           <nav aria-label="Navigasi Utama">
             <ul id="primary-navigation" className={`nav-links ${mobileMenuOpen ? 'open' : ''}`}>
               {NAV_ITEMS.map((item) => (
@@ -128,7 +125,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onTryFreeClick }) => {
             </ul>
           </nav>
 
-          {/* Right CTA & Mobile Toggle */}
           <div className="nav-actions">
             <button type="button" className="btn btn-primary" onClick={onTryFreeClick}>
               Coba Kelas Gratis

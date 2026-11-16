@@ -95,7 +95,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
       `- Nama Orang Tua/Wali: ${data.namaOrangTua}\n` +
       `- Nama & Kelas Siswa: ${data.namaDanKelasSiswa}\n` +
       `- Jenjang: ${data.jenjang}\n` +
-      `- Target Program: ${data.targetProgram}\n` +
+      `- Jalur Program: ${data.targetProgram}\n` +
       `- No. WhatsApp Aktif: ${data.nomorWhatsapp}\n` +
       `- Program Pilihan: ${data.paketPilihan}`
   );
@@ -142,7 +142,7 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             <strong>Jenjang Pendidikan:</strong> {data.jenjang}
           </div>
           <div>
-            <strong>Target Program:</strong> {data.targetProgram}
+            <strong>Jalur Program:</strong> {data.targetProgram}
           </div>
           <div>
             <strong>Nomor WhatsApp:</strong> {data.nomorWhatsapp}

@@ -1,118 +1,109 @@
 import React from 'react';
-import { PILLARS_DATA } from '../data/content';
-import { EducationLevel, PillarCardData } from '../types';
 import {
-  ArrowRightIcon,
-  CompassIcon,
-  GraduationCapIcon,
-  LightbulbIcon,
-  TargetIcon,
-  TrophyIcon,
-  SeedlingIcon,
-} from './Icons';
+  BUSINESS_FORMATS,
+  PAIN_POINTS_DATA,
+  STRATEGIC_STORY_CARDS,
+} from '../data/content';
+import { EducationLevel } from '../types';
+import { DeckIllustration } from './DeckIllustrations';
+import { ArrowRightIcon, CheckIcon } from './Icons';
 
 interface AboutSectionProps {
   onSelectJenjang: (jenjang: EducationLevel) => void;
 }
-
-const renderPillarIcon = (key: PillarCardData['iconKey']) => {
-  switch (key) {
-    case 'seedling':
-      return <SeedlingIcon size={24} color="#047857" />;
-    case 'compass':
-      return <CompassIcon size={24} color="#B45309" />;
-    case 'graduation':
-      return <GraduationCapIcon size={24} color="#0F172A" />;
-  }
-};
 
 export const AboutSection: React.FC<AboutSectionProps> = ({ onSelectJenjang }) => {
   return (
     <section className="section section-slate" id="tentang-kami">
       <div className="container">
         <div className="section-header">
-          <span className="section-tag">TENTANG TUNASCENDEKIA</span>
+          <span className="section-tag">VISI, PELUANG &amp; SOLUSI</span>
           <h2 className="section-title">
-            Menjembatani Potensi Anak Menuju Medali Olimpiade &amp; Sekolah Impian
+            Merancang Ekosistem Pembinaan Prestasi yang Terarah di Seluruh Indonesia
           </h2>
           <p className="section-subtitle">
-            Dirancang khusus untuk menumbuhkan daya pikir kritis dan kecintaan terhadap eksplorasi
-            sains serta matematika berstandar kompetisi nasional.
+            Mengatasi kesenjangan pembinaan TKA dan Olimpiade melalui pembelajaran daring
+            interaktif yang mengutamakan kedalaman konsep.
           </p>
         </div>
 
-        {/* Problem & Solution Narrative Grid */}
-        <div className="about-narrative-grid">
-          <article className="narrative-card problem-card">
-            <div className="narrative-label">
-              <TargetIcon size={16} color="#B45309" />
-              <span>Tantangan Saat Ini</span>
-            </div>
-            <p className="narrative-text">
-              Banyak siswa berbakat memiliki minat tinggi pada sains dan matematika, namun terhambat
-              oleh terbatasnya jam pembinaan olimpiade di sekolah. Di sisi lain, bimbingan belajar
-              konvensional umumnya hanya berfokus pada materi ujian harian reguler.
-            </p>
-          </article>
-
-          <article className="narrative-card solution-card">
-            <div className="narrative-label">
-              <LightbulbIcon size={16} color="#047857" />
-              <span>Pendekatan TunasCendekia</span>
-            </div>
-            <p className="narrative-text">
-              TunasCendekia hadir sebagai ekosistem edutech spesialis kompetisi akademik dan Tes
-              Kemampuan Akademik (TKA). Melalui metode Live Interactive Virtual Classroom via Zoom,
-              kami mempertemukan siswa dari seluruh penjuru Indonesia dengan pelatih olimpiade dan
-              alumni peraih medali nasional secara lintas daerah. Kami berfokus membangun pemahaman
-              konsep mendalam dan penalaran logika tingkat tinggi (HOTS).
-            </p>
-          </article>
-        </div>
-
-        {/* Unique Selling Proposition (USP) Highlight Box */}
-        <div className="usp-highlight-box">
-          <div className="usp-icon-badge" aria-hidden="true">
-            <TrophyIcon size={30} color="#F59E0B" />
-          </div>
-          <div>
-            <div className="usp-content-tag">Proposisi Nilai Utama</div>
-            <p className="usp-quote">
-              &ldquo;Satu-satunya bimbingan persiapan OSN &amp; TKA berbasis kurikulum kompetisi
-              nasional dengan pendampingan langsung dua arah dari alumni peraih medali dalam format
-              kelas kecil yang terukur.&rdquo;
-            </p>
-          </div>
-        </div>
-
-        {/* 3 Pillar Cards (Jenjang Pendidikan) */}
-        <div className="pillars-heading">
-          <h3>Pembinaan Berjenjang Sesuai Fase Akademik Siswa</h3>
-        </div>
-
-        <div className="pillars-grid">
-          {PILLARS_DATA.map((pillar) => (
-            <article key={pillar.id} className="pillar-card">
-              <div>
-                <div className="pillar-top">
-                  <div className="pillar-icon" aria-hidden="true">
-                    {renderPillarIcon(pillar.iconKey)}
-                  </div>
-                  <span className="pillar-step-badge">{pillar.stepLabel}</span>
-                </div>
-                <h4 className="pillar-title">{pillar.title}</h4>
-                <p className="pillar-desc">{pillar.description}</p>
+        {/* 4 Deck Story Cards: Problem Statement, Our Vision, The Opportunity, Our Solution */}
+        <div className="deck-story-grid">
+          {STRATEGIC_STORY_CARDS.map((card) => (
+            <article key={card.id} className={`deck-story-card theme-${card.accentTheme}`}>
+              <div className="deck-story-visual">
+                <DeckIllustration variant={card.illustrationKey} />
               </div>
-              <button
-                type="button"
-                className="pillar-action-link"
-                onClick={() => onSelectJenjang(pillar.jenjangValue)}
-              >
-                <span>Pilih &amp; Konsultasi {pillar.jenjangValue}</span>
-                <ArrowRightIcon size={16} />
-              </button>
+              <div className="deck-story-content">
+                <span className="deck-story-tag">{card.tag}</span>
+                <h3 className="deck-story-title">{card.title}</h3>
+                <p className="deck-story-body">{card.body}</p>
+                {card.highlightText && (
+                  <p className="deck-story-highlight">{card.highlightText}</p>
+                )}
+              </div>
             </article>
           ))}
+        </div>
+
+        {/* Pain Point & Solusi Orang Tua (Slide 8 Persona Blueprint) */}
+        <div className="pain-point-section">
+          <div className="pain-point-header">
+            <span className="section-tag">UNTUK ORANG TUA &amp; WALI SISWA</span>
+            <h3>Mengapa Orang Tua Mempercayakan Pendampingan Anak ke TunasCendekia</h3>
+            <p>
+              Dirancang untuk orang tua yang peduli mutu pendidikan anak namun memiliki kesibukan
+              kerja dan keterbatasan waktu mengantar ke bimbel luring.
+            </p>
+          </div>
+
+          <div className="pain-point-grid">
+            {PAIN_POINTS_DATA.map((item) => (
+              <article key={item.id} className="pain-point-card">
+                <div className="pain-question">{item.painQuestion}</div>
+                <div className="pain-arrow-row" aria-hidden="true">
+                  <span className="pain-arrow-circle">
+                    <ArrowRightIcon size={15} color="#FFFFFF" />
+                  </span>
+                  <span className="pain-solution-pill">{item.solutionLabel}</span>
+                </div>
+                <p className="pain-detail">{item.detailText}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+
+        {/* Ekosistem & Format Pembinaan + Akses Cepat Jenjang */}
+        <div className="business-model-strip">
+          <div className="business-model-left">
+            <span className="business-model-tag">Format Pembelajaran Lengkap</span>
+            <h4>Tersedia untuk Jenjang SD, SMP, dan SMA</h4>
+            <div className="business-formats-list">
+              {BUSINESS_FORMATS.map((fmt) => (
+                <span key={fmt} className="business-format-pill">
+                  <CheckIcon size={13} color="#10B981" />
+                  <span>{fmt}</span>
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="business-model-actions" aria-label="Pilih Jenjang Konsultasi">
+            <span className="action-prompt-label">Mulai dari jenjang anak Anda:</span>
+            <div className="jenjang-quick-btns">
+              {(['SD', 'SMP', 'SMA'] as EducationLevel[]).map((lvl) => (
+                <button
+                  key={lvl}
+                  type="button"
+                  className="btn btn-primary btn-sm"
+                  onClick={() => onSelectJenjang(lvl)}
+                >
+                  <span>Jenjang {lvl}</span>
+                  <ArrowRightIcon size={14} />
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>

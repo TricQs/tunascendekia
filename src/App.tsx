@@ -81,7 +81,7 @@ export const App: React.FC = () => {
       ...prev,
       jenjang: selection.level,
       targetProgram: selection.track,
-      paketPilihan: `${selection.planName} (${selection.track} ${selection.level} - ${cycleText})`,
+      paketPilihan: `${selection.planName} (${cycleText})`,
     }));
     setErrors((prev) => {
       const next = { ...prev };
@@ -152,7 +152,7 @@ export const App: React.FC = () => {
       fieldErrors.jenjang = 'Mohon pilih jenjang pendidikan siswa (SD, SMP, atau SMA).';
     }
     if (!formData.targetProgram) {
-      fieldErrors.targetProgram = 'Mohon pilih target program (TKA, OSN, atau keduanya).';
+      fieldErrors.targetProgram = 'Mohon pilih jalur program (TKA, Olimpiade, atau keduanya).';
     }
 
     const waError = validateWhatsappNumber(formData.nomorWhatsapp);

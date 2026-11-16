@@ -1,6 +1,7 @@
 import React from 'react';
 import { FEATURES_DATA } from '../data/content';
 import { FeatureCardData } from '../types';
+import { DeckIllustration } from './DeckIllustrations';
 import {
   CbtAnalyticsIcon,
   CheckIcon,
@@ -12,13 +13,13 @@ import {
 const renderFeatureIcon = (key: FeatureCardData['iconKey']) => {
   switch (key) {
     case 'zoom':
-      return <ZoomLiveIcon size={26} color="#10B981" />;
+      return <ZoomLiveIcon size={24} color="#10B981" />;
     case 'curriculum':
-      return <CurriculumHotsIcon size={26} color="#F59E0B" />;
+      return <CurriculumHotsIcon size={24} color="#F59E0B" />;
     case 'group':
-      return <SmallClassIcon size={26} color="#10B981" />;
+      return <SmallClassIcon size={24} color="#10B981" />;
     case 'analytics':
-      return <CbtAnalyticsIcon size={26} color="#F59E0B" />;
+      return <CbtAnalyticsIcon size={24} color="#F59E0B" />;
   }
 };
 
@@ -27,14 +28,45 @@ export const FeaturesSection: React.FC = () => {
     <section className="section" id="fitur-program">
       <div className="container">
         <div className="section-header">
-          <span className="section-tag">FITUR &amp; KEUNGGULAN</span>
+          <span className="section-tag">PRODUCT, SERVICE &amp; VISUAL APPROACH</span>
           <h2 className="section-title">
-            Dirancang Untuk Membangun Nalar Kritis, Bukan Sekadar Menghafal
+            Keunggulan Metode Pembinaan TunasCendekia
           </h2>
           <p className="section-subtitle">
-            Setiap komponen kelas kami disusun agar siswa mampu menguasai konsep secara mendalam
-            dan orang tua menerima laporan perkembangan yang transparan.
+            Menggabungkan kelas tatap muka Zoom, bank soal HOTS bertingkat, pembahasan visual
+            interaktif, dan gaya mengajar yang suportif serta kredibel.
           </p>
+        </div>
+
+        {/* Visual Showcase Banner from Deck Page 9 */}
+        <div className="product-showcase-strip">
+          <div className="product-showcase-item">
+            <div className="showcase-art">
+              <DeckIllustration variant="product-zoom" />
+            </div>
+            <div className="showcase-copy">
+              <span className="showcase-pill">Product &amp; Service</span>
+              <h3>Bank Soal HOTS &amp; Pembahasan Visual</h3>
+              <p>
+                Materi dikelompokkan bertingkat (Basic to Advanced) dengan diagram interaktif agar
+                siswa melihat alur pembuktian, bukan menghafal rumus.
+              </p>
+            </div>
+          </div>
+
+          <div className="product-showcase-item">
+            <div className="showcase-art">
+              <DeckIllustration variant="product-clinic" />
+            </div>
+            <div className="showcase-copy">
+              <span className="showcase-pill pill-emerald">Brand Personality</span>
+              <h3>Suportif, Terbuka, dan Kredibel</h3>
+              <p>
+                Mentor menggunakan bahasa yang mudah dipahami untuk membangun rasa ingin tahu serta
+                kepercayaan diri siswa menghadapi tes bergengsi.
+              </p>
+            </div>
+          </div>
         </div>
 
         <div className="features-grid">

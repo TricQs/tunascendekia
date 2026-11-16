@@ -43,17 +43,17 @@ export const Footer: React.FC = () => {
             </li>
             <li>
               <a href="#tentang-kami" onClick={(e) => { e.preventDefault(); scrollTo('tentang-kami'); }}>
-                Tentang Kami
+                Visi &amp; Solusi
               </a>
             </li>
             <li>
               <a href="#fitur-program" onClick={(e) => { e.preventDefault(); scrollTo('fitur-program'); }}>
-                Fitur &amp; Program
+                Keunggulan
               </a>
             </li>
             <li>
               <a href="#paket-belajar" onClick={(e) => { e.preventDefault(); scrollTo('paket-belajar'); }}>
-                Paket Belajar
+                Katalog 9 Program
               </a>
             </li>
             <li>

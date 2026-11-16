@@ -1,11 +1,11 @@
 import {
-  EducationLevel,
   FaqItemData,
   FeatureCardData,
-  PillarCardData,
-  PricingTierData,
-  ProgramTrack,
+  PainPointItem,
+  ProgramCatalogItem,
   SandboxProblemSet,
+  StrategicStoryCard,
+  TrackOverviewData,
 } from '../types';
 
 export const SANDBOX_PROBLEMS: SandboxProblemSet[] = [
@@ -13,8 +13,8 @@ export const SANDBOX_PROBLEMS: SandboxProblemSet[] = [
     level: 'SD',
     tabLabel: 'SD (Kelas 4-6)',
     gradeRangeLabel: 'SD Kelas 4-6',
-    trackLabel: 'TKA Numerasi & OSN SD',
-    conceptTitle: 'Pola Ubin Ganjil Membentuk Persegi Sempurna',
+    trackLabel: 'TKA & Olimpiade SD',
+    conceptTitle: 'Visual Learning: Pola Ubin Ganjil Membentuk Persegi',
     parameterLabel: 'Jumlah Lapis Ubin (k)',
     parameterUnit: 'lapis',
     parameterMin: 2,
@@ -25,36 +25,36 @@ export const SANDBOX_PROBLEMS: SandboxProblemSet[] = [
         stageNumber: 1,
         shortLabel: '1. Pisah Lapisan',
         title: 'Tahap 1: Urai Deret Bilangan Ganjil',
-        highlightBadge: 'Model Barisan',
+        highlightBadge: 'Visual Barisan',
         explanation:
-          'Alih-alih menjumlahkan satu per satu, visualisasikan setiap suku ganjil (1, 3, 5, ...) sebagai baris ubin bertingkat.',
+          'Konsep dasar dijelaskan lewat bentuk visual konkret: setiap bilangan ganjil (1, 3, 5, ...) disusun sebagai baris ubin bertingkat.',
       },
       {
         stageNumber: 2,
         shortLabel: '2. Lipat Siku L',
         title: 'Tahap 2: Susun Menjadi Siku-Siku (L-Tile)',
-        highlightBadge: 'Pola Geometri',
+        highlightBadge: 'Pola Logika',
         explanation:
-          'Setiap lapisan ganjil baru tepat membungkus dua sisi persegi sebelumnya sehingga membentuk bangun siku beraturan.',
+          'Setiap lapisan ganjil baru tepat membungkus dua sisi persegi sebelumnya sehingga membentuk bangun siku yang mudah dilihat anak.',
       },
       {
         stageNumber: 3,
         shortLabel: '3. Persegi k x k',
-        title: 'Tahap 3: Terbukti Luas Selalu Sama Dengan k kuadrat',
-        highlightBadge: 'Simpulan Nalar',
+        title: 'Tahap 3: Terbukti Luas Membentuk Persegi k x k',
+        highlightBadge: 'Paham Konsep',
         explanation:
-          'Jumlah k bilangan ganjil pertama selalu membentuk persegi utuh berukuran k x k tanpa menghafal rumus deret.',
+          'Jumlah k bilangan ganjil pertama selalu membentuk persegi utuh k x k. Siswa paham polanya tanpa menghafal rumus.',
       },
     ],
     challengeQuestion:
-      'Jika lapisan ganjil ke-8 memiliki 15 ubin (untuk k = 8 lapis), berapakah total seluruh ubin yang tersusun?',
+      'Jika lapisan ganjil ke-8 memiliki 15 ubin (k = 8 lapis), berapakah total seluruh ubin yang terbentuk?',
     challengeOptions: [
       {
         id: 'sd-a',
         label: '56 ubin',
         isCorrect: false,
         feedbackHint:
-          'Perhatikan panjang sisi persegi penuh saat k = 8: bukan 7 x 8, melainkan sisi sama panjang k x k.',
+          'Perhatikan bentuk persegi penuh saat k = 8: panjang kedua sisinya sama panjang, bukan 7 x 8.',
       },
       {
         id: 'sd-b',
@@ -67,19 +67,19 @@ export const SANDBOX_PROBLEMS: SandboxProblemSet[] = [
         label: '72 ubin',
         isCorrect: false,
         feedbackHint:
-          'Coba geser slider k untuk melihat hubungan jumlah lapis dengan ukuran sisi persegi yang terbentuk.',
+          'Geser pengatur k di atas dan amati hubungan banyaknya lapis dengan ukuran persegi k x k.',
       },
     ],
     correctExplanation:
-      'Tepat. Delapan lapis ubin ganjil membentuk persegi berukuran 8 x 8 sehingga totalnya 64 ubin (k kuadrat).',
+      'Tepat. Delapan lapis ubin ganjil membentuk persegi berukuran 8 x 8 sehingga totalnya 64 ubin.',
   },
   {
     level: 'SMP',
     tabLabel: 'SMP (Kelas 7-9)',
     gradeRangeLabel: 'SMP Kelas 7-9',
-    trackLabel: 'OSN Matematika & TKA SMP',
-    conceptTitle: 'Pembuktian Luas Selisih Dua Kuadrat',
-    parameterLabel: 'Ukuran Potongan Sisi (b)',
+    trackLabel: 'Olimpiade & TKA SMP',
+    conceptTitle: 'Visual Learning: Pembuktian a² - b² = (a + b)(a - b)',
+    parameterLabel: 'Ukuran Potongan (b)',
     parameterUnit: 'cm',
     parameterMin: 2,
     parameterMax: 6,
@@ -87,38 +87,38 @@ export const SANDBOX_PROBLEMS: SandboxProblemSet[] = [
     stages: [
       {
         stageNumber: 1,
-        shortLabel: '1. Bangun a kuadrat',
+        shortLabel: '1. Bangun Awal a²',
         title: 'Tahap 1: Tinjau Persegi Utuh Berukuran a x a',
-        highlightBadge: 'Luas Awal',
+        highlightBadge: 'Konsep Luas',
         explanation:
-          'Mulai dari persegi besar dengan panjang sisi tetap a = 10 cm sehingga luas awal bernilai 100 cm persegi.',
+          'Mulai dari persegi besar bersisi a = 10 cm sehingga luas awal bernilai 100 cm persegi.',
       },
       {
         stageNumber: 2,
-        shortLabel: '2. Potong b kuadrat',
-        title: 'Tahap 2: Buang Persegi Sudut b x b dan Belah Sisa',
-        highlightBadge: 'Reduksi Luas',
+        shortLabel: '2. Potong Sudut b²',
+        title: 'Tahap 2: Pisahkan Persegi Kecil b² di Sudut Kanan',
+        highlightBadge: 'Strategi Visual',
         explanation:
-          'Membuang persegi kecil b x b menyisakan dua bagian berbentuk L. Kita pisahkan potongan bawah selebar (a - b) x b.',
+          'Membuang persegi kecil b x b menyisakan daerah berbentuk huruf L. Kita pisahkan potongan bawah selebar (a - b) x b.',
       },
       {
         stageNumber: 3,
         shortLabel: '3. Putar & Gabung',
         title: 'Tahap 3: Putar 90 Derajat Menjadi (a + b)(a - b)',
-        highlightBadge: 'Faktorisasi',
+        highlightBadge: 'Inti Materi',
         explanation:
-          'Potongan bawah diputar dan ditempel ke sisi kanan, membentuk persegi panjang tunggal berukuran (a + b) kali (a - b).',
+          'Potongan bawah diputar lalu digabungkan ke sisi kanan hingga membentuk persegi panjang (a + b) kali (a - b).',
       },
     ],
     challengeQuestion:
-      'Tanpa menghitung kuadrat secara manual, berapakah hasil 53 kuadrat dikurangi 47 kuadrat dengan konsep potongan luas?',
+      'Gunakan strategi potongan luas untuk menghitung nilai 53 kuadrat dikurangi 47 kuadrat secara cepat:',
     challengeOptions: [
       {
         id: 'smp-a',
         label: '300',
         isCorrect: false,
         feedbackHint:
-          'Cek kembali jumlah kedua sisi (53 + 47) dikalikan dengan selisihnya (53 - 47). Hasil penjumlahannya bernilai 100.',
+          'Jumlahkan dahulu kedua bilangan (53 + 47 = 100), lalu kalikan dengan selisihnya (53 - 47).',
       },
       {
         id: 'smp-b',
@@ -131,19 +131,19 @@ export const SANDBOX_PROBLEMS: SandboxProblemSet[] = [
         label: '1.000',
         isCorrect: false,
         feedbackHint:
-          'Selisih antara 53 dan 47 bukan 10, melainkan 6. Kalikan 100 dengan selisih sisi yang tepat.',
+          'Selisih antara 53 dan 47 bernilai 6, bukan 10. Kalikan 100 dengan selisih yang tepat.',
       },
     ],
     correctExplanation:
-      'Benar. Dengan identitas (53 + 47)(53 - 47) = 100 x 6 = 600, soal aljabar kompetitif selesai dalam hitungan detik.',
+      'Benar. Dengan visualisasi (53 + 47)(53 - 47) = 100 x 6 = 600, soal nonrutin terselesaikan dalam hitungan detik.',
   },
   {
     level: 'SMA',
     tabLabel: 'SMA (Kelas 10-12)',
     gradeRangeLabel: 'SMA Kelas 10-12',
     trackLabel: 'OSN Fisika & TKA Saintek',
-    conceptTitle: 'Transformasi Grafik Kecepatan v-t Menjadi Jarak Tempuh',
-    parameterLabel: 'Kecepatan Awal (v0)',
+    conceptTitle: 'Visual Learning: Ekuivalensi Luas Grafik Kecepatan v-t',
+    parameterLabel: 'Kecepatan Awal (v₀)',
     parameterUnit: 'm/s',
     parameterMin: 4,
     parameterMax: 12,
@@ -153,36 +153,36 @@ export const SANDBOX_PROBLEMS: SandboxProblemSet[] = [
         stageNumber: 1,
         shortLabel: '1. Grafik v-t',
         title: 'Tahap 1: Amati Luas Segitiga di Bawah Kurva v-t',
-        highlightBadge: 'Kinematika',
+        highlightBadge: 'Penalaran Ilmiah',
         explanation:
-          'Pada perlambatan tetap selama t = 8 detik, jarak tempuh sama dengan luas daerah segitiga antara sumbu waktu dan grafik kecepatan.',
+          'Selama perlambatan tetap t = 8 detik, jarak tempuh benda sama dengan luas daerah segitiga di bawah grafik.',
       },
       {
         stageNumber: 2,
-        shortLabel: '2. Belah 1/2 v0',
-        title: 'Tahap 2: Bagi Tepat di Kecepatan Tengah (1/2 v0)',
-        highlightBadge: 'Partisi Kurva',
+        shortLabel: '2. Belah 1/2 v₀',
+        title: 'Tahap 2: Bagi Tepat di Kecepatan Tengah (1/2 v₀)',
+        highlightBadge: 'Analisis Kurva',
         explanation:
-          'Garis horizontal pada setengah kecepatan awal membagi puncak segitiga untuk menunjukkan kecepatan rata-rata gerak.',
+          'Pemotongan di setengah kecepatan awal memudahkan siswa melihat transformasi bentuk tanpa hafalan rumus.',
       },
       {
         stageNumber: 3,
         shortLabel: '3. Persegi Panjang',
-        title: 'Tahap 3: Putar Puncak 180 Derajat Jadi Luas t x (1/2 v0)',
-        highlightBadge: 'Ekuivalensi',
+        title: 'Tahap 3: Putar Puncak 180 Derajat Jadi Luas t x (1/2 v₀)',
+        highlightBadge: 'Simpulan Visual',
         explanation:
-          'Puncak segitiga mengisi rongga kanan secara kongruen menjadi persegi panjang t x (1/2 v0), membuktikan s = 1/2 v0 t secara visual.',
+          'Bagian atas segitiga tepat mengisi sisi kanan membentuk persegi panjang berukuran alas t dan tinggi 1/2 v₀.',
       },
     ],
     challengeQuestion:
-      'Sebuah benda direm beraturan dari kecepatan awal v0 = 18 m/s hingga berhenti dalam t = 6 detik. Berapakah jarak tempuhnya?',
+      'Sebuah benda direm beraturan dari v₀ = 18 m/s hingga berhenti dalam t = 6 detik. Berapakah jarak tempuhnya?',
     challengeOptions: [
       {
         id: 'sma-a',
         label: '36 meter',
         isCorrect: false,
         feedbackHint:
-          'Setengah dari 18 m/s adalah 9 m/s. Kalikan kecepatan rata-rata 9 m/s dengan selang waktu 6 detik.',
+          'Setengah dari 18 m/s bernilai 9 m/s. Kalikan 9 m/s dengan selang waktu 6 detik.',
       },
       {
         id: 'sma-b',
@@ -195,252 +195,363 @@ export const SANDBOX_PROBLEMS: SandboxProblemSet[] = [
         label: '108 meter',
         isCorrect: false,
         feedbackHint:
-          '108 meter adalah luas persegi penuh v0 x t. Ingat kurva berbentuk segitiga sehingga tingginya menjadi 1/2 v0.',
+          '108 meter merupakan luas persegi penuh v₀ x t. Tinggi persegi panjang ekuivalen hanya setengahnya.',
       },
     ],
     correctExplanation:
-      'Tepat. Luas persegi panjang ekuivalen memiliki tinggi 1/2 x 18 = 9 m/s dan alas 6 s, sehingga jarak tempuhnya 54 meter.',
+      'Tepat. Luas persegi panjang ekuivalen memiliki tinggi 1/2 x 18 = 9 m/s dan waktu 6 s, menghasilkan 54 meter.',
   },
 ];
 
-export const PILLARS_DATA: PillarCardData[] = [
+export const STRATEGIC_STORY_CARDS: StrategicStoryCard[] = [
   {
-    id: 'sd',
-    stepLabel: 'Tahap 01',
-    title: 'Jenjang SD (Kelas 4-6)',
-    description:
-      'Membangun fondasi nalar logika, eksplorasi Matematika dan IPA Olimpiade tingkat dasar, serta kesiapan menghadapi seleksi SMP unggulan.',
-    jenjangValue: 'SD',
-    iconKey: 'seedling',
+    id: 'problem',
+    tag: '01 | Problem Statement',
+    title: 'Kesenjangan Pembinaan Kompetisi di Sekolah & Bimbel Umum',
+    body: 'Banyak siswa berprestasi kesulitan menemukan bimbingan terarah untuk kompetisi TKA & OSN. Sekolah memiliki keterbatasan waktu dan tenaga pelatih ahli, sementara bimbel umum hanya berfokus pada kurikulum reguler tanpa pemahaman konsep mendalam.',
+    accentTheme: 'navy',
+    illustrationKey: 'problem',
   },
   {
-    id: 'smp',
-    stepLabel: 'Tahap 02',
-    title: 'Jenjang SMP (Kelas 7-9)',
-    description:
-      'Pendalaman konsep Matematika, IPA (Fisika dan Biologi), serta IPS dari level Kabupaten hingga Nasional sekaligus penguatan TKA SMA favorit.',
-    jenjangValue: 'SMP',
-    iconKey: 'compass',
+    id: 'vision',
+    tag: '02 | Our Vision',
+    title: 'Pemerataan Akses Pembinaan Prestasi Nasional',
+    body: 'Mewujudkan pemerataan akses pembinaan prestasi akademik berkualitas di seluruh Indonesia, mengantar siswa berbakat meraih medali dan menembus sekolah serta perguruan tinggi impian.',
+    highlightText: 'Fokus kami: nalar kuat, percaya diri, dan prestasi nyata.',
+    accentTheme: 'emerald',
+    illustrationKey: 'vision',
   },
   {
-    id: 'sma',
-    stepLabel: 'Tahap 03',
-    title: 'Jenjang SMA (Kelas 10-12)',
-    description:
-      'Pembinaan terstruktur bidang utama OSN SMA dan penguasaan TKA Saintek maupun Soshum sebagai bekal jalur prestasi menuju PTN tujuan.',
-    jenjangValue: 'SMA',
-    iconKey: 'graduation',
+    id: 'opportunity',
+    tag: '03 | The Opportunity',
+    title: 'Akses Mentor Nasional Tanpa Terkendala Wilayah',
+    body: 'Tingginya minat orang tua dan siswa terhadap jalur prestasi (OSN & TKA) untuk masuk sekolah unggulan dan PTN. Pembelajaran daring via Zoom membuka akses mentor nasional secara merata di seluruh Indonesia.',
+    accentTheme: 'gold',
+    illustrationKey: 'opportunity',
   },
+  {
+    id: 'solution',
+    tag: '04 | Our Solution',
+    title: 'Ekosistem Bimbel Daring Interaktif & Terukur',
+    body: 'Ekosistem bimbel daring interaktif via Zoom dengan kurikulum khusus olimpiade & TKA, dibimbing langsung oleh mentor peraih medali nasional dalam kelas kecil yang terstruktur dan terukur.',
+    accentTheme: 'navy',
+    illustrationKey: 'solution',
+  },
+];
+
+export const PAIN_POINTS_DATA: PainPointItem[] = [
+  {
+    id: 'cost-distance',
+    painQuestion: 'Bimbel offline mahal dan jauh?',
+    solutionLabel: 'Online dan terjangkau',
+    detailText: 'Kelas langsung via Zoom dengan biaya transparan tanpa beban transportasi.',
+  },
+  {
+    id: 'pickup-time',
+    painQuestion: 'Tidak ada waktu antar jemput?',
+    solutionLabel: 'Belajar dari rumah',
+    detailText: 'Siswa mengikuti sesi pembinaan dengan aman dan nyaman dari rumah.',
+  },
+  {
+    id: 'schedule-clash',
+    painQuestion: 'Jadwal sering bentrok?',
+    solutionLabel: 'Jadwal fleksibel',
+    detailText: 'Tersedia pilihan kelas reguler, bootcamp kilat, dan rekaman ulang materi.',
+  },
+  {
+    id: 'trust-quality',
+    painQuestion: 'Bingung pilih bimbel yang tepat?',
+    solutionLabel: 'Pengajar profesional dan terpercaya',
+    detailText: 'Dibimbing langsung mentor alumni peraih medali OSN dan pengajar terkurasi.',
+  },
+];
+
+export const BUSINESS_FORMATS: string[] = [
+  'Paket Bimbingan Intensif TKA & OSN',
+  'Program Try-Out Akbar Berkala',
+  'Bootcamp Kilat Jelang Kompetisi',
+  'Program Kemitraan Bimbingan Sekolah',
 ];
 
 export const FEATURES_DATA: FeatureCardData[] = [
   {
-    id: 'live-zoom',
-    number: 'Keunggulan 01',
-    title: 'Live Interactive Classroom via Zoom',
+    id: 'product-service',
+    number: 'Layanan 01',
+    title: 'Live Interactive Class via Zoom & Klinik Mingguan',
     description:
-      'Sesi tatap muka daring dua arah secara langsung bersama pembimbing, bukan sekadar menonton rekaman video satu arah. Siswa didorong aktif berdiskusi dan membedah argumen jawaban secara real-time.',
-    benefitText:
-      'Siswa berani bertanya di tempat hingga paham akar konsepnya tanpa menumpuk kebingungan.',
+      'Pembelajaran berlangsung tatap muka dua arah bersama mentor peraih medali olimpiade, dilengkapi bank soal HOTS bertingkat (Basic to Advanced) serta sesi tanya-jawab soal sulit setiap minggu.',
+    benefitText: 'Siswa aktif bertanya langsung dan memahami langkah penyelesaian hingga tuntas.',
     iconKey: 'zoom',
   },
   {
-    id: 'kurikulum-hots',
-    number: 'Keunggulan 02',
-    title: 'Kurikulum Berbasis Nalar HOTS & Standar OSN',
+    id: 'visual-learning',
+    number: 'Layanan 02',
+    title: 'Visual Learning Approach di Setiap Pembahasan',
     description:
-      'Materi disusun bertahap mulai dari pemahaman prinsip dasar hingga latihan pemecahan soal non-rutin tingkat Kabupaten, Provinsi, Nasional, dan TKA berstandar seleksi ketat.',
-    benefitText:
-      'Anak terlatih mengurai soal baru dengan logika mandiri, bukan bergantung pada hafalan rumus.',
+      'Setiap pembahasan soal dilengkapi visualisasi interaktif agar siswa dapat memvisualisasikan proses berpikir, melihat struktur pembuktian konsep, dan menangkap inti materi jauh lebih mudah.',
+    benefitText: 'Tidak sekadar menghafal rumus cepat, melainkan menguasai logika di baliknya.',
     iconKey: 'curriculum',
   },
   {
-    id: 'kelas-kecil',
-    number: 'Keunggulan 03',
-    title: 'Kapasitas Kelas Kecil & Klinik Soal Mingguan',
+    id: 'competitive-advantage',
+    number: 'Layanan 03',
+    title: 'Kurikulum Khusus Kompetisi & Kelas Terstruktur',
     description:
-      'Setiap kelas Zoom dibatasi maksimal 10 hingga 15 siswa agar pembimbing dapat memantau cara berpikir tiap peserta. Tersedia klinik soal mingguan untuk mengulas PR maupun soal sekolah yang sulit.',
-    benefitText:
-      'Perhatian personal terjaga meski kelas diikuti dari kota berbeda di seluruh Indonesia.',
+      'Keunggulan kami terletak pada kurikulum terarah mulai dari fondasi hingga level nonrutin OSN, serta kelas interaktif terukur dengan diskusi dua arah antara mentor dan peserta.',
+    benefitText: 'Retensi pemahaman jangka panjang bertingkat dari SD, SMP, hingga SMA.',
     iconKey: 'group',
   },
   {
-    id: 'diagnostic-cbt',
-    number: 'Keunggulan 04',
-    title: 'Diagnostic Test & Evaluasi Perkembangan Berkala',
+    id: 'brand-voice',
+    number: 'Layanan 04',
+    title: 'Evaluasi Try-Out Berkala & Pendampingan Suportif',
     description:
-      'Sebelum penempatan kelas, siswa mengikuti Diagnostic Test untuk memetakan kekuatan dan celah konsepnya. Orang tua menerima laporan progres periodik yang jelas dan terukur.',
-    benefitText:
-      'Orang tua mengetahui perkembangan nyata anak di tiap bab dan fokus perbaikan selanjutnya.',
+      'Try-out berkala memetakan kesiapan anak secara objektif dengan gaya pengajaran yang mudah dipahami, komunikatif, dan membangun rasa ingin tahu siswa tanpa menghilangkan profesionalisme.',
+    benefitText: 'Orang tua memperoleh gambaran kesiapan anak menuju tes unggulan dan OSN.',
     iconKey: 'analytics',
   },
 ];
 
-interface LevelPricingSchedule {
-  level: EducationLevel;
-  track: ProgramTrack;
-  baseMonthly: number;
-  intensiveMonthly: number;
-  privateMonthly: number;
-}
+export const TRACK_OVERVIEWS: TrackOverviewData[] = [
+  {
+    stepNumber: '1',
+    track: 'TKA',
+    title: 'TKA',
+    subtitle: 'Tes Kemampuan Akademik',
+    suitableFor: 'Siswa yang ingin kuat di pelajaran inti dan siap menghadapi tes akademik.',
+    learningFocus: [
+      'Soal HOTS bertingkat, dari dasar hingga lanjut',
+      'Try-out berkala untuk mengukur kesiapan',
+    ],
+  },
+  {
+    stepNumber: '2',
+    track: 'Olimpiade',
+    title: 'Olimpiade',
+    subtitle: 'Olimpiade Sains Nasional (OSN)',
+    suitableFor: 'Siswa yang ingin berprestasi dan bertanding di kompetisi sains.',
+    learningFocus: [
+      'Soal nonrutin dan strategi penyelesaiannya',
+      'Bimbingan langsung mentor peraih medali',
+    ],
+  },
+  {
+    stepNumber: '3',
+    track: 'TKA + Olimpiade',
+    title: 'TKA + Olimpiade',
+    subtitle: 'Dua target, satu paket',
+    suitableFor: 'Siswa yang menargetkan skor akademik kuat sekaligus siap bertanding.',
+    learningFocus: [
+      'Materi TKA diperdalam dengan soal olimpiade',
+      'Satu paket untuk dua target sekaligus',
+    ],
+  },
+];
 
-const PRICING_SCHEDULES: LevelPricingSchedule[] = [
-  {
-    level: 'SD',
-    track: 'TKA',
-    baseMonthly: 420000,
-    intensiveMonthly: 760000,
-    privateMonthly: 1850000,
-  },
-  {
-    level: 'SD',
-    track: 'OSN',
-    baseMonthly: 450000,
-    intensiveMonthly: 820000,
-    privateMonthly: 1950000,
-  },
-  {
-    level: 'SMP',
-    track: 'TKA',
-    baseMonthly: 490000,
-    intensiveMonthly: 860000,
-    privateMonthly: 2100000,
-  },
-  {
-    level: 'SMP',
-    track: 'OSN',
-    baseMonthly: 520000,
-    intensiveMonthly: 920000,
-    privateMonthly: 2250000,
-  },
-  {
-    level: 'SMA',
-    track: 'TKA',
-    baseMonthly: 560000,
-    intensiveMonthly: 960000,
-    privateMonthly: 2400000,
-  },
-  {
-    level: 'SMA',
-    track: 'OSN',
-    baseMonthly: 600000,
-    intensiveMonthly: 1050000,
-    privateMonthly: 2600000,
-  },
+export const UNIVERSAL_GUARANTEES: string[] = [
+  'Kelas live interaktif via Zoom',
+  'Mentor peraih medali olimpiade',
+  'Pembahasan visual interaktif',
+  'Tanya-jawab soal sulit tiap minggu',
 ];
 
 export const formatRupiah = (amount: number): string =>
   `Rp ${amount.toLocaleString('id-ID')}`;
 
-export const PRICING_TIERS: PricingTierData[] = PRICING_SCHEDULES.flatMap((s) => {
-  const levelText = s.level === 'SD' ? 'SD Kelas 4-6' : s.level === 'SMP' ? 'SMP Kelas 7-9' : 'SMA Kelas 10-12';
-  const trackText = s.track === 'TKA' ? 'Persiapan TKA' : 'Pembinaan OSN';
+// Exact 3 Jenjang (SD, SMP, SMA) x 3 Jalur (TKA, Olimpiade, TKA + Olimpiade) = 9 Programs
+export const PROGRAM_CATALOGUE: ProgramCatalogItem[] = [
+  // JENJANG SD (Teal Accent)
+  {
+    id: 'sd-tka',
+    level: 'SD',
+    track: 'TKA',
+    trackLabel: 'TKA',
+    headline: 'Bangun fondasi berhitung dan sains sejak dini.',
+    bullets: [
+      'Konsep dasar dijelaskan lewat visual dan contoh sehari-hari.',
+      'Latihan bertahap agar siswa teliti dan percaya diri.',
+    ],
+    classQuota: 'Kelas Interaktif via Zoom',
+    sessionQuotaMonthly: '8x sesi Live Zoom / bulan',
+    sessionQuotaSemester: '48x sesi Live Zoom / semester',
+    monthlyPriceRp: 420000,
+    semesterPriceRp: 2270000,
+    cardTone: 'teal',
+  },
+  {
+    id: 'sd-olimpiade',
+    level: 'SD',
+    track: 'Olimpiade',
+    trackLabel: 'OLIMPIADE',
+    headline: 'Kenalkan serunya berpikir logis dan kreatif.',
+    bullets: [
+      'Soal logika dan teka-teki yang dikemas menyenangkan.',
+      'Dibimbing mentor peraih medali olimpiade.',
+    ],
+    classQuota: 'Kelas Interaktif via Zoom',
+    sessionQuotaMonthly: '8x sesi Live Zoom / bulan',
+    sessionQuotaSemester: '48x sesi Live Zoom / semester',
+    monthlyPriceRp: 450000,
+    semesterPriceRp: 2430000,
+    cardTone: 'teal',
+  },
+  {
+    id: 'sd-combo',
+    level: 'SD',
+    track: 'TKA + Olimpiade',
+    trackLabel: 'TKA + OLIMPIADE',
+    headline: 'Satu paket: fondasi kuat dan nalar yang terasah.',
+    bullets: [
+      'Materi TKA dasar plus soal logika yang menantang.',
+      'Kelas live interaktif dengan mentor berpengalaman.',
+    ],
+    classQuota: 'Paket Ganda Terintegrasi',
+    sessionQuotaMonthly: '12x sesi Live Zoom / bulan',
+    sessionQuotaSemester: '72x sesi Live Zoom / semester',
+    monthlyPriceRp: 690000,
+    semesterPriceRp: 3730000,
+    cardTone: 'teal',
+    badgeLabel: '2 Target Sekaligus',
+  },
 
-  // Exact semester pricing = 6 months * monthly - clear 10% semester discount
-  const regularSem = Math.round((s.baseMonthly * 6 * 0.9) / 10000) * 10000;
-  const intensiveSem = Math.round((s.intensiveMonthly * 6 * 0.9) / 10000) * 10000;
-  const privateSem = Math.round((s.privateMonthly * 6 * 0.9) / 10000) * 10000;
+  // JENJANG SMP (Emerald Accent)
+  {
+    id: 'smp-tka',
+    level: 'SMP',
+    track: 'TKA',
+    trackLabel: 'TKA',
+    headline: 'Siap menghadapi tes dengan soal yang lebih analitis.',
+    bullets: [
+      'Latihan soal HOTS bertingkat, dari dasar hingga lanjut.',
+      'Belajar menerapkan konsep, bukan sekadar menghafal rumus.',
+    ],
+    classQuota: 'Kelas Interaktif via Zoom',
+    sessionQuotaMonthly: '8x sesi Live Zoom / bulan',
+    sessionQuotaSemester: '48x sesi Live Zoom / semester',
+    monthlyPriceRp: 490000,
+    semesterPriceRp: 2650000,
+    cardTone: 'emerald',
+  },
+  {
+    id: 'smp-olimpiade',
+    level: 'SMP',
+    track: 'Olimpiade',
+    trackLabel: 'OLIMPIADE',
+    headline: 'Naik level dari soal sekolah ke soal olimpiade.',
+    bullets: [
+      'Strategi memecah soal nonrutin langkah demi langkah.',
+      'Pembahasan visual interaktif di setiap soal.',
+    ],
+    classQuota: 'Kelas Interaktif via Zoom',
+    sessionQuotaMonthly: '8x sesi Live Zoom / bulan',
+    sessionQuotaSemester: '48x sesi Live Zoom / semester',
+    monthlyPriceRp: 520000,
+    semesterPriceRp: 2810000,
+    cardTone: 'emerald',
+  },
+  {
+    id: 'smp-combo',
+    level: 'SMP',
+    track: 'TKA + Olimpiade',
+    trackLabel: 'TKA + OLIMPIADE',
+    headline: 'Satu paket: siap TKA, siap tanding olimpiade.',
+    bullets: [
+      'Materi TKA diperdalam dengan soal nonrutin.',
+      'Visualisasi interaktif membantu memahami konsep sulit.',
+    ],
+    classQuota: 'Paket Ganda Terintegrasi',
+    sessionQuotaMonthly: '12x sesi Live Zoom / bulan',
+    sessionQuotaSemester: '72x sesi Live Zoom / semester',
+    monthlyPriceRp: 790000,
+    semesterPriceRp: 4270000,
+    cardTone: 'emerald',
+    badgeLabel: 'Pilihan Populer SMP',
+  },
 
-  return [
-    {
-      id: `${s.track.toLowerCase()}-${s.level.toLowerCase()}-reguler`,
-      track: s.track,
-      level: s.level,
-      name: `Kelas Fondasi ${s.track}`,
-      target: `${levelText} dengan fokus penguatan konsep dasar dan latihan terstruktur (${trackText}).`,
-      classQuota: 'Maks. 15 siswa per kelas Zoom',
-      sessionQuotaMonthly: '8x sesi Live Zoom / bulan',
-      sessionQuotaSemester: '48x sesi Live Zoom / semester',
-      mentorCredential: 'Pembimbing Spesialis Bidang & Tutor Senior',
-      monthlyPriceRp: s.baseMonthly,
-      semesterPriceRp: regularSem,
-      semesterSavingsLabel: `Hemat ${formatRupiah(s.baseMonthly * 6 - regularSem)} vs bayar bulanan`,
-      features: [
-        'Maksimal 15 siswa per kelas Zoom interaktif 2 arah',
-        'Modul konsep dan bank soal HOTS format PDF per pertemuan',
-        'Rekaman sesi Zoom tersimpan untuk ditinjau ulang',
-        '1x Try Out Evaluasi Berkala per bulan beserta pembahasan',
-      ],
-      featured: false,
-      buttonVariant: 'navy',
-    },
-    {
-      id: `${s.track.toLowerCase()}-${s.level.toLowerCase()}-intensif`,
-      track: s.track,
-      level: s.level,
-      name: `Program Intensif ${s.track}`,
-      target: `${levelText} yang menargetkan lolos seleksi sekolah unggulan atau jenjang kabupaten hingga nasional.`,
-      classQuota: 'Maks. 10 siswa per kelas Zoom',
-      sessionQuotaMonthly: '12x sesi Live Zoom / bulan',
-      sessionQuotaSemester: '72x sesi Live Zoom / semester',
-      mentorCredential: 'Alumni Medalis OSN / Pembina TKA Terkurasi',
-      monthlyPriceRp: s.intensiveMonthly,
-      semesterPriceRp: intensiveSem,
-      semesterSavingsLabel: `Hemat ${formatRupiah(s.intensiveMonthly * 6 - intensiveSem)} vs bayar bulanan`,
-      features: [
-        'Kelas kecil maksimal 10 siswa agar diskusi nalar lebih intensif',
-        'Dibimbing langsung Alumni Medalis OSN & pembina berpengalaman',
-        'Termasuk 4x Klinik Soal Mingguan & bedah PR sekolah atau lomba',
-        'Rapor perkembangan konsep bulanan langsung untuk orang tua',
-      ],
-      featured: true,
-      ribbonLabel: 'Rekomendasi Orang Tua',
-      buttonVariant: 'primary',
-    },
-    {
-      id: `${s.track.toLowerCase()}-${s.level.toLowerCase()}-privat`,
-      track: s.track,
-      level: s.level,
-      name: `Mentoring Privat 1-on-1`,
-      target: `${levelText} yang membutuhkan silabus khusus, akselerasi materi, dan jadwal fleksibel.`,
-      classQuota: '1 siswa per kelas (Privat 1-on-1)',
-      sessionQuotaMonthly: '8x sesi Privat / bulan',
-      sessionQuotaSemester: '48x sesi Privat / semester',
-      mentorCredential: 'Mentor Utama Alumni Medalis OSN Nasional',
-      monthlyPriceRp: s.privateMonthly,
-      semesterPriceRp: privateSem,
-      semesterSavingsLabel: `Hemat ${formatRupiah(s.privateMonthly * 6 - privateSem)} vs bayar bulanan`,
-      features: [
-        'Kurikulum kustom menyesuaikan peta diagnostik awal dan target sekolah',
-        'Jadwal sesi fleksibel dengan dukungan tanya soal terarah antara pertemuan',
-        'Simulasi CBT / Try Out OSN lengkap dengan bedah solusi langkah demi langkah',
-        'Konsultasi progres berkala langsung antara mentor dan orang tua',
-      ],
-      featured: false,
-      buttonVariant: 'secondary',
-    },
-  ];
-});
+  // JENJANG SMA (Navy Accent)
+  {
+    id: 'sma-tka',
+    level: 'SMA',
+    track: 'TKA',
+    trackLabel: 'TKA',
+    headline: 'Targetkan skor tinggi untuk jalur prestasi dan PTN.',
+    bullets: [
+      'Penalaran kuantitatif dan analisis ilmiah secara terstruktur.',
+      'Try-out berkala untuk mengukur kesiapan.',
+    ],
+    classQuota: 'Kelas Interaktif via Zoom',
+    sessionQuotaMonthly: '8x sesi Live Zoom / bulan',
+    sessionQuotaSemester: '48x sesi Live Zoom / semester',
+    monthlyPriceRp: 560000,
+    semesterPriceRp: 3020000,
+    cardTone: 'navy',
+  },
+  {
+    id: 'sma-olimpiade',
+    level: 'SMA',
+    track: 'Olimpiade',
+    trackLabel: 'OLIMPIADE',
+    headline: 'Tembus seleksi OSN dengan strategi yang matang.',
+    bullets: [
+      'Teknik pembuktian dan soal kompleks dari mentor medalis.',
+      'Tanya-jawab soal sulit tiap minggu.',
+    ],
+    classQuota: 'Kelas Interaktif via Zoom',
+    sessionQuotaMonthly: '8x sesi Live Zoom / bulan',
+    sessionQuotaSemester: '48x sesi Live Zoom / semester',
+    monthlyPriceRp: 600000,
+    semesterPriceRp: 3240000,
+    cardTone: 'navy',
+  },
+  {
+    id: 'sma-combo',
+    level: 'SMA',
+    track: 'TKA + Olimpiade',
+    trackLabel: 'TKA + OLIMPIADE',
+    headline: 'Satu paket, dua target: skor TKA kuat dan siap OSN.',
+    bullets: [
+      'Dibimbing alumni peraih medali olimpiade.',
+      'Try-out berkala dan latihan soal tingkat lanjut.',
+    ],
+    classQuota: 'Paket Ganda Terintegrasi',
+    sessionQuotaMonthly: '12x sesi Live Zoom / bulan',
+    sessionQuotaSemester: '72x sesi Live Zoom / semester',
+    monthlyPriceRp: 890000,
+    semesterPriceRp: 4810000,
+    cardTone: 'navy',
+    badgeLabel: 'Persiapan Lengkap SMA',
+  },
+];
 
 export const FAQ_DATA: FaqItemData[] = [
   {
     id: 1,
-    question: 'Bagaimana alur pembelajaran via Zoom, dan apakah rekaman kelas tersedia jika anak berhalangan?',
+    question: 'Apa saja perbedaan antara program TKA, Olimpiade, dan TKA + Olimpiade?',
     answer:
-      'Seluruh sesi berlangsung secara tatap muka dua arah melalui Zoom, diawali bedah konsep visual dan dilanjutkan latihan soal terpandu. Setiap pertemuan direkam otomatis dan dibagikan pada hari yang sama beserta anotasi papan tulis agar siswa dapat mengulang materi kapan saja saat sakit atau memiliki agenda sekolah.',
+      'Jalur TKA berfokus pada soal HOTS bertingkat untuk menguatkan pelajaran inti dan try-out menghadapi tes masuk sekolah unggulan/PTN. Jalur Olimpiade membedah soal nonrutin OSN bersama mentor peraih medali. Jalur TKA + Olimpiade menggabungkan keduanya dalam satu jadwal terpadu sehingga siswa siap mengejar skor akademik maupun prestasi kompetisi.',
   },
   {
     id: 2,
-    question: 'Mengapa jumlah peserta per kelas Zoom dibatasi 10 hingga 15 siswa?',
+    question: 'Bagaimana alur kelas Zoom dan dukungan jika siswa menemui soal sulit di luar jam kelas?',
     answer:
-      'Pembelajaran TKA dan Olimpiade menuntut keberanian berargumen serta koreksi logika di tempat. Dengan batas maksimal 10 siswa di kelas Intensif dan 15 siswa di kelas Fondasi, mentor dapat memeriksa langkah pengerjaan tiap anak secara aktif dan menghindari kelas pasif.',
+      'Seluruh sesi dilakukan live interaktif dua arah melalui Zoom dengan pendekatan pembahasan visual. Di luar kelas inti, setiap program sudah mencakup sesi klinik tanya-jawab soal sulit mingguan dan rekaman kelas agar siswa dapat mengulang materi dari rumah.',
   },
   {
     id: 3,
-    question: 'Siapa yang mengajar di TunasCendekia dan bagaimana seleksi mentornya?',
+    question: 'Apakah program ini cocok untuk orang tua bekerja yang tidak sempat antar jemput ke tempat les?',
     answer:
-      'Tim pengajar kami terdiri dari alumni peraih medali Olimpiade Sains Nasional (OSN), finalis pelatnas, serta pembina TKA dan ujian seleksi PTN yang telah melalui tahap micro-teaching terkurasi untuk memastikan penyampaian materi mudah diikuti siswa SD, SMP, maupun SMA.',
+      'Sangat cocok. Seluruh pembelajaran dilakukan daring dari rumah sehingga orang tua tidak perlu mengatur jadwal antar jemput atau terbebani biaya perjalanan, sementara laporan progres try-out berkala disampaikan secara jelas.',
   },
   {
     id: 4,
-    question: 'Apa perbedaan utama antara jalur program TKA dan pembinaan OSN?',
+    question: 'Siapa yang membimbing anak saya di setiap jenjang SD, SMP, dan SMA?',
     answer:
-      'Program TKA (Tes Kemampuan Akademik) berfokus pada kecepatan, akurasi penalaran literasi-numerasi, serta penguasaan konsep Saintek/Soshum untuk masuk SMP/SMA unggulan dan PTN. Sementara program OSN menggali topik kompetisi non-rutin tingkat mendalam (Teori Bilangan, Kombinatorika, Mekanika Analisis, hingga pembuktian matematis) menuju jenjang Kabupaten, Provinsi, dan Nasional.',
+      'Siswa dibimbing oleh mentor alumni peraih medali Olimpiade Sains Nasional (OSN) dan tutor berpengalaman yang terlatih menjelaskan konsep secara bertahap dan komunikatif sesuai usia belajar SD Kelas 4-6, SMP, maupun SMA.',
   },
   {
     id: 5,
-    question: 'Apakah jadwal kelas dapat dijadwalkan ulang (reschedule) saat anak menghadapi ujian sekolah atau lomba?',
+    question: 'Apakah tersedia pilihan jadwal fleksibel atau persiapan khusus menjelang lomba/ujian?',
     answer:
-      'Ya. Peserta Program Privat 1-on-1 dapat melakukan penjadwalan ulang minimal H-1 sebelum sesi dimulai. Untuk kelas Grup, siswa yang berhalangan karena ujian sekolah atau lomba dapat meminta akses kelas pengganti di jadwal paralel minggu yang sama atau mendiskusikan soal melalui Klinik Soal Mingguan.',
+      'Ya. Selain program bulanan dan paket semester terstruktur, TunasCendekia menyediakan sesi bootcamp kilat jelang kompetisi serta penjadwalan fleksibel apabila siswa berhalangan karena jadwal ujian sekolah.',
   },
 ];

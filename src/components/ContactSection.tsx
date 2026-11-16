@@ -4,9 +4,10 @@ import {
   FormDataType,
   FormFieldKey,
   FormStatus,
+  ProgramTrack,
   SelectedConsultationProgram,
-  TargetProgramChoice,
 } from '../types';
+import { DeckIllustration } from './DeckIllustrations';
 import {
   ArrowRightIcon,
   EmailIcon,
@@ -69,35 +70,40 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   return (
     <section className="section section-slate" id="kontak">
       <div className="container">
-        {/* Consultation Header Banner Card */}
+        {/* Consultation Banner Card */}
         <div className="cta-banner-card">
-          <div className="cta-banner-content">
-            <h2 className="cta-banner-title">
-              Siap Mengukur Potensi Akademik Anak Secara Terarah?
-            </h2>
-            <p className="cta-banner-text">
-              Konsultasikan target sekolah unggulan atau bidang Olimpiade Sains Nasional bersama
-              tim akademik kami, lalu ikuti Kelas Percobaan &amp; Diagnostic Test Gratis.
-            </p>
+          <div className="cta-banner-split">
+            <div className="cta-banner-content left-aligned">
+              <span className="banner-kicker">PENDAFTARAN &amp; KONSULTASI AKADEMIK</span>
+              <h2 className="cta-banner-title">
+                Cari Tahu Lebih Lanjut &amp; Jadwalkan Diagnostic Test Gratis
+              </h2>
+              <p className="cta-banner-text">
+                Konsultasikan pilihan jenjang SD, SMP, atau SMA beserta jalur TKA, Olimpiade, atau
+                TKA + Olimpiade bersama tim akademik TunasCendekia.
+              </p>
+            </div>
+            <div className="cta-banner-art" aria-hidden="true">
+              <DeckIllustration variant="contact-team" />
+            </div>
           </div>
         </div>
 
-        {/* Contact Grid: Registration Form + Official Contact Card */}
+        {/* Contact Grid: Form + Official Contact Card */}
         <div className="contact-grid">
           <div className="form-card">
             <div className="form-card-header">
-              <h3>Formulir Konsultasi &amp; Pendaftaran Diagnostic Test</h3>
+              <h3>Formulir Konsultasi &amp; Klaim Kelas Percobaan Gratis</h3>
               <p>
-                Lengkapi data di bawah ini untuk menjadwalkan sesi pemetaan nalar awal dan kelas
-                percobaan via Zoom.
+                Lengkapi data singkat di bawah ini untuk penjadwalan Diagnostic Test dan kelas live
+                Zoom pertama.
               </p>
             </div>
 
             {selectedConsultation && (
               <div className="selected-package-pill visible" role="status">
                 <span>
-                  Program Dipilih: {selectedConsultation.planName} ({selectedConsultation.track}{' '}
-                  {selectedConsultation.level} |{' '}
+                  Program Dipilih: {selectedConsultation.planName} (
                   {selectedConsultation.billingCycle === 'semester'
                     ? 'Paket Semester'
                     : 'Bulanan'}
@@ -115,7 +121,6 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
 
             <form onSubmit={onSubmit} noValidate>
               <div className="form-grid">
-                {/* Field 1: Nama Orang Tua / Wali */}
                 <div className="form-group">
                   <label htmlFor="namaOrangTua" className="form-label">
                     Nama Orang Tua / Wali <span aria-hidden="true">*</span>
@@ -126,7 +131,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                     id="namaOrangTua"
                     name="namaOrangTua"
                     className={`form-control ${errors.namaOrangTua ? 'is-invalid' : ''}`}
-                    placeholder="Contoh: Ibu Rina Hartono"
+                    placeholder="Contoh: Ibu Dewi"
                     value={formData.namaOrangTua}
                     onChange={(e) => onInputChange('namaOrangTua', e.target.value)}
                     aria-invalid={Boolean(errors.namaOrangTua)}
@@ -140,7 +145,6 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   )}
                 </div>
 
-                {/* Field 2: Nama & Kelas Siswa */}
                 <div className="form-group">
                   <label htmlFor="namaDanKelasSiswa" className="form-label">
                     Nama &amp; Kelas Siswa <span aria-hidden="true">*</span>
@@ -151,7 +155,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                     id="namaDanKelasSiswa"
                     name="namaDanKelasSiswa"
                     className={`form-control ${errors.namaDanKelasSiswa ? 'is-invalid' : ''}`}
-                    placeholder="Contoh: Bagas Pratama - Kelas 8"
+                    placeholder="Contoh: Bagas Pratama - Kelas 9"
                     value={formData.namaDanKelasSiswa}
                     onChange={(e) => onInputChange('namaDanKelasSiswa', e.target.value)}
                     aria-invalid={Boolean(errors.namaDanKelasSiswa)}
@@ -167,7 +171,6 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   )}
                 </div>
 
-                {/* Field 3: Jenjang */}
                 <div className="form-group">
                   <label htmlFor="jenjang" className="form-label">
                     Jenjang Pendidikan <span aria-hidden="true">*</span>
@@ -199,10 +202,9 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   )}
                 </div>
 
-                {/* Field 4: Target Program */}
                 <div className="form-group">
                   <label htmlFor="targetProgram" className="form-label">
-                    Target Program <span aria-hidden="true">*</span>
+                    Jalur Program <span aria-hidden="true">*</span>
                   </label>
                   <select
                     ref={targetProgramRef}
@@ -211,18 +213,18 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                     className={`form-control ${errors.targetProgram ? 'is-invalid' : ''}`}
                     value={formData.targetProgram}
                     onChange={(e) =>
-                      onInputChange('targetProgram', e.target.value as TargetProgramChoice | '')
+                      onInputChange('targetProgram', e.target.value as ProgramTrack | '')
                     }
                     aria-invalid={Boolean(errors.targetProgram)}
                     aria-describedby={errors.targetProgram ? 'err-targetProgram' : undefined}
                     required
                   >
                     <option value="" disabled>
-                      Pilih Target Program
+                      Pilih Jalur Program
                     </option>
                     <option value="TKA">TKA (Tes Kemampuan Akademik)</option>
-                    <option value="OSN">OSN (Olimpiade Sains Nasional)</option>
-                    <option value="TKA & OSN">TKA &amp; OSN (Keduanya)</option>
+                    <option value="Olimpiade">Olimpiade (OSN)</option>
+                    <option value="TKA + Olimpiade">TKA + Olimpiade (Dua Target)</option>
                   </select>
                   {errors.targetProgram && (
                     <p id="err-targetProgram" className="field-error" role="alert">
@@ -231,7 +233,6 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   )}
                 </div>
 
-                {/* Field 5: Nomor WhatsApp Aktif */}
                 <div className="form-group full-width">
                   <label htmlFor="nomorWhatsapp" className="form-label">
                     Nomor WhatsApp Aktif <span aria-hidden="true">*</span>
@@ -280,19 +281,18 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               <p className="form-note">
                 <ShieldLockIcon size={15} color="#047857" />
                 <span>
-                  Data Anda terjaga kerahasiaannya dan hanya digunakan untuk penjadwalan konsultasi
-                  akademik TunasCendekia.
+                  Data Anda aman dan hanya digunakan untuk penjadwalan akademik oleh tim
+                  TunasCendekia.
                 </span>
               </p>
             </form>
           </div>
 
-          {/* Official Contact Card */}
           <aside className="contact-info-card" aria-label="Kontak Resmi TunasCendekia">
-            <h3>Hubungi Tim Akademik Kami</h3>
+            <h3>Cari Tahu Lebih Lanjut</h3>
             <p>
-              Konsultasikan target sekolah unggulan atau bidang OSN yang paling sesuai dengan
-              profil akademik putra/putri Anda.
+              Terhubung langsung dengan konsultan pendidikan kami untuk memilih program dari 9
+              jalur pembinaan SD, SMP, dan SMA.
             </p>
 
             <div className="contact-list">

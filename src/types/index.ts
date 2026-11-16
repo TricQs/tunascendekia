@@ -1,8 +1,8 @@
 export type EducationLevel = 'SD' | 'SMP' | 'SMA';
 
-export type ProgramTrack = 'TKA' | 'OSN';
+export type ProgramTrack = 'TKA' | 'Olimpiade' | 'TKA + Olimpiade';
 
-export type TargetProgramChoice = 'TKA' | 'OSN' | 'TKA & OSN';
+export type LevelFilter = 'ALL' | EducationLevel;
 
 export type BillingCycle = 'bulanan' | 'semester';
 
@@ -20,7 +20,7 @@ export interface FormDataType {
   namaDanKelasSiswa: string;
   nomorWhatsapp: string;
   jenjang: EducationLevel | '';
-  targetProgram: TargetProgramChoice | '';
+  targetProgram: ProgramTrack | '';
   paketPilihan: string;
 }
 
@@ -63,13 +63,30 @@ export interface SandboxProblemSet {
   correctExplanation: string;
 }
 
-export interface PillarCardData {
+export type DeckIllustrationKey =
+  | 'problem'
+  | 'vision'
+  | 'opportunity'
+  | 'solution'
+  | 'product-zoom'
+  | 'product-clinic'
+  | 'contact-team';
+
+export interface StrategicStoryCard {
   id: string;
-  stepLabel: string;
+  tag: string;
   title: string;
-  description: string;
-  jenjangValue: EducationLevel;
-  iconKey: 'seedling' | 'compass' | 'graduation';
+  body: string;
+  highlightText?: string;
+  accentTheme: 'navy' | 'emerald' | 'gold' | 'slate';
+  illustrationKey: DeckIllustrationKey;
+}
+
+export interface PainPointItem {
+  id: string;
+  painQuestion: string;
+  solutionLabel: string;
+  detailText: string;
 }
 
 export interface FeatureCardData {
@@ -81,23 +98,29 @@ export interface FeatureCardData {
   iconKey: 'zoom' | 'curriculum' | 'group' | 'analytics';
 }
 
-export interface PricingTierData {
-  id: string;
+export interface TrackOverviewData {
+  stepNumber: string;
   track: ProgramTrack;
+  title: string;
+  subtitle: string;
+  suitableFor: string;
+  learningFocus: [string, string];
+}
+
+export interface ProgramCatalogItem {
+  id: string;
   level: EducationLevel;
-  name: string;
-  target: string;
+  track: ProgramTrack;
+  trackLabel: string;
+  headline: string;
+  bullets: [string, string];
   classQuota: string;
   sessionQuotaMonthly: string;
   sessionQuotaSemester: string;
-  mentorCredential: string;
   monthlyPriceRp: number;
   semesterPriceRp: number;
-  semesterSavingsLabel: string;
-  features: string[];
-  featured?: boolean;
-  ribbonLabel?: string;
-  buttonVariant: 'navy' | 'primary' | 'secondary';
+  cardTone: 'teal' | 'emerald' | 'navy';
+  badgeLabel?: string;
 }
 
 export interface FaqItemData {
