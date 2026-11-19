@@ -1,557 +1,242 @@
 import {
+  B2BPricingTier,
   FaqItemData,
-  FeatureCardData,
-  PainPointItem,
-  ProgramCatalogItem,
-  SandboxProblemSet,
+  LmsModuleFeature,
+  PortalComparisonRow,
   StrategicStoryCard,
-  TrackOverviewData,
 } from '../types';
-
-export const SANDBOX_PROBLEMS: SandboxProblemSet[] = [
-  {
-    level: 'SD',
-    tabLabel: 'SD (Kelas 4-6)',
-    gradeRangeLabel: 'SD Kelas 4-6',
-    trackLabel: 'TKA & Olimpiade SD',
-    conceptTitle: 'Visual Learning: Pola Ubin Ganjil Membentuk Persegi',
-    parameterLabel: 'Jumlah Lapis Ubin (k)',
-    parameterUnit: 'lapis',
-    parameterMin: 2,
-    parameterMax: 5,
-    parameterDefault: 4,
-    stages: [
-      {
-        stageNumber: 1,
-        shortLabel: '1. Pisah Lapisan',
-        title: 'Tahap 1: Urai Deret Bilangan Ganjil',
-        highlightBadge: 'Visual Barisan',
-        explanation:
-          'Konsep dasar dijelaskan lewat bentuk visual konkret: setiap bilangan ganjil (1, 3, 5, ...) disusun sebagai baris ubin bertingkat.',
-      },
-      {
-        stageNumber: 2,
-        shortLabel: '2. Lipat Siku L',
-        title: 'Tahap 2: Susun Menjadi Siku-Siku (L-Tile)',
-        highlightBadge: 'Pola Logika',
-        explanation:
-          'Setiap lapisan ganjil baru tepat membungkus dua sisi persegi sebelumnya sehingga membentuk bangun siku yang mudah dilihat anak.',
-      },
-      {
-        stageNumber: 3,
-        shortLabel: '3. Persegi k x k',
-        title: 'Tahap 3: Terbukti Luas Membentuk Persegi k x k',
-        highlightBadge: 'Paham Konsep',
-        explanation:
-          'Jumlah k bilangan ganjil pertama selalu membentuk persegi utuh k x k. Siswa paham polanya tanpa menghafal rumus.',
-      },
-    ],
-    challengeQuestion:
-      'Jika lapisan ganjil ke-8 memiliki 15 ubin (k = 8 lapis), berapakah total seluruh ubin yang terbentuk?',
-    challengeOptions: [
-      {
-        id: 'sd-a',
-        label: '56 ubin',
-        isCorrect: false,
-        feedbackHint:
-          'Perhatikan bentuk persegi penuh saat k = 8: panjang kedua sisinya sama panjang, bukan 7 x 8.',
-      },
-      {
-        id: 'sd-b',
-        label: '64 ubin',
-        isCorrect: true,
-        feedbackHint: '',
-      },
-      {
-        id: 'sd-c',
-        label: '72 ubin',
-        isCorrect: false,
-        feedbackHint:
-          'Geser pengatur k di atas dan amati hubungan banyaknya lapis dengan ukuran persegi k x k.',
-      },
-    ],
-    correctExplanation:
-      'Tepat. Delapan lapis ubin ganjil membentuk persegi berukuran 8 x 8 sehingga totalnya 64 ubin.',
-  },
-  {
-    level: 'SMP',
-    tabLabel: 'SMP (Kelas 7-9)',
-    gradeRangeLabel: 'SMP Kelas 7-9',
-    trackLabel: 'Olimpiade & TKA SMP',
-    conceptTitle: 'Visual Learning: Pembuktian a² - b² = (a + b)(a - b)',
-    parameterLabel: 'Ukuran Potongan (b)',
-    parameterUnit: 'cm',
-    parameterMin: 2,
-    parameterMax: 6,
-    parameterDefault: 4,
-    stages: [
-      {
-        stageNumber: 1,
-        shortLabel: '1. Bangun Awal a²',
-        title: 'Tahap 1: Tinjau Persegi Utuh Berukuran a x a',
-        highlightBadge: 'Konsep Luas',
-        explanation:
-          'Mulai dari persegi besar bersisi a = 10 cm sehingga luas awal bernilai 100 cm persegi.',
-      },
-      {
-        stageNumber: 2,
-        shortLabel: '2. Potong Sudut b²',
-        title: 'Tahap 2: Pisahkan Persegi Kecil b² di Sudut Kanan',
-        highlightBadge: 'Strategi Visual',
-        explanation:
-          'Membuang persegi kecil b x b menyisakan daerah berbentuk huruf L. Kita pisahkan potongan bawah selebar (a - b) x b.',
-      },
-      {
-        stageNumber: 3,
-        shortLabel: '3. Putar & Gabung',
-        title: 'Tahap 3: Putar 90 Derajat Menjadi (a + b)(a - b)',
-        highlightBadge: 'Inti Materi',
-        explanation:
-          'Potongan bawah diputar lalu digabungkan ke sisi kanan hingga membentuk persegi panjang (a + b) kali (a - b).',
-      },
-    ],
-    challengeQuestion:
-      'Gunakan strategi potongan luas untuk menghitung nilai 53 kuadrat dikurangi 47 kuadrat secara cepat:',
-    challengeOptions: [
-      {
-        id: 'smp-a',
-        label: '300',
-        isCorrect: false,
-        feedbackHint:
-          'Jumlahkan dahulu kedua bilangan (53 + 47 = 100), lalu kalikan dengan selisihnya (53 - 47).',
-      },
-      {
-        id: 'smp-b',
-        label: '600',
-        isCorrect: true,
-        feedbackHint: '',
-      },
-      {
-        id: 'smp-c',
-        label: '1.000',
-        isCorrect: false,
-        feedbackHint:
-          'Selisih antara 53 dan 47 bernilai 6, bukan 10. Kalikan 100 dengan selisih yang tepat.',
-      },
-    ],
-    correctExplanation:
-      'Benar. Dengan visualisasi (53 + 47)(53 - 47) = 100 x 6 = 600, soal nonrutin terselesaikan dalam hitungan detik.',
-  },
-  {
-    level: 'SMA',
-    tabLabel: 'SMA (Kelas 10-12)',
-    gradeRangeLabel: 'SMA Kelas 10-12',
-    trackLabel: 'OSN Fisika & TKA Saintek',
-    conceptTitle: 'Visual Learning: Ekuivalensi Luas Grafik Kecepatan v-t',
-    parameterLabel: 'Kecepatan Awal (v₀)',
-    parameterUnit: 'm/s',
-    parameterMin: 4,
-    parameterMax: 12,
-    parameterDefault: 8,
-    stages: [
-      {
-        stageNumber: 1,
-        shortLabel: '1. Grafik v-t',
-        title: 'Tahap 1: Amati Luas Segitiga di Bawah Kurva v-t',
-        highlightBadge: 'Penalaran Ilmiah',
-        explanation:
-          'Selama perlambatan tetap t = 8 detik, jarak tempuh benda sama dengan luas daerah segitiga di bawah grafik.',
-      },
-      {
-        stageNumber: 2,
-        shortLabel: '2. Belah 1/2 v₀',
-        title: 'Tahap 2: Bagi Tepat di Kecepatan Tengah (1/2 v₀)',
-        highlightBadge: 'Analisis Kurva',
-        explanation:
-          'Pemotongan di setengah kecepatan awal memudahkan siswa melihat transformasi bentuk tanpa hafalan rumus.',
-      },
-      {
-        stageNumber: 3,
-        shortLabel: '3. Persegi Panjang',
-        title: 'Tahap 3: Putar Puncak 180 Derajat Jadi Luas t x (1/2 v₀)',
-        highlightBadge: 'Simpulan Visual',
-        explanation:
-          'Bagian atas segitiga tepat mengisi sisi kanan membentuk persegi panjang berukuran alas t dan tinggi 1/2 v₀.',
-      },
-    ],
-    challengeQuestion:
-      'Sebuah benda direm beraturan dari v₀ = 18 m/s hingga berhenti dalam t = 6 detik. Berapakah jarak tempuhnya?',
-    challengeOptions: [
-      {
-        id: 'sma-a',
-        label: '36 meter',
-        isCorrect: false,
-        feedbackHint:
-          'Setengah dari 18 m/s bernilai 9 m/s. Kalikan 9 m/s dengan selang waktu 6 detik.',
-      },
-      {
-        id: 'sma-b',
-        label: '54 meter',
-        isCorrect: true,
-        feedbackHint: '',
-      },
-      {
-        id: 'sma-c',
-        label: '108 meter',
-        isCorrect: false,
-        feedbackHint:
-          '108 meter merupakan luas persegi penuh v₀ x t. Tinggi persegi panjang ekuivalen hanya setengahnya.',
-      },
-    ],
-    correctExplanation:
-      'Tepat. Luas persegi panjang ekuivalen memiliki tinggi 1/2 x 18 = 9 m/s dan waktu 6 s, menghasilkan 54 meter.',
-  },
-];
 
 export const STRATEGIC_STORY_CARDS: StrategicStoryCard[] = [
   {
     id: 'problem',
     tag: '01 | Problem Statement',
-    title: 'Kesenjangan Pembinaan Kompetisi di Sekolah & Bimbel Umum',
-    body: 'Banyak siswa berprestasi kesulitan menemukan bimbingan terarah untuk kompetisi TKA & OSN. Sekolah memiliki keterbatasan waktu dan tenaga pelatih ahli, sementara bimbel umum hanya berfokus pada kurikulum reguler tanpa pemahaman konsep mendalam.',
+    title: 'Portal Akademik Konvensional Sering Kaku & Membatasi Aktivitas Belajar',
+    body: 'Banyak portal kampus maupun sekolah memiliki UI/UX yang lambat, batas unggah tugas kecil (sekitar 10 MB), notifikasi pesan yang hilang sebelum dibalas, kewajiban antre scan QR presensi, hingga tidak adanya arsip otomatis rekaman perkuliahan.',
     accentTheme: 'navy',
     illustrationKey: 'problem',
   },
   {
     id: 'vision',
     tag: '02 | Our Vision',
-    title: 'Pemerataan Akses Pembinaan Prestasi Nasional',
-    body: 'Mewujudkan pemerataan akses pembinaan prestasi akademik berkualitas di seluruh Indonesia, mengantar siswa berbakat meraih medali dan menembus sekolah serta perguruan tinggi impian.',
-    highlightText: 'Fokus kami: nalar kuat, percaya diri, dan prestasi nyata.',
+    title: 'Mewujudkan Ekosistem Kampus & Sekolah Digital Terpadu',
+    body: 'Membangun platform Learning Management System (LMS) berstandar modern yang menggantikan portal terpisah-pisah menjadi satu ruang kerja kolaboratif antara mahasiswa, dosen, pembimbing skripsi, dan admin akademik.',
+    highlightText: 'Satu sistem terpadu untuk perkuliahan, pengumpulan tugas, presensi, dan bimbingan.',
     accentTheme: 'emerald',
     illustrationKey: 'vision',
   },
   {
     id: 'opportunity',
-    tag: '03 | The Opportunity',
-    title: 'Akses Mentor Nasional Tanpa Terkendala Wilayah',
-    body: 'Tingginya minat orang tua dan siswa terhadap jalur prestasi (OSN & TKA) untuk masuk sekolah unggulan dan PTN. Pembelajaran daring via Zoom membuka akses mentor nasional secara merata di seluruh Indonesia.',
+    tag: '03 | The Opportunity (B2B)',
+    title: 'Transformasi Digital Perguruan Tinggi & Sekolah Modern',
+    body: 'Institusi pendidikan membutuhkan sistem yang fleksibel disesuaikan dengan kapasitas pengguna (1.000 hingga 100.000+ akun aktif), siap terhubung dengan SIAKAD/SSO, serta mudah digunakan tanpa pelatihan rumit.',
     accentTheme: 'gold',
     illustrationKey: 'opportunity',
   },
   {
     id: 'solution',
     tag: '04 | Our Solution',
-    title: 'Ekosistem Bimbel Daring Interaktif & Terukur',
-    body: 'Ekosistem bimbel daring interaktif via Zoom dengan kurikulum khusus olimpiade & TKA, dibimbing langsung oleh mentor peraih medali nasional dalam kelas kecil yang terstruktur dan terukur.',
+    title: 'TunasCendekia LMS: Workspace Cerdas Berbasis Cloud',
+    body: 'Platform B2B SaaS dengan upload hingga 2 GB per file (hingga Unlimited Cloud), notifikasi chat persisten layaknya workspace pesan, auto-upload rekaman kuliah ke linimasa, presensi tanpa QR, dan penjadwalan bimbingan otomatis.',
     accentTheme: 'navy',
     illustrationKey: 'solution',
   },
 ];
 
-export const PAIN_POINTS_DATA: PainPointItem[] = [
+export const PORTAL_COMPARISON_ROWS: PortalComparisonRow[] = [
   {
-    id: 'cost-distance',
-    painQuestion: 'Bimbel offline mahal dan jauh?',
-    solutionLabel: 'Online dan terjangkau',
-    detailText: 'Kelas langsung via Zoom dengan biaya transparan tanpa beban transportasi.',
+    aspect: 'Antarmuka & Pengalaman (UI/UX)',
+    legacyPortal: 'Menu tersebar di banyak tab statis dan kurang nyaman di layar ponsel.',
+    tunasCendekiaLms: 'Workspace terpadu bersih, responsif di desktop maupun smartphone.',
   },
   {
-    id: 'pickup-time',
-    painQuestion: 'Tidak ada waktu antar jemput?',
-    solutionLabel: 'Belajar dari rumah',
-    detailText: 'Siswa mengikuti sesi pembinaan dengan aman dan nyaman dari rumah.',
+    aspect: 'Chat & Notifikasi Diskusi',
+    legacyPortal: 'Notifikasi hilang otomatis setelah pesan dibuka, meski belum sempat dibalas.',
+    tunasCendekiaLms: 'Notifikasi persisten: badge "Perlu Balasan" tetap aktif sampai respons terkirim.',
   },
   {
-    id: 'schedule-clash',
-    painQuestion: 'Jadwal sering bentrok?',
-    solutionLabel: 'Jadwal fleksibel',
-    detailText: 'Tersedia pilihan kelas reguler, bootcamp kilat, dan rekaman ulang materi.',
+    aspect: 'Kapasitas Upload Tugas & Proyek',
+    legacyPortal: 'Batas sempit (~10 MB), sering gagal saat mengunggah video, desain, atau dataset.',
+    tunasCendekiaLms: 'Mendukung upload hingga 2 GB per file hingga opsi penyimpanan Unlimited Cloud.',
   },
   {
-    id: 'trust-quality',
-    painQuestion: 'Bingung pilih bimbel yang tepat?',
-    solutionLabel: 'Pengajar profesional dan terpercaya',
-    detailText: 'Dibimbing langsung mentor alumni peraih medali OSN dan pengajar terkurasi.',
-  },
-];
-
-export const BUSINESS_FORMATS: string[] = [
-  'Paket Bimbingan Intensif TKA & OSN',
-  'Program Try-Out Akbar Berkala',
-  'Bootcamp Kilat Jelang Kompetisi',
-  'Program Kemitraan Bimbingan Sekolah',
-];
-
-export const FEATURES_DATA: FeatureCardData[] = [
-  {
-    id: 'product-service',
-    number: 'Layanan 01',
-    title: 'Live Interactive Class via Zoom & Klinik Mingguan',
-    description:
-      'Pembelajaran berlangsung tatap muka dua arah bersama mentor peraih medali olimpiade, dilengkapi bank soal HOTS bertingkat (Basic to Advanced) serta sesi tanya-jawab soal sulit setiap minggu.',
-    benefitText: 'Siswa aktif bertanya langsung dan memahami langkah penyelesaian hingga tuntas.',
-    iconKey: 'zoom',
+    aspect: 'Arsip Rekaman Perkuliahan',
+    legacyPortal: 'Tautan rekaman tercecer di chat grup dan sering kedaluwarsa.',
+    tunasCendekiaLms: 'Setiap sesi mengajar otomatis tersimpan dan terindeks rapi di linimasa kelas.',
   },
   {
-    id: 'visual-learning',
-    number: 'Layanan 02',
-    title: 'Visual Learning Approach di Setiap Pembahasan',
-    description:
-      'Setiap pembahasan soal dilengkapi visualisasi interaktif agar siswa dapat memvisualisasikan proses berpikir, melihat struktur pembuktian konsep, dan menangkap inti materi jauh lebih mudah.',
-    benefitText: 'Tidak sekadar menghafal rumus cepat, melainkan menguasai logika di baliknya.',
-    iconKey: 'curriculum',
+    aspect: 'Sistem Presensi Mahasiswa/Siswa',
+    legacyPortal: 'Bergantung pada scan QR manual di layar kelas atau input satu per satu.',
+    tunasCendekiaLms: 'Smart Session & Geo-Check-In 1-klik tervalidasi tanpa antre scan QR.',
   },
   {
-    id: 'competitive-advantage',
-    number: 'Layanan 03',
-    title: 'Kurikulum Khusus Kompetisi & Kelas Terstruktur',
-    description:
-      'Keunggulan kami terletak pada kurikulum terarah mulai dari fondasi hingga level nonrutin OSN, serta kelas interaktif terukur dengan diskusi dua arah antara mentor dan peserta.',
-    benefitText: 'Retensi pemahaman jangka panjang bertingkat dari SD, SMP, hingga SMA.',
-    iconKey: 'group',
-  },
-  {
-    id: 'brand-voice',
-    number: 'Layanan 04',
-    title: 'Evaluasi Try-Out Berkala & Pendampingan Suportif',
-    description:
-      'Try-out berkala memetakan kesiapan anak secara objektif dengan gaya pengajaran yang mudah dipahami, komunikatif, dan membangun rasa ingin tahu siswa tanpa menghilangkan profesionalisme.',
-    benefitText: 'Orang tua memperoleh gambaran kesiapan anak menuju tes unggulan dan OSN.',
-    iconKey: 'analytics',
+    aspect: 'Penjadwalan Bimbingan & Skripsi',
+    legacyPortal: 'Harus membuat janji manual lewat WhatsApp pribadi dosen.',
+    tunasCendekiaLms: 'Sinkronisasi kalender bimbingan otomatis langsung di dalam sistem LMS.',
   },
 ];
 
-export const TRACK_OVERVIEWS: TrackOverviewData[] = [
+export const LMS_FEATURES_DATA: LmsModuleFeature[] = [
   {
-    stepNumber: '1',
-    track: 'TKA',
-    title: 'TKA',
-    subtitle: 'Tes Kemampuan Akademik',
-    suitableFor: 'Siswa yang ingin kuat di pelajaran inti dan siap menghadapi tes akademik.',
-    learningFocus: [
-      'Soal HOTS bertingkat, dari dasar hingga lanjut',
-      'Try-out berkala untuk mengukur kesiapan',
-    ],
+    id: 'persistent-chat',
+    number: 'Modul 01',
+    title: 'Smart Chat & Persistent Unread Notification',
+    description:
+      'Komunikasi akademik terstruktur per mata kuliah dan bimbingan. Pesan yang baru dibaca tanpa balasan tetap ditandai status aktif agar dosen maupun mahasiswa tidak lupa menindaklanjuti.',
+    benefitText: 'Menghilangkan miskomunikasi tugas dan mempercepat alur tanya-jawab kelas.',
+    iconKey: 'chat',
   },
   {
-    stepNumber: '2',
-    track: 'Olimpiade',
-    title: 'Olimpiade',
-    subtitle: 'Olimpiade Sains Nasional (OSN)',
-    suitableFor: 'Siswa yang ingin berprestasi dan bertanding di kompetisi sains.',
-    learningFocus: [
-      'Soal nonrutin dan strategi penyelesaiannya',
-      'Bimbingan langsung mentor peraih medali',
-    ],
+    id: 'cloud-upload-2gb',
+    number: 'Modul 02',
+    title: 'High-Capacity Cloud Upload (Hingga 2 GB/File)',
+    description:
+      'Mahasiswa dapat mengunggah laporan, video presentasi, aplikasi tugas akhir, hingga dataset berukuran hingga 2 GB per berkas langsung ke penyimpanan cloud LMS dengan pelacakan versi.',
+    benefitText: 'Bebas kendala batasan 10 MB saat pengumpulan proyek dan tugas praktikum.',
+    iconKey: 'cloud',
   },
   {
-    stepNumber: '3',
-    track: 'TKA + Olimpiade',
-    title: 'TKA + Olimpiade',
-    subtitle: 'Dua target, satu paket',
-    suitableFor: 'Siswa yang menargetkan skor akademik kuat sekaligus siap bertanding.',
-    learningFocus: [
-      'Materi TKA diperdalam dengan soal olimpiade',
-      'Satu paket untuk dua target sekaligus',
-    ],
+    id: 'auto-recording',
+    number: 'Modul 03',
+    title: 'Automated Lecture Recording Library',
+    description:
+      'Rekaman pertemuan sinkron otomatis diunggah ke halaman mata kuliah masing-masing beserta penanda topik pertemuan, memudahkan mahasiswa mengulas materi sebelum ujian.',
+    benefitText: 'Dosen tidak perlu mengunggah ulang video secara manual di akhir kelas.',
+    iconKey: 'video',
+  },
+  {
+    id: 'smart-attendance',
+    number: 'Modul 04',
+    title: 'Smart Session Attendance (Tanpa Antre QR)',
+    description:
+      'Menggantikan pemindaian QR konvensional dengan check-in tervalidasi sesi kelas aktif, geolokasi kampus, serta log partisipasi otomatis yang langsung masuk ke rekap nilai kehadiran.',
+    benefitText: 'Menghemat waktu awal kelas dan mencegah kecurangan titip presensi.',
+    iconKey: 'attendance',
+  },
+  {
+    id: 'auto-advising',
+    number: 'Modul 05',
+    title: 'Integrated Thesis & Consultation Scheduler',
+    description:
+      'Sistem otomatis mencocokkan slot waktu kosong dosen pembimbing dan mahasiswa untuk bimbingan skripsi atau konsultasi akademik lengkap dengan catatan revisi terpusat.',
+    benefitText: 'Tanpa perlu janjian manual melalui WhatsApp pribadi di luar jam kerja.',
+    iconKey: 'calendar',
+  },
+  {
+    id: 'b2b-security',
+    number: 'Modul 06',
+    title: 'Multi-Role Access, SSO & Integrasi SIAKAD',
+    description:
+      'Arsitektur siap skala institusi dengan hak akses terpisah untuk Mahasiswa, Dosen/Guru, Kaprodi, dan Admin IT Kampus beserta integrasi API SIAKAD serta Single Sign-On.',
+    benefitText: 'Skalabel dari 1.000 pengguna hingga 100.000+ akun kampus tanpa downtime.',
+    iconKey: 'shield',
   },
 ];
 
-export const UNIVERSAL_GUARANTEES: string[] = [
-  'Kelas live interaktif via Zoom',
-  'Mentor peraih medali olimpiade',
-  'Pembahasan visual interaktif',
-  'Tanya-jawab soal sulit tiap minggu',
+export const SYSTEM_GUARANTEES: string[] = [
+  'Upload file besar hingga 2 GB / Unlimited',
+  'Chat notifikasi persisten sebelum dibalas',
+  'Rekaman kuliah otomatis masuk linimasa',
+  'Bimbingan & presensi terintegrasi penuh',
 ];
 
 export const formatRupiah = (amount: number): string =>
   `Rp ${amount.toLocaleString('id-ID')}`;
 
-// Exact 3 Jenjang (SD, SMP, SMA) x 3 Jalur (TKA, Olimpiade, TKA + Olimpiade) = 9 Programs
-export const PROGRAM_CATALOGUE: ProgramCatalogItem[] = [
-  // JENJANG SD (Teal Accent)
+export const B2B_PRICING_TIERS: B2BPricingTier[] = [
   {
-    id: 'sd-tka',
-    level: 'SD',
-    track: 'TKA',
-    trackLabel: 'TKA',
-    headline: 'Bangun fondasi berhitung dan sains sejak dini.',
-    bullets: [
-      'Konsep dasar dijelaskan lewat visual dan contoh sehari-hari.',
-      'Latihan bertahap agar siswa teliti dan percaya diri.',
+    id: 'paket-a',
+    codeLabel: 'PAKET A • STARTER',
+    name: 'Starter Institusi & Sekolah',
+    targetInstitution:
+      'Dirancang untuk sekolah menengah, akademi, atau program studi dengan skala hingga 1.000 pengguna aktif.',
+    userLimitLabel: 'Maks. 1.000 Pengguna Aktif',
+    uploadLimitLabel: 'Upload File hingga 2 GB / berkas',
+    storagePoolLabel: '20 GB per Prodi / 200 GB Pool Cloud',
+    monthlyPriceRp: 4500000,
+    annualPriceRp: 45000000,
+    highlights: [
+      'Workspace LMS modern responsif (Web & Mobile Browser)',
+      'Chat kelas dengan notifikasi persisten (tetap aktif hingga dibalas)',
+      'Upload tugas besar hingga 2 GB per file + Auto-Archive Rekaman',
+      'Presensi pintar Non-QR otomatis untuk seluruh sesi kelas',
     ],
-    classQuota: 'Kelas Interaktif via Zoom',
-    sessionQuotaMonthly: '8x sesi Live Zoom / bulan',
-    sessionQuotaSemester: '48x sesi Live Zoom / semester',
-    monthlyPriceRp: 420000,
-    semesterPriceRp: 2270000,
-    cardTone: 'teal',
+    ctaLabel: 'Pilih Paket A (1.000 User)',
+    tone: 'teal',
   },
   {
-    id: 'sd-olimpiade',
-    level: 'SD',
-    track: 'Olimpiade',
-    trackLabel: 'OLIMPIADE',
-    headline: 'Kenalkan serunya berpikir logis dan kreatif.',
-    bullets: [
-      'Soal logika dan teka-teki yang dikemas menyenangkan.',
-      'Dibimbing mentor peraih medali olimpiade.',
+    id: 'paket-b',
+    codeLabel: 'PAKET B • CAMPUS PRO',
+    name: 'Enterprise Kampus & Universitas',
+    targetInstitution:
+      'Solusi lengkap bagi perguruan tinggi berkembang untuk menggantikan portal akademik konvensional secara menyeluruh.',
+    userLimitLabel: 'Maks. 10.000 Pengguna Aktif',
+    uploadLimitLabel: 'Upload Tugas & Media > 2 GB / berkas',
+    storagePoolLabel: 'Unlimited Cloud Storage Institusi',
+    monthlyPriceRp: 14500000,
+    annualPriceRp: 145000000,
+    featured: true,
+    badgeLabel: 'Rekomendasi Kampus',
+    highlights: [
+      'Semua fitur Paket A + Unlimited Cloud Storage untuk rekaman & tugas',
+      'Modul Penjadwalan Bimbingan Skripsi Otomatis terhubung ke Dosen',
+      'Dashboard Analitik Retensi Mahasiswa, Nilai & Kehadiran Real-Time',
+      'Dukungan teknis prioritas & pelatihan onboarding dosen',
     ],
-    classQuota: 'Kelas Interaktif via Zoom',
-    sessionQuotaMonthly: '8x sesi Live Zoom / bulan',
-    sessionQuotaSemester: '48x sesi Live Zoom / semester',
-    monthlyPriceRp: 450000,
-    semesterPriceRp: 2430000,
-    cardTone: 'teal',
+    ctaLabel: 'Pilih Paket B (10.000 User)',
+    tone: 'emerald',
   },
   {
-    id: 'sd-combo',
-    level: 'SD',
-    track: 'TKA + Olimpiade',
-    trackLabel: 'TKA + OLIMPIADE',
-    headline: 'Satu paket: fondasi kuat dan nalar yang terasah.',
-    bullets: [
-      'Materi TKA dasar plus soal logika yang menantang.',
-      'Kelas live interaktif dengan mentor berpengalaman.',
+    id: 'paket-custom',
+    codeLabel: 'CUSTOMIZE • SKALA BESAR',
+    name: 'Institutional Custom Scale',
+    targetInstitution:
+      'Untuk universitas besar (misal 50.000 - 100.000+ mahasiswa aktif) yang membutuhkan integrasi SIAKAD & arsitektur khusus.',
+    userLimitLabel: '10.000 hingga 100.000+ Pengguna',
+    uploadLimitLabel: 'Kapasitas Upload Kustom (> 5 GB / berkas)',
+    storagePoolLabel: 'Dedicated Cloud / On-Premise Kampus',
+    monthlyPriceRp: null,
+    annualPriceRp: null,
+    customPriceNote: 'Terbuka untuk Diskusi & Penyesuaian Anggaran',
+    highlights: [
+      'Kapasitas dan fitur dapat di-customize penuh sesuai kebutuhan institusi',
+      'Integrasi API langsung dengan SIAKAD, PDDIKTI, & Single Sign-On (SSO)',
+      'White-label domain & identitas visual resmi milik kampus/yayasan',
+      'Tim IT engineer khusus untuk migrasi data dari portal lama',
     ],
-    classQuota: 'Paket Ganda Terintegrasi',
-    sessionQuotaMonthly: '12x sesi Live Zoom / bulan',
-    sessionQuotaSemester: '72x sesi Live Zoom / semester',
-    monthlyPriceRp: 690000,
-    semesterPriceRp: 3730000,
-    cardTone: 'teal',
-    badgeLabel: '2 Target Sekaligus',
-  },
-
-  // JENJANG SMP (Emerald Accent)
-  {
-    id: 'smp-tka',
-    level: 'SMP',
-    track: 'TKA',
-    trackLabel: 'TKA',
-    headline: 'Siap menghadapi tes dengan soal yang lebih analitis.',
-    bullets: [
-      'Latihan soal HOTS bertingkat, dari dasar hingga lanjut.',
-      'Belajar menerapkan konsep, bukan sekadar menghafal rumus.',
-    ],
-    classQuota: 'Kelas Interaktif via Zoom',
-    sessionQuotaMonthly: '8x sesi Live Zoom / bulan',
-    sessionQuotaSemester: '48x sesi Live Zoom / semester',
-    monthlyPriceRp: 490000,
-    semesterPriceRp: 2650000,
-    cardTone: 'emerald',
-  },
-  {
-    id: 'smp-olimpiade',
-    level: 'SMP',
-    track: 'Olimpiade',
-    trackLabel: 'OLIMPIADE',
-    headline: 'Naik level dari soal sekolah ke soal olimpiade.',
-    bullets: [
-      'Strategi memecah soal nonrutin langkah demi langkah.',
-      'Pembahasan visual interaktif di setiap soal.',
-    ],
-    classQuota: 'Kelas Interaktif via Zoom',
-    sessionQuotaMonthly: '8x sesi Live Zoom / bulan',
-    sessionQuotaSemester: '48x sesi Live Zoom / semester',
-    monthlyPriceRp: 520000,
-    semesterPriceRp: 2810000,
-    cardTone: 'emerald',
-  },
-  {
-    id: 'smp-combo',
-    level: 'SMP',
-    track: 'TKA + Olimpiade',
-    trackLabel: 'TKA + OLIMPIADE',
-    headline: 'Satu paket: siap TKA, siap tanding olimpiade.',
-    bullets: [
-      'Materi TKA diperdalam dengan soal nonrutin.',
-      'Visualisasi interaktif membantu memahami konsep sulit.',
-    ],
-    classQuota: 'Paket Ganda Terintegrasi',
-    sessionQuotaMonthly: '12x sesi Live Zoom / bulan',
-    sessionQuotaSemester: '72x sesi Live Zoom / semester',
-    monthlyPriceRp: 790000,
-    semesterPriceRp: 4270000,
-    cardTone: 'emerald',
-    badgeLabel: 'Pilihan Populer SMP',
-  },
-
-  // JENJANG SMA (Navy Accent)
-  {
-    id: 'sma-tka',
-    level: 'SMA',
-    track: 'TKA',
-    trackLabel: 'TKA',
-    headline: 'Targetkan skor tinggi untuk jalur prestasi dan PTN.',
-    bullets: [
-      'Penalaran kuantitatif dan analisis ilmiah secara terstruktur.',
-      'Try-out berkala untuk mengukur kesiapan.',
-    ],
-    classQuota: 'Kelas Interaktif via Zoom',
-    sessionQuotaMonthly: '8x sesi Live Zoom / bulan',
-    sessionQuotaSemester: '48x sesi Live Zoom / semester',
-    monthlyPriceRp: 560000,
-    semesterPriceRp: 3020000,
-    cardTone: 'navy',
-  },
-  {
-    id: 'sma-olimpiade',
-    level: 'SMA',
-    track: 'Olimpiade',
-    trackLabel: 'OLIMPIADE',
-    headline: 'Tembus seleksi OSN dengan strategi yang matang.',
-    bullets: [
-      'Teknik pembuktian dan soal kompleks dari mentor medalis.',
-      'Tanya-jawab soal sulit tiap minggu.',
-    ],
-    classQuota: 'Kelas Interaktif via Zoom',
-    sessionQuotaMonthly: '8x sesi Live Zoom / bulan',
-    sessionQuotaSemester: '48x sesi Live Zoom / semester',
-    monthlyPriceRp: 600000,
-    semesterPriceRp: 3240000,
-    cardTone: 'navy',
-  },
-  {
-    id: 'sma-combo',
-    level: 'SMA',
-    track: 'TKA + Olimpiade',
-    trackLabel: 'TKA + OLIMPIADE',
-    headline: 'Satu paket, dua target: skor TKA kuat dan siap OSN.',
-    bullets: [
-      'Dibimbing alumni peraih medali olimpiade.',
-      'Try-out berkala dan latihan soal tingkat lanjut.',
-    ],
-    classQuota: 'Paket Ganda Terintegrasi',
-    sessionQuotaMonthly: '12x sesi Live Zoom / bulan',
-    sessionQuotaSemester: '72x sesi Live Zoom / semester',
-    monthlyPriceRp: 890000,
-    semesterPriceRp: 4810000,
-    cardTone: 'navy',
-    badgeLabel: 'Persiapan Lengkap SMA',
+    ctaLabel: 'Diskusikan Paket Custom',
+    tone: 'navy',
   },
 ];
 
 export const FAQ_DATA: FaqItemData[] = [
   {
     id: 1,
-    question: 'Apa saja perbedaan antara program TKA, Olimpiade, dan TKA + Olimpiade?',
+    question: 'Bagaimana notifikasi chat di TunasCendekia LMS berbeda dari portal kampus biasa?',
     answer:
-      'Jalur TKA berfokus pada soal HOTS bertingkat untuk menguatkan pelajaran inti dan try-out menghadapi tes masuk sekolah unggulan/PTN. Jalur Olimpiade membedah soal nonrutin OSN bersama mentor peraih medali. Jalur TKA + Olimpiade menggabungkan keduanya dalam satu jadwal terpadu sehingga siswa siap mengejar skor akademik maupun prestasi kompetisi.',
+      'Pada banyak portal lama, notifikasi pesan langsung hilang saat chat dibuka meskipun dosen atau mahasiswa belum sempat membalas. Di TunasCendekia LMS, setiap pesan yang belum mendapat balasan tetap mempertahankan indikator "Perlu Balasan" sehingga komunikasi bimbingan selalu tuntas.',
   },
   {
     id: 2,
-    question: 'Bagaimana alur kelas Zoom dan dukungan jika siswa menemui soal sulit di luar jam kelas?',
+    question: 'Apakah benar sistem mendukung upload tugas hingga 2 GB dan bagaimana keamanan servernya?',
     answer:
-      'Seluruh sesi dilakukan live interaktif dua arah melalui Zoom dengan pendekatan pembahasan visual. Di luar kelas inti, setiap program sudah mencakup sesi klinik tanya-jawab soal sulit mingguan dan rekaman kelas agar siswa dapat mengulang materi dari rumah.',
+      'Ya. Berkas besar seperti video demo aplikasi, file desain CAD, maupun dataset tugas akhir dikirim melalui unggahan bertahap (chunked cloud upload) hingga 2 GB pada Paket A dan kapasitas Unlimited pada Paket B, lengkap dengan pemindaian format dan enkripsi penyimpanan.',
   },
   {
     id: 3,
-    question: 'Apakah program ini cocok untuk orang tua bekerja yang tidak sempat antar jemput ke tempat les?',
+    question: 'Bagaimana cara kerja presensi tanpa harus scan QR di dalam kelas?',
     answer:
-      'Sangat cocok. Seluruh pembelajaran dilakukan daring dari rumah sehingga orang tua tidak perlu mengatur jadwal antar jemput atau terbebani biaya perjalanan, sementara laporan progres try-out berkala disampaikan secara jelas.',
+      'Presensi dijalankan melalui verifikasi sesi kuliah aktif dikombinasikan dengan geolokasi jaringan/area kelas atau aktivitas langsung saat mengikuti kelas daring, sehingga mahasiswa tidak perlu antre memindai QR sambil tetap menjaga validitas kehadiran.',
   },
   {
     id: 4,
-    question: 'Siapa yang membimbing anak saya di setiap jenjang SD, SMP, dan SMA?',
+    question: 'Bagaimana alur bimbingan skripsi atau konsultasi akademik tanpa WhatsApp manual?',
     answer:
-      'Siswa dibimbing oleh mentor alumni peraih medali Olimpiade Sains Nasional (OSN) dan tutor berpengalaman yang terlatih menjelaskan konsep secara bertahap dan komunikatif sesuai usia belajar SD Kelas 4-6, SMP, maupun SMA.',
+      'Dosen cukup mengatur ketersediaan jam bimbingan di kalender LMS. Mahasiswa memilih slot yang masih kosong secara mandiri di dalam sistem, mengunggah berkas revisi, dan sistem mengirimkan pengingat otomatis kepada kedua pihak.',
   },
   {
     id: 5,
-    question: 'Apakah tersedia pilihan jadwal fleksibel atau persiapan khusus menjelang lomba/ujian?',
+    question: 'Apakah kampus dengan 50.000 hingga 100.000+ mahasiswa bisa menyesuaikan fitur dan harga?',
     answer:
-      'Ya. Selain program bulanan dan paket semester terstruktur, TunasCendekia menyediakan sesi bootcamp kilat jelang kompetisi serta penjadwalan fleksibel apabila siswa berhalangan karena jadwal ujian sekolah.',
+      'Bisa. Kami menyediakan Paket Customize bagi institusi berkapasitas besar yang ingin menyesuaikan jumlah pengguna aktif, integrasi database SIAKAD existing, SSO kampus, serta skema lisensi tahunan melalui diskusi langsung dengan tim pengembang kami.',
   },
 ];

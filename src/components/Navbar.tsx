@@ -6,9 +6,9 @@ interface NavbarProps {
 
 const NAV_ITEMS = [
   { id: 'beranda', label: 'Beranda' },
-  { id: 'tentang-kami', label: 'Visi & Solusi' },
-  { id: 'fitur-program', label: 'Keunggulan' },
-  { id: 'paket-belajar', label: 'Katalog 9 Program' },
+  { id: 'tentang-kami', label: 'Analisis & Solusi' },
+  { id: 'fitur-program', label: 'Modul LMS' },
+  { id: 'paket-belajar', label: 'Paket Institusi' },
   { id: 'faq', label: 'FAQ' },
   { id: 'kontak', label: 'Kontak' },
 ];
@@ -80,18 +80,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onTryFreeClick }) => {
           <a
             href="#beranda"
             className="brand-logo"
-            aria-label="TunasCendekia Beranda"
+            aria-label="TunasCendekia LMS Beranda"
             onClick={(e) => handleNavClick(e, 'beranda')}
           >
             <img
               src="/logo.png"
-              alt="Logo Resmi TunasCendekia"
+              alt="Logo Resmi TunasCendekia LMS"
               className="brand-logo-img"
               width={40}
               height={40}
             />
             <span className="brand-text">
-              Tunas<span>Cendekia</span>
+              Tunas<span>Cendekia</span> <small className="brand-lms-pill">LMS</small>
             </span>
           </a>
 
@@ -118,7 +118,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onTryFreeClick }) => {
                       onTryFreeClick();
                     }}
                   >
-                    Coba Kelas Gratis
+                    Jadwalkan Demo Kampus
                   </button>
                 </li>
               )}
@@ -127,7 +127,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onTryFreeClick }) => {
 
           <div className="nav-actions">
             <button type="button" className="btn btn-primary" onClick={onTryFreeClick}>
-              Coba Kelas Gratis
+              Jadwalkan Demo Kampus
             </button>
 
             <button

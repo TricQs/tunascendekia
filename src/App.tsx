@@ -10,31 +10,29 @@ import { HeroSection } from './components/HeroSection';
 import { Navbar } from './components/Navbar';
 import { PricingSection } from './components/PricingSection';
 import {
-  EducationLevel,
   FormDataType,
   FormFieldKey,
   FormStatus,
-  SelectedConsultationProgram,
+  SelectedB2BInquiry,
 } from './types';
 
-const DEFAULT_PACKAGE_LABEL = 'Kelas Percobaan & Diagnostic Test Gratis';
+const DEFAULT_PACKAGE_LABEL = 'Live Demo & Konsultasi LMS Kampus';
 
 const INITIAL_FORM_DATA: FormDataType = {
-  namaOrangTua: '',
-  namaDanKelasSiswa: '',
+  namaInstitusi: '',
+  namaPic: '',
+  tipeInstitusi: '',
+  jumlahPengguna: '',
   nomorWhatsapp: '',
-  jenjang: '',
-  targetProgram: '',
   paketPilihan: DEFAULT_PACKAGE_LABEL,
 };
 
 function validateWhatsappNumber(rawValue: string): string | null {
   const cleaned = rawValue.trim().replace(/[\s.-]/g, '');
   if (!cleaned) {
-    return 'Mohon isi nomor WhatsApp aktif orang tua atau wali.';
+    return 'Mohon isi nomor WhatsApp aktif PIC atau kantor institusi.';
   }
 
-  // Accept local 08... (10-14 digits) or international +628... (10-14 digits)
   const isValidLocal = /^08\d{8,12}$/.test(cleaned);
   const isValidIntl = /^\+628\d{7,11}$/.test(cleaned);
 
@@ -47,8 +45,7 @@ function validateWhatsappNumber(rawValue: string): string | null {
 
 export const App: React.FC = () => {
   const [formData, setFormData] = useState<FormDataType>(INITIAL_FORM_DATA);
-  const [selectedConsultation, setSelectedConsultation] =
-    useState<SelectedConsultationProgram | null>(null);
+  const [selectedInquiry, setSelectedInquiry] = useState<SelectedB2BInquiry | null>(null);
   const [errors, setErrors] = useState<Partial<Record<FormFieldKey, string>>>({});
   const [firstErrorField, setFirstErrorField] = useState<FormFieldKey | null>(null);
   const [errorFocusNonce, setErrorFocusNonce] = useState<number>(0);
@@ -74,40 +71,54 @@ export const App: React.FC = () => {
     }
   };
 
-  const handleSelectPlanFromPricing = (selection: SelectedConsultationProgram) => {
-    const cycleText = selection.billingCycle === 'semester' ? 'Paket Semester' : 'Bulanan';
-    setSelectedConsultation(selection);
+  const handleSelectPlanFromPricing = (selection: SelectedB2BInquiry) => {
+    const cycleText = selection.billingCycle === 'tahunan' ? 'Tahunan' : 'Bulanan';
+    setSelectedInquiry(selection);
     setFormData((prev) => ({
       ...prev,
-      jenjang: selection.level,
-      targetProgram: selection.track,
+      jumlahPengguna: selection.userCapacityLabel,
       paketPilihan: `${selection.planName} (${cycleText})`,
     }));
     setErrors((prev) => {
       const next = { ...prev };
-      delete next.jenjang;
-      delete next.targetProgram;
+      delete next.jumlahPengguna;
       return next;
     });
     scrollToSection('kontak');
   };
 
-  const handleSelectLevelForDiagnostic = (level: EducationLevel) => {
+  const handleSelectScaleQuick = (estimate: string) => {
+    const mappedPlan = estimate.includes('100.000')
+      ? 'Institutional Custom Scale'
+      : estimate.includes('10.000')
+      ? 'Enterprise Kampus & Universitas'
+      : 'Starter Institusi & Sekolah';
+
+    setSelectedInquiry({
+      planId: estimate.includes('100.000')
+        ? 'paket-custom'
+        : estimate.includes('10.000')
+        ? 'paket-b'
+        : 'paket-a',
+      planName: mappedPlan,
+      billingCycle: 'bulanan',
+      userCapacityLabel: estimate,
+    });
     setFormData((prev) => ({
       ...prev,
-      jenjang: level,
-      paketPilihan: `${DEFAULT_PACKAGE_LABEL} (Jenjang ${level})`,
+      jumlahPengguna: estimate,
+      paketPilihan: `${mappedPlan} (${estimate})`,
     }));
     setErrors((prev) => {
       const next = { ...prev };
-      delete next.jenjang;
+      delete next.jumlahPengguna;
       return next;
     });
     scrollToSection('kontak');
   };
 
-  const handleClearConsultation = () => {
-    setSelectedConsultation(null);
+  const handleClearInquiry = () => {
+    setSelectedInquiry(null);
     setFormData((prev) => ({
       ...prev,
       paketPilihan: DEFAULT_PACKAGE_LABEL,
@@ -135,24 +146,24 @@ export const App: React.FC = () => {
 
     const fieldErrors: Partial<Record<FormFieldKey, string>> = {};
     const orderedFields: FormFieldKey[] = [
-      'namaOrangTua',
-      'namaDanKelasSiswa',
-      'jenjang',
-      'targetProgram',
+      'namaInstitusi',
+      'namaPic',
+      'tipeInstitusi',
+      'jumlahPengguna',
       'nomorWhatsapp',
     ];
 
-    if (!formData.namaOrangTua.trim()) {
-      fieldErrors.namaOrangTua = 'Mohon isi nama lengkap orang tua atau wali siswa.';
+    if (!formData.namaInstitusi.trim()) {
+      fieldErrors.namaInstitusi = 'Mohon isi nama universitas, sekolah, atau institusi.';
     }
-    if (!formData.namaDanKelasSiswa.trim()) {
-      fieldErrors.namaDanKelasSiswa = 'Mohon isi nama panggilan siswa beserta kelasnya.';
+    if (!formData.namaPic.trim()) {
+      fieldErrors.namaPic = 'Mohon isi nama lengkap dan jabatan PIC.';
     }
-    if (!formData.jenjang) {
-      fieldErrors.jenjang = 'Mohon pilih jenjang pendidikan siswa (SD, SMP, atau SMA).';
+    if (!formData.tipeInstitusi) {
+      fieldErrors.tipeInstitusi = 'Mohon pilih kategori institusi Anda.';
     }
-    if (!formData.targetProgram) {
-      fieldErrors.targetProgram = 'Mohon pilih jalur program (TKA, Olimpiade, atau keduanya).';
+    if (!formData.jumlahPengguna.trim()) {
+      fieldErrors.jumlahPengguna = 'Mohon isi estimasi jumlah mahasiswa atau siswa aktif.';
     }
 
     const waError = validateWhatsappNumber(formData.nomorWhatsapp);
@@ -176,8 +187,9 @@ export const App: React.FC = () => {
 
     const snapshot: FormDataType = {
       ...formData,
-      namaOrangTua: formData.namaOrangTua.trim(),
-      namaDanKelasSiswa: formData.namaDanKelasSiswa.trim(),
+      namaInstitusi: formData.namaInstitusi.trim(),
+      namaPic: formData.namaPic.trim(),
+      jumlahPengguna: formData.jumlahPengguna.trim(),
       nomorWhatsapp: formData.nomorWhatsapp.trim(),
     };
 
@@ -196,10 +208,9 @@ export const App: React.FC = () => {
         <HeroSection
           onCtaClick={() => scrollToSection('kontak')}
           onSecondaryClick={() => scrollToSection('paket-belajar')}
-          onRequestDiagnosticForLevel={handleSelectLevelForDiagnostic}
         />
 
-        <AboutSection onSelectJenjang={handleSelectLevelForDiagnostic} />
+        <AboutSection onSelectScaleQuick={handleSelectScaleQuick} />
 
         <FeaturesSection />
 
@@ -213,10 +224,10 @@ export const App: React.FC = () => {
           firstErrorField={firstErrorField}
           errorFocusNonce={errorFocusNonce}
           formStatus={formStatus}
-          selectedConsultation={selectedConsultation}
+          selectedInquiry={selectedInquiry}
           onInputChange={handleInputChange}
           onSubmit={handleFormSubmit}
-          onClearConsultation={handleClearConsultation}
+          onClearInquiry={handleClearInquiry}
           submitButtonRef={submitButtonRef}
         />
       </main>

@@ -1,33 +1,32 @@
 import React from 'react';
 import {
-  BUSINESS_FORMATS,
-  PAIN_POINTS_DATA,
+  PORTAL_COMPARISON_ROWS,
   STRATEGIC_STORY_CARDS,
 } from '../data/content';
-import { EducationLevel } from '../types';
 import { DeckIllustration } from './DeckIllustrations';
 import { ArrowRightIcon, CheckIcon } from './Icons';
 
 interface AboutSectionProps {
-  onSelectJenjang: (jenjang: EducationLevel) => void;
+  onSelectScaleQuick: (estimate: string) => void;
 }
 
-export const AboutSection: React.FC<AboutSectionProps> = ({ onSelectJenjang }) => {
+export const AboutSection: React.FC<AboutSectionProps> = ({ onSelectScaleQuick }) => {
   return (
     <section className="section section-slate" id="tentang-kami">
       <div className="container">
         <div className="section-header">
-          <span className="section-tag">VISI, PELUANG &amp; SOLUSI</span>
+          <span className="section-tag">ANALISIS PORTAL LAMA &amp; SOLUSI LMS</span>
           <h2 className="section-title">
-            Merancang Ekosistem Pembinaan Prestasi yang Terarah di Seluruh Indonesia
+            Mengapa Kampus &amp; Sekolah Beralih ke Ekosistem TunasCendekia LMS
           </h2>
           <p className="section-subtitle">
-            Mengatasi kesenjangan pembinaan TKA dan Olimpiade melalui pembelajaran daring
-            interaktif yang mengutamakan kedalaman konsep.
+            Dirancang oleh tim pengembang IT untuk memecahkan keterbatasan portal akademik lama
+            secara langsung dari sisi pengalaman pengguna (UI/UX), infrastruktur file, hingga
+            alur bimbingan.
           </p>
         </div>
 
-        {/* 4 Deck Story Cards: Problem Statement, Our Vision, The Opportunity, Our Solution */}
+        {/* 4 Deck Story Cards: Problem, Vision, Opportunity, Solution */}
         <div className="deck-story-grid">
           {STRATEGIC_STORY_CARDS.map((card) => (
             <article key={card.id} className={`deck-story-card theme-${card.accentTheme}`}>
@@ -46,59 +45,68 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onSelectJenjang }) =
           ))}
         </div>
 
-        {/* Pain Point & Solusi Orang Tua (Slide 8 Persona Blueprint) */}
-        <div className="pain-point-section">
-          <div className="pain-point-header">
-            <span className="section-tag">UNTUK ORANG TUA &amp; WALI SISWA</span>
-            <h3>Mengapa Orang Tua Mempercayakan Pendampingan Anak ke TunasCendekia</h3>
+        {/* Head-to-Head Comparison Matrix: Portal Biasa vs TunasCendekia LMS */}
+        <div className="comparison-panel">
+          <div className="comparison-panel-header">
+            <span className="section-tag">BENCHMARKING SISTEM</span>
+            <h3>Perbandingan Portal Akademik Konvensional vs TunasCendekia LMS</h3>
             <p>
-              Dirancang untuk orang tua yang peduli mutu pendidikan anak namun memiliki kesibukan
-              kerja dan keterbatasan waktu mengantar ke bimbel luring.
+              Ringkasan perbaikan konkret yang ditawarkan saat tim kami melakukan presentasi solusi
+              di hadapan rektorat, pimpinan akademik, dan tim IT institusi.
             </p>
           </div>
 
-          <div className="pain-point-grid">
-            {PAIN_POINTS_DATA.map((item) => (
-              <article key={item.id} className="pain-point-card">
-                <div className="pain-question">{item.painQuestion}</div>
-                <div className="pain-arrow-row" aria-hidden="true">
-                  <span className="pain-arrow-circle">
-                    <ArrowRightIcon size={15} color="#FFFFFF" />
-                  </span>
-                  <span className="pain-solution-pill">{item.solutionLabel}</span>
-                </div>
-                <p className="pain-detail">{item.detailText}</p>
-              </article>
-            ))}
+          <div className="comparison-table-wrap">
+            <table className="comparison-table">
+              <thead>
+                <tr>
+                  <th scope="col">Aspek Sistem</th>
+                  <th scope="col">Portal Akademik Lama</th>
+                  <th scope="col" className="col-lms-highlight">
+                    TunasCendekia LMS (Solusi Kami)
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {PORTAL_COMPARISON_ROWS.map((row) => (
+                  <tr key={row.aspect}>
+                    <td data-label="Aspek Sistem" className="cell-aspect">
+                      {row.aspect}
+                    </td>
+                    <td data-label="Portal Lama" className="cell-legacy">
+                      {row.legacyPortal}
+                    </td>
+                    <td data-label="TunasCendekia LMS" className="cell-lms">
+                      <span className="cell-check" aria-hidden="true">
+                        <CheckIcon size={13} color="#047857" />
+                      </span>
+                      <span>{row.tunasCendekiaLms}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
 
-        {/* Ekosistem & Format Pembinaan + Akses Cepat Jenjang */}
+        {/* Bottom B2B Quick Scale Strip */}
         <div className="business-model-strip">
           <div className="business-model-left">
-            <span className="business-model-tag">Format Pembelajaran Lengkap</span>
-            <h4>Tersedia untuk Jenjang SD, SMP, dan SMA</h4>
-            <div className="business-formats-list">
-              {BUSINESS_FORMATS.map((fmt) => (
-                <span key={fmt} className="business-format-pill">
-                  <CheckIcon size={13} color="#10B981" />
-                  <span>{fmt}</span>
-                </span>
-              ))}
-            </div>
+            <span className="business-model-tag">Model Adopsi Institusi (B2B SaaS)</span>
+            <h4>Tersedia untuk Berbagai Ukuran Kampus, Universitas &amp; Sekolah</h4>
           </div>
 
-          <div className="business-model-actions" aria-label="Pilih Jenjang Konsultasi">
-            <span className="action-prompt-label">Mulai dari jenjang anak Anda:</span>
+          <div className="business-model-actions" aria-label="Pilih Estimasi Skala Institusi">
+            <span className="action-prompt-label">Pilih skala pengguna institusi Anda:</span>
             <div className="jenjang-quick-btns">
-              {(['SD', 'SMP', 'SMA'] as EducationLevel[]).map((lvl) => (
+              {['< 1.000 User', '1.000 - 10.000 User', '100.000+ Custom'].map((scale) => (
                 <button
-                  key={lvl}
+                  key={scale}
                   type="button"
                   className="btn btn-primary btn-sm"
-                  onClick={() => onSelectJenjang(lvl)}
+                  onClick={() => onSelectScaleQuick(scale)}
                 >
-                  <span>Jenjang {lvl}</span>
+                  <span>{scale}</span>
                   <ArrowRightIcon size={14} />
                 </button>
               ))}

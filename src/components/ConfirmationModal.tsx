@@ -91,13 +91,13 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   if (!isOpen) return null;
 
   const waMessage = encodeURIComponent(
-    `Halo Tim Akademik TunasCendekia! Saya ingin menjadwalkan Kelas Percobaan & Diagnostic Test Gratis.\n\n` +
-      `- Nama Orang Tua/Wali: ${data.namaOrangTua}\n` +
-      `- Nama & Kelas Siswa: ${data.namaDanKelasSiswa}\n` +
-      `- Jenjang: ${data.jenjang}\n` +
-      `- Jalur Program: ${data.targetProgram}\n` +
-      `- No. WhatsApp Aktif: ${data.nomorWhatsapp}\n` +
-      `- Program Pilihan: ${data.paketPilihan}`
+    `Halo Tim Solusi B2B TunasCendekia LMS! Kami ingin menjadwalkan sesi demo & presentasi sistem LMS untuk institusi kami.\n\n` +
+      `- Institusi: ${data.namaInstitusi}\n` +
+      `- PIC / Jabatan: ${data.namaPic}\n` +
+      `- Kategori: ${data.tipeInstitusi}\n` +
+      `- Estimasi Pengguna: ${data.jumlahPengguna}\n` +
+      `- No. WhatsApp: ${data.nomorWhatsapp}\n` +
+      `- Paket Diminati: ${data.paketPilihan}`
   );
 
   return (
@@ -125,30 +125,30 @@ export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
         <div className="modal-icon" aria-hidden="true">
           <CheckIcon size={32} color="#047857" />
         </div>
-        <h4 id="modalTitle">Pendaftaran Diagnostic Test Diterima</h4>
+        <h4 id="modalTitle">Permintaan Demo B2B Diterima</h4>
         <p id="modalDesc">
-          Data pendaftaran Anda sudah siap diteruskan kepada Konsultan Akademik TunasCendekia
-          untuk penjadwalan sesi Zoom.
+          Data institusi Anda siap diteruskan ke Tim Engineering &amp; Solusi Kampus TunasCendekia
+          LMS untuk penjadwalan demo.
         </p>
 
         <div className="modal-summary">
           <div>
-            <strong>Orang Tua / Wali:</strong> {data.namaOrangTua}
+            <strong>Institusi:</strong> {data.namaInstitusi}
           </div>
           <div>
-            <strong>Siswa &amp; Kelas:</strong> {data.namaDanKelasSiswa}
+            <strong>PIC &amp; Jabatan:</strong> {data.namaPic}
           </div>
           <div>
-            <strong>Jenjang Pendidikan:</strong> {data.jenjang}
+            <strong>Kategori Institusi:</strong> {data.tipeInstitusi}
           </div>
           <div>
-            <strong>Jalur Program:</strong> {data.targetProgram}
+            <strong>Estimasi Pengguna:</strong> {data.jumlahPengguna}
           </div>
           <div>
             <strong>Nomor WhatsApp:</strong> {data.nomorWhatsapp}
           </div>
           <div>
-            <strong>Program Pilihan:</strong> {data.paketPilihan}
+            <strong>Paket Pilihan:</strong> {data.paketPilihan}
           </div>
         </div>
 

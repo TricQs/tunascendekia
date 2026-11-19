@@ -1,11 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import {
-  EducationLevel,
   FormDataType,
   FormFieldKey,
   FormStatus,
-  ProgramTrack,
-  SelectedConsultationProgram,
+  InstitutionType,
+  SelectedB2BInquiry,
 } from '../types';
 import { DeckIllustration } from './DeckIllustrations';
 import {
@@ -23,10 +22,10 @@ interface ContactSectionProps {
   firstErrorField: FormFieldKey | null;
   errorFocusNonce: number;
   formStatus: FormStatus;
-  selectedConsultation: SelectedConsultationProgram | null;
+  selectedInquiry: SelectedB2BInquiry | null;
   onInputChange: (field: FormFieldKey | 'paketPilihan', value: string) => void;
   onSubmit: (e: React.FormEvent) => void;
-  onClearConsultation: () => void;
+  onClearInquiry: () => void;
   submitButtonRef: React.RefObject<HTMLButtonElement>;
 }
 
@@ -36,17 +35,17 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   firstErrorField,
   errorFocusNonce,
   formStatus,
-  selectedConsultation,
+  selectedInquiry,
   onInputChange,
   onSubmit,
-  onClearConsultation,
+  onClearInquiry,
   submitButtonRef,
 }) => {
-  const namaOrangTuaRef = useRef<HTMLInputElement>(null);
-  const namaSiswaRef = useRef<HTMLInputElement>(null);
+  const institusiRef = useRef<HTMLInputElement>(null);
+  const picRef = useRef<HTMLInputElement>(null);
+  const tipeRef = useRef<HTMLSelectElement>(null);
+  const jumlahRef = useRef<HTMLInputElement>(null);
   const whatsappRef = useRef<HTMLInputElement>(null);
-  const jenjangRef = useRef<HTMLSelectElement>(null);
-  const targetProgramRef = useRef<HTMLSelectElement>(null);
 
   useEffect(() => {
     if (!firstErrorField || errorFocusNonce === 0) return;
@@ -55,11 +54,11 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
       FormFieldKey,
       React.RefObject<HTMLInputElement | HTMLSelectElement>
     > = {
-      namaOrangTua: namaOrangTuaRef,
-      namaDanKelasSiswa: namaSiswaRef,
+      namaInstitusi: institusiRef,
+      namaPic: picRef,
+      tipeInstitusi: tipeRef,
+      jumlahPengguna: jumlahRef,
       nomorWhatsapp: whatsappRef,
-      jenjang: jenjangRef,
-      targetProgram: targetProgramRef,
     };
 
     fieldRefMap[firstErrorField].current?.focus();
@@ -70,17 +69,17 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
   return (
     <section className="section section-slate" id="kontak">
       <div className="container">
-        {/* Consultation Banner Card */}
+        {/* B2B Demo Banner */}
         <div className="cta-banner-card">
           <div className="cta-banner-split">
             <div className="cta-banner-content left-aligned">
-              <span className="banner-kicker">PENDAFTARAN &amp; KONSULTASI AKADEMIK</span>
+              <span className="banner-kicker">ADOPSI B2B &amp; PRESENTASI KAMPUS</span>
               <h2 className="cta-banner-title">
-                Cari Tahu Lebih Lanjut &amp; Jadwalkan Diagnostic Test Gratis
+                Siap Meng-upgrade Portal Akademik Institusi Anda?
               </h2>
               <p className="cta-banner-text">
-                Konsultasikan pilihan jenjang SD, SMP, atau SMA beserta jalur TKA, Olimpiade, atau
-                TKA + Olimpiade bersama tim akademik TunasCendekia.
+                Jadwalkan sesi pitching dan uji coba langsung sistem TunasCendekia LMS bersama tim
+                IT kami untuk kampus, universitas, maupun sekolah Anda.
               </p>
             </div>
             <div className="cta-banner-art" aria-hidden="true">
@@ -89,30 +88,27 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
           </div>
         </div>
 
-        {/* Contact Grid: Form + Official Contact Card */}
+        {/* Contact Grid: B2B Form + Static Non-Clickable Contact Panel */}
         <div className="contact-grid">
           <div className="form-card">
             <div className="form-card-header">
-              <h3>Formulir Konsultasi &amp; Klaim Kelas Percobaan Gratis</h3>
+              <h3>Formulir Permintaan Demo &amp; Penawaran Kustom (B2B)</h3>
               <p>
-                Lengkapi data singkat di bawah ini untuk penjadwalan Diagnostic Test dan kelas live
-                Zoom pertama.
+                Lengkapi profil institusi di bawah ini untuk menjadwalkan presentasi sistem dan
+                diskusi paket kapasitas pengguna.
               </p>
             </div>
 
-            {selectedConsultation && (
+            {selectedInquiry && (
               <div className="selected-package-pill visible" role="status">
                 <span>
-                  Program Dipilih: {selectedConsultation.planName} (
-                  {selectedConsultation.billingCycle === 'semester'
-                    ? 'Paket Semester'
-                    : 'Bulanan'}
-                  )
+                  Paket Dipilih: {selectedInquiry.planName} ({selectedInquiry.userCapacityLabel} |{' '}
+                  {selectedInquiry.billingCycle === 'tahunan' ? 'Tahunan' : 'Bulanan'})
                 </span>
                 <button
                   type="button"
                   className="clear-package-btn"
-                  onClick={onClearConsultation}
+                  onClick={onClearInquiry}
                 >
                   Hapus Pilihan
                 </button>
@@ -122,120 +118,115 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
             <form onSubmit={onSubmit} noValidate>
               <div className="form-grid">
                 <div className="form-group">
-                  <label htmlFor="namaOrangTua" className="form-label">
-                    Nama Orang Tua / Wali <span aria-hidden="true">*</span>
+                  <label htmlFor="namaInstitusi" className="form-label">
+                    Nama Universitas / Sekolah <span aria-hidden="true">*</span>
                   </label>
                   <input
-                    ref={namaOrangTuaRef}
+                    ref={institusiRef}
                     type="text"
-                    id="namaOrangTua"
-                    name="namaOrangTua"
-                    className={`form-control ${errors.namaOrangTua ? 'is-invalid' : ''}`}
-                    placeholder="Contoh: Ibu Dewi"
-                    value={formData.namaOrangTua}
-                    onChange={(e) => onInputChange('namaOrangTua', e.target.value)}
-                    aria-invalid={Boolean(errors.namaOrangTua)}
-                    aria-describedby={errors.namaOrangTua ? 'err-namaOrangTua' : undefined}
+                    id="namaInstitusi"
+                    name="namaInstitusi"
+                    className={`form-control ${errors.namaInstitusi ? 'is-invalid' : ''}`}
+                    placeholder="Contoh: Universitas Nusantara / SMA Harapan"
+                    value={formData.namaInstitusi}
+                    onChange={(e) => onInputChange('namaInstitusi', e.target.value)}
+                    aria-invalid={Boolean(errors.namaInstitusi)}
+                    aria-describedby={errors.namaInstitusi ? 'err-namaInstitusi' : undefined}
                     required
                   />
-                  {errors.namaOrangTua && (
-                    <p id="err-namaOrangTua" className="field-error" role="alert">
-                      {errors.namaOrangTua}
+                  {errors.namaInstitusi && (
+                    <p id="err-namaInstitusi" className="field-error" role="alert">
+                      {errors.namaInstitusi}
                     </p>
                   )}
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="namaDanKelasSiswa" className="form-label">
-                    Nama &amp; Kelas Siswa <span aria-hidden="true">*</span>
+                  <label htmlFor="namaPic" className="form-label">
+                    Nama PIC &amp; Jabatan <span aria-hidden="true">*</span>
                   </label>
                   <input
-                    ref={namaSiswaRef}
+                    ref={picRef}
                     type="text"
-                    id="namaDanKelasSiswa"
-                    name="namaDanKelasSiswa"
-                    className={`form-control ${errors.namaDanKelasSiswa ? 'is-invalid' : ''}`}
-                    placeholder="Contoh: Bagas Pratama - Kelas 9"
-                    value={formData.namaDanKelasSiswa}
-                    onChange={(e) => onInputChange('namaDanKelasSiswa', e.target.value)}
-                    aria-invalid={Boolean(errors.namaDanKelasSiswa)}
-                    aria-describedby={
-                      errors.namaDanKelasSiswa ? 'err-namaDanKelasSiswa' : undefined
-                    }
+                    id="namaPic"
+                    name="namaPic"
+                    className={`form-control ${errors.namaPic ? 'is-invalid' : ''}`}
+                    placeholder="Contoh: Ibu Clara - Kepala Lab / Wakil Rektor"
+                    value={formData.namaPic}
+                    onChange={(e) => onInputChange('namaPic', e.target.value)}
+                    aria-invalid={Boolean(errors.namaPic)}
+                    aria-describedby={errors.namaPic ? 'err-namaPic' : undefined}
                     required
                   />
-                  {errors.namaDanKelasSiswa && (
-                    <p id="err-namaDanKelasSiswa" className="field-error" role="alert">
-                      {errors.namaDanKelasSiswa}
+                  {errors.namaPic && (
+                    <p id="err-namaPic" className="field-error" role="alert">
+                      {errors.namaPic}
                     </p>
                   )}
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="jenjang" className="form-label">
-                    Jenjang Pendidikan <span aria-hidden="true">*</span>
+                  <label htmlFor="tipeInstitusi" className="form-label">
+                    Kategori Institusi <span aria-hidden="true">*</span>
                   </label>
                   <select
-                    ref={jenjangRef}
-                    id="jenjang"
-                    name="jenjang"
-                    className={`form-control ${errors.jenjang ? 'is-invalid' : ''}`}
-                    value={formData.jenjang}
+                    ref={tipeRef}
+                    id="tipeInstitusi"
+                    name="tipeInstitusi"
+                    className={`form-control ${errors.tipeInstitusi ? 'is-invalid' : ''}`}
+                    value={formData.tipeInstitusi}
                     onChange={(e) =>
-                      onInputChange('jenjang', e.target.value as EducationLevel | '')
+                      onInputChange('tipeInstitusi', e.target.value as InstitutionType | '')
                     }
-                    aria-invalid={Boolean(errors.jenjang)}
-                    aria-describedby={errors.jenjang ? 'err-jenjang' : undefined}
+                    aria-invalid={Boolean(errors.tipeInstitusi)}
+                    aria-describedby={errors.tipeInstitusi ? 'err-tipeInstitusi' : undefined}
                     required
                   >
                     <option value="" disabled>
-                      Pilih Jenjang
+                      Pilih Kategori Institusi
                     </option>
-                    <option value="SD">SD (Kelas 4-6)</option>
-                    <option value="SMP">SMP (Kelas 7-9)</option>
-                    <option value="SMA">SMA (Kelas 10-12)</option>
+                    <option value="Universitas / Perguruan Tinggi">
+                      Universitas / Perguruan Tinggi
+                    </option>
+                    <option value="Sekolah (SD / SMP / SMA)">Sekolah (SD / SMP / SMA)</option>
+                    <option value="Lembaga Pelatihan & Vokasi">
+                      Lembaga Pelatihan &amp; Vokasi
+                    </option>
                   </select>
-                  {errors.jenjang && (
-                    <p id="err-jenjang" className="field-error" role="alert">
-                      {errors.jenjang}
+                  {errors.tipeInstitusi && (
+                    <p id="err-tipeInstitusi" className="field-error" role="alert">
+                      {errors.tipeInstitusi}
                     </p>
                   )}
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="targetProgram" className="form-label">
-                    Jalur Program <span aria-hidden="true">*</span>
+                  <label htmlFor="jumlahPengguna" className="form-label">
+                    Estimasi Pengguna Aktif <span aria-hidden="true">*</span>
                   </label>
-                  <select
-                    ref={targetProgramRef}
-                    id="targetProgram"
-                    name="targetProgram"
-                    className={`form-control ${errors.targetProgram ? 'is-invalid' : ''}`}
-                    value={formData.targetProgram}
-                    onChange={(e) =>
-                      onInputChange('targetProgram', e.target.value as ProgramTrack | '')
-                    }
-                    aria-invalid={Boolean(errors.targetProgram)}
-                    aria-describedby={errors.targetProgram ? 'err-targetProgram' : undefined}
+                  <input
+                    ref={jumlahRef as React.RefObject<HTMLInputElement>}
+                    type="text"
+                    id="jumlahPengguna"
+                    name="jumlahPengguna"
+                    className={`form-control ${errors.jumlahPengguna ? 'is-invalid' : ''}`}
+                    placeholder="Contoh: 10.000 Mahasiswa atau 100.000 User"
+                    value={formData.jumlahPengguna}
+                    onChange={(e) => onInputChange('jumlahPengguna', e.target.value)}
+                    aria-invalid={Boolean(errors.jumlahPengguna)}
+                    aria-describedby={errors.jumlahPengguna ? 'err-jumlahPengguna' : undefined}
                     required
-                  >
-                    <option value="" disabled>
-                      Pilih Jalur Program
-                    </option>
-                    <option value="TKA">TKA (Tes Kemampuan Akademik)</option>
-                    <option value="Olimpiade">Olimpiade (OSN)</option>
-                    <option value="TKA + Olimpiade">TKA + Olimpiade (Dua Target)</option>
-                  </select>
-                  {errors.targetProgram && (
-                    <p id="err-targetProgram" className="field-error" role="alert">
-                      {errors.targetProgram}
+                  />
+                  {errors.jumlahPengguna && (
+                    <p id="err-jumlahPengguna" className="field-error" role="alert">
+                      {errors.jumlahPengguna}
                     </p>
                   )}
                 </div>
 
                 <div className="form-group full-width">
                   <label htmlFor="nomorWhatsapp" className="form-label">
-                    Nomor WhatsApp Aktif <span aria-hidden="true">*</span>
+                    Nomor WhatsApp PIC / Kontak Kantor <span aria-hidden="true">*</span>
                   </label>
                   <input
                     ref={whatsappRef}
@@ -256,8 +247,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                     </p>
                   ) : (
                     <p id="hint-wa" className="field-hint">
-                      Gunakan awalan 08 atau +62 (10 sampai 14 digit aktif untuk pengiriman tautan
-                      Zoom).
+                      Gunakan awalan 08 atau +62 (10 sampai 14 digit aktif untuk pengiriman proposal
+                      &amp; tautan sandbox demo).
                     </p>
                   )}
                 </div>
@@ -272,8 +263,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               >
                 <span>
                   {isSubmitting
-                    ? 'Memproses Pendaftaran...'
-                    : 'Klaim Kelas Percobaan & Diagnostic Test Gratis'}
+                    ? 'Memproses Permintaan Demo...'
+                    : 'Ajukan Live Demo & Proposal B2B'}
                 </span>
                 {!isSubmitting && <ArrowRightIcon size={18} />}
               </button>
@@ -281,18 +272,19 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
               <p className="form-note">
                 <ShieldLockIcon size={15} color="#047857" />
                 <span>
-                  Data Anda aman dan hanya digunakan untuk penjadwalan akademik oleh tim
-                  TunasCendekia.
+                  Kebutuhan sistem dan estimasi pengguna dijaga kerahasiaannya untuk persiapan
+                  demo tim teknis TunasCendekia.
                 </span>
               </p>
             </form>
           </div>
 
-          <aside className="contact-info-card" aria-label="Informasi Kontak TunasCendekia">
-            <h3>Hubungi Tim Akademik Kami</h3>
+          {/* Static Non-Clickable Contact Panel */}
+          <aside className="contact-info-card" aria-label="Informasi Kontak TunasCendekia LMS">
+            <h3>Hubungi Tim Akademik &amp; Solusi B2B</h3>
             <p>
-              Konsultasikan pilihan jenjang SD, SMP, atau SMA beserta jalur TKA, Olimpiade, atau
-              TKA + Olimpiade yang paling sesuai bagi putra/putri Anda.
+              Diskusikan kustomisasi kapasitas hingga 100.000+ mahasiswa, integrasi SIAKAD, dan
+              kebutuhan infrastruktur portal kampus Anda.
             </p>
 
             <div className="contact-list">
@@ -301,7 +293,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   <WhatsAppIcon size={20} color="#10B981" />
                 </div>
                 <div>
-                  <div className="contact-item-label">WhatsApp Konsultasi</div>
+                  <div className="contact-item-label">WhatsApp Bisnis</div>
                   <div className="contact-item-value">+62 812-3456-7890</div>
                 </div>
               </div>
@@ -321,7 +313,7 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   <EmailIcon size={20} color="#10B981" />
                 </div>
                 <div>
-                  <div className="contact-item-label">Email</div>
+                  <div className="contact-item-label">Email Enterprise</div>
                   <div className="contact-item-value">halo@tunascendekia.id</div>
                 </div>
               </div>
@@ -331,15 +323,15 @@ export const ContactSection: React.FC<ContactSectionProps> = ({
                   <GlobeIcon size={20} color="#10B981" />
                 </div>
                 <div>
-                  <div className="contact-item-label">Website</div>
-                  <div className="contact-item-value">www.tunascendekia.id</div>
+                  <div className="contact-item-label">Website Demo</div>
+                  <div className="contact-item-value">tunascendekia.vercel.app</div>
                 </div>
               </div>
             </div>
 
             <div className="operational-hours">
-              <strong>Jam Layanan Akademik:</strong>
-              Senin sampai Sabtu: 08.00 - 21.00 WIB (Live Zoom &amp; Klinik Soal Akhir Pekan)
+              <strong>Jam Dukungan Teknis &amp; Pitching:</strong>
+              Senin sampai Sabtu: 08.00 - 21.00 WIB (Presentasi Daring &amp; Kunjungan Kampus)
             </div>
           </aside>
         </div>

@@ -1,25 +1,31 @@
 import React from 'react';
-import { FEATURES_DATA } from '../data/content';
-import { FeatureCardData } from '../types';
+import { LMS_FEATURES_DATA } from '../data/content';
+import { LmsModuleFeature } from '../types';
 import { DeckIllustration } from './DeckIllustrations';
 import {
-  CbtAnalyticsIcon,
+  AttendanceCheckIcon,
+  CalendarSyncIcon,
+  ChatBubbleIcon,
   CheckIcon,
-  CurriculumHotsIcon,
-  SmallClassIcon,
-  ZoomLiveIcon,
+  CloudUploadIcon,
+  ShieldLockIcon,
+  VideoArchiveIcon,
 } from './Icons';
 
-const renderFeatureIcon = (key: FeatureCardData['iconKey']) => {
+const renderModuleIcon = (key: LmsModuleFeature['iconKey']) => {
   switch (key) {
-    case 'zoom':
-      return <ZoomLiveIcon size={24} color="#10B981" />;
-    case 'curriculum':
-      return <CurriculumHotsIcon size={24} color="#F59E0B" />;
-    case 'group':
-      return <SmallClassIcon size={24} color="#10B981" />;
-    case 'analytics':
-      return <CbtAnalyticsIcon size={24} color="#F59E0B" />;
+    case 'chat':
+      return <ChatBubbleIcon size={24} color="#10B981" />;
+    case 'cloud':
+      return <CloudUploadIcon size={24} color="#F59E0B" />;
+    case 'video':
+      return <VideoArchiveIcon size={24} color="#10B981" />;
+    case 'attendance':
+      return <AttendanceCheckIcon size={24} color="#F59E0B" />;
+    case 'calendar':
+      return <CalendarSyncIcon size={24} color="#10B981" />;
+    case 'shield':
+      return <ShieldLockIcon size={24} color="#F59E0B" />;
   }
 };
 
@@ -28,28 +34,28 @@ export const FeaturesSection: React.FC = () => {
     <section className="section" id="fitur-program">
       <div className="container">
         <div className="section-header">
-          <span className="section-tag">PRODUCT, SERVICE &amp; VISUAL APPROACH</span>
+          <span className="section-tag">ARSITEKTUR &amp; 6 MODUL UTAMA LMS</span>
           <h2 className="section-title">
-            Keunggulan Metode Pembinaan TunasCendekia
+            Ekosistem Kerja Digital yang Lengkap dalam Satu Platform
           </h2>
           <p className="section-subtitle">
-            Menggabungkan kelas tatap muka Zoom, bank soal HOTS bertingkat, pembahasan visual
-            interaktif, dan gaya mengajar yang suportif serta kredibel.
+            Setiap modul dirancang untuk menyelesaikan hambatan teknis sehari-hari yang dihadapi
+            mahasiswa, dosen pembimbing, dan administrator akademik.
           </p>
         </div>
 
-        {/* Visual Showcase Banner from Deck Page 9 */}
+        {/* Visual Showcase Strip */}
         <div className="product-showcase-strip">
           <div className="product-showcase-item">
             <div className="showcase-art">
               <DeckIllustration variant="product-zoom" />
             </div>
             <div className="showcase-copy">
-              <span className="showcase-pill">Product &amp; Service</span>
-              <h3>Bank Soal HOTS &amp; Pembahasan Visual</h3>
+              <span className="showcase-pill">Workspace Terintegrasi</span>
+              <h3>UI/UX Bersih &amp; Nyaman untuk Generasi Digital</h3>
               <p>
-                Materi dikelompokkan bertingkat (Basic to Advanced) dengan diagram interaktif agar
-                siswa melihat alur pembuktian, bukan menghafal rumus.
+                Navigasi berbasis mata kuliah, tugas, chat bimbingan, dan arsip video ditempatkan
+                dalam satu alur kerja intuitif yang ringan di desktop maupun ponsel.
               </p>
             </div>
           </div>
@@ -59,23 +65,24 @@ export const FeaturesSection: React.FC = () => {
               <DeckIllustration variant="product-clinic" />
             </div>
             <div className="showcase-copy">
-              <span className="showcase-pill pill-emerald">Brand Personality</span>
-              <h3>Suportif, Terbuka, dan Kredibel</h3>
+              <span className="showcase-pill pill-emerald">Arsitektur Terbuka</span>
+              <h3>Siap Terhubung ke SIAKAD &amp; Kalender Akademik</h3>
               <p>
-                Mentor menggunakan bahasa yang mudah dipahami untuk membangun rasa ingin tahu serta
-                kepercayaan diri siswa menghadapi tes bergengsi.
+                Mendukung sinkronisasi data nilai, jadwal bimbingan skripsi, serta kontrol akses
+                berjenjang mulai dari ribuan hingga ratusan ribu akun aktif.
               </p>
             </div>
           </div>
         </div>
 
+        {/* 6 Core LMS Modules */}
         <div className="features-grid">
-          {FEATURES_DATA.map((feature) => (
+          {LMS_FEATURES_DATA.map((feature) => (
             <article key={feature.id} className="feature-card">
               <div>
                 <div className="feature-header">
                   <div className="feature-icon-box" aria-hidden="true">
-                    {renderFeatureIcon(feature.iconKey)}
+                    {renderModuleIcon(feature.iconKey)}
                   </div>
                   <div>
                     <div className="feature-number">{feature.number}</div>

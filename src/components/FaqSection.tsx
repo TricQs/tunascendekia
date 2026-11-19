@@ -13,13 +13,14 @@ export const FaqSection: React.FC = () => {
     <section className="section" id="faq">
       <div className="container">
         <div className="section-header">
-          <span className="section-tag">TANYA JAWAB (FAQ)</span>
+          <span className="section-tag">TANYA JAWAB TEKNIS &amp; B2B (FAQ)</span>
           <h2 className="section-title">
-            Pertanyaan yang Sering Diajukan Orang Tua &amp; Siswa
+            Pertanyaan yang Sering Diajukan Tim Akademik &amp; IT Institusi
           </h2>
           <p className="section-subtitle">
-            Informasi lengkap mengenai alur sesi Zoom, batasan kuota kelas, seleksi pengajar, hingga
-            kebijakan penjadwalan ulang.
+            Informasi lengkap mengenai fitur chat persisten, kapasitas unggah berkas hingga 2 GB,
+            presensi tanpa scan QR, bimbingan skripsi terpadu, hingga integrasi SIAKAD skala
+            besar.
           </p>
         </div>
 

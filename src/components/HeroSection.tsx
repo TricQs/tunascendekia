@@ -1,51 +1,49 @@
 import React from 'react';
-import { EducationLevel } from '../types';
 import {
   ArrowRightIcon,
+  AttendanceCheckIcon,
+  ChatBubbleIcon,
   CheckIcon,
-  CurriculumHotsIcon,
-  MedalAwardIcon,
-  SmallClassIcon,
-  ZoomLiveIcon,
+  CloudUploadIcon,
+  ServerScaleIcon,
 } from './Icons';
-import { ZoomAlgorithmVisualizer } from './ZoomAlgorithmVisualizer';
+import { LmsWorkspaceDemo } from './LmsWorkspaceDemo';
 
 interface HeroSectionProps {
   onCtaClick: () => void;
   onSecondaryClick: () => void;
-  onRequestDiagnosticForLevel: (level: EducationLevel) => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   onCtaClick,
   onSecondaryClick,
-  onRequestDiagnosticForLevel,
 }) => {
   return (
     <section className="hero-section" id="beranda">
       <div className="container">
         <div className="hero-grid">
-          {/* Hero Editorial Copy Column */}
+          {/* Hero Editorial B2B Pitch Copy */}
           <div className="hero-content">
             <div className="hero-badge">
-              <MedalAwardIcon size={16} color="#B45309" />
-              <span>Bimbel Online Persiapan TKA &amp; OSN (SD, SMP, SMA)</span>
+              <ServerScaleIcon size={15} color="#B45309" />
+              <span>B2B SaaS Learning Management System untuk Kampus &amp; Sekolah</span>
             </div>
 
             <h1 className="hero-title">
-              Mengasah <span className="highlight-emerald">Nalar Juara</span>, Mengantar Siswa ke{' '}
-              <span className="highlight-gold">Panggung Prestasi Nasional.</span>
+              Ekosistem <span className="highlight-emerald">LMS Terpadu</span> Pengganti{' '}
+              <span className="highlight-gold">Portal Akademik Konvensional.</span>
             </h1>
 
             <p className="hero-subtitle">
-              Ekosistem bimbel daring interaktif via Zoom dengan kurikulum khusus olimpiade &amp;
-              TKA, dibimbing langsung oleh mentor peraih medali nasional dengan pembahasan visual
-              interaktif.
+              Tinggalkan portal kampus atau sekolah yang lambat dan kaku. TunasCendekia LMS
+              menghadirkan UI/UX workspace modern dengan upload tugas hingga 2 GB, notifikasi chat
+              persisten sebelum dibalas, auto-arsip rekaman kuliah, presensi Non-QR, serta jadwal
+              bimbingan skripsi otomatis.
             </p>
 
             <div className="hero-cta-group">
               <button type="button" className="btn btn-primary btn-lg" onClick={onCtaClick}>
-                <span>Daftar Diagnostic Test Gratis</span>
+                <span>Ajukan Demo &amp; Pitching Kampus</span>
                 <ArrowRightIcon size={18} />
               </button>
 
@@ -54,74 +52,72 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 className="btn btn-secondary btn-lg"
                 onClick={onSecondaryClick}
               >
-                <span>Jelajahi 9 Program</span>
+                <span>Lihat Paket Institusi (B2B)</span>
               </button>
             </div>
 
             <div className="hero-mini-note">
               <span>
                 <CheckIcon size={14} color="#047857" />
-                3 Jenjang (SD, SMP, SMA)
+                Skala 1.000 hingga 100.000+ Pengguna
               </span>
               <span>
                 <CheckIcon size={14} color="#047857" />
-                3 Jalur: TKA, Olimpiade, TKA + Olimpiade
+                Integrasi SIAKAD &amp; SSO
               </span>
               <span>
                 <CheckIcon size={14} color="#047857" />
-                Belajar Terstruktur dari Rumah
+                Opsi Customize Kebutuhan Kampus
               </span>
             </div>
           </div>
 
-          {/* Right Column: Visual Learning Sandbox */}
+          {/* Right Column: Interactive Live LMS Sandbox */}
           <div className="hero-visual">
-            <ZoomAlgorithmVisualizer
-              onRequestDiagnosticForLevel={onRequestDiagnosticForLevel}
-            />
+            <LmsWorkspaceDemo onRequestDemo={onCtaClick} />
           </div>
         </div>
 
-        {/* Universal Value Guarantees Bar */}
-        <div className="stats-bar" aria-label="Fasilitas di Semua Program">
+        {/* 4 Core LMS Differentiators Bar */}
+        <div className="stats-bar" aria-label="Keunggulan Arsitektur TunasCendekia LMS">
           <div className="stats-grid">
             <div className="stat-card">
               <div className="stat-icon" aria-hidden="true">
-                <ZoomLiveIcon size={22} color="#10B981" />
+                <CloudUploadIcon size={22} color="#10B981" />
               </div>
               <div>
-                <div className="stat-value">Kelas Live Zoom</div>
-                <div className="stat-label">Tatap muka interaktif 2 arah</div>
+                <div className="stat-value">Hingga 2 GB+</div>
+                <div className="stat-label">Kapasitas upload per file &amp; cloud</div>
               </div>
             </div>
 
             <div className="stat-card">
               <div className="stat-icon" aria-hidden="true">
-                <MedalAwardIcon size={22} color="#F59E0B" />
+                <ChatBubbleIcon size={22} color="#F59E0B" />
               </div>
               <div>
-                <div className="stat-value">Mentor Medalis</div>
-                <div className="stat-label">Alumni peraih medali olimpiade</div>
+                <div className="stat-value">Notif Persisten</div>
+                <div className="stat-label">Status pesan aktif hingga dibalas</div>
               </div>
             </div>
 
             <div className="stat-card">
               <div className="stat-icon" aria-hidden="true">
-                <CurriculumHotsIcon size={22} color="#10B981" />
+                <AttendanceCheckIcon size={22} color="#10B981" />
               </div>
               <div>
-                <div className="stat-value">Visual Learning</div>
-                <div className="stat-label">Pembahasan visual interaktif</div>
+                <div className="stat-value">Presensi Non-QR</div>
+                <div className="stat-label">Tanpa antre scan QR di kelas</div>
               </div>
             </div>
 
             <div className="stat-card">
               <div className="stat-icon" aria-hidden="true">
-                <SmallClassIcon size={22} color="#F59E0B" />
+                <ServerScaleIcon size={22} color="#F59E0B" />
               </div>
               <div>
-                <div className="stat-value">Klinik Mingguan</div>
-                <div className="stat-label">Tanya-jawab soal sulit tiap minggu</div>
+                <div className="stat-value">1K - 100K+ User</div>
+                <div className="stat-label">Paket terukur &amp; opsi custom B2B</div>
               </div>
             </div>
           </div>

@@ -1,147 +1,92 @@
 import React, { useState } from 'react';
 import {
+  B2B_PRICING_TIERS,
   formatRupiah,
-  PROGRAM_CATALOGUE,
-  TRACK_OVERVIEWS,
-  UNIVERSAL_GUARANTEES,
+  SYSTEM_GUARANTEES,
 } from '../data/content';
-import {
-  BillingCycle,
-  LevelFilter,
-  ProgramTrack,
-  SelectedConsultationProgram,
-} from '../types';
+import { B2BPlanId, BillingCycle, SelectedB2BInquiry } from '../types';
 import { CheckIcon } from './Icons';
 
 interface PricingSectionProps {
-  onSelectPlan: (selection: SelectedConsultationProgram) => void;
+  onSelectPlan: (selection: SelectedB2BInquiry) => void;
 }
 
-const LEVEL_FILTER_OPTIONS: Array<{ value: LevelFilter; label: string }> = [
-  { value: 'ALL', label: 'Semua (9 Program)' },
-  { value: 'SD', label: 'Jenjang SD' },
-  { value: 'SMP', label: 'Jenjang SMP' },
-  { value: 'SMA', label: 'Jenjang SMA' },
-];
-
-const TRACK_FILTER_OPTIONS: Array<{ value: 'ALL' | ProgramTrack; label: string }> = [
-  { value: 'ALL', label: 'Semua Jalur' },
-  { value: 'TKA', label: 'TKA' },
-  { value: 'Olimpiade', label: 'Olimpiade' },
-  { value: 'TKA + Olimpiade', label: 'TKA + Olimpiade' },
-];
-
 export const PricingSection: React.FC<PricingSectionProps> = ({ onSelectPlan }) => {
-  const [selectedLevelFilter, setSelectedLevelFilter] = useState<LevelFilter>('ALL');
-  const [selectedTrackFilter, setSelectedTrackFilter] = useState<'ALL' | ProgramTrack>('ALL');
   const [billingCycle, setBillingCycle] = useState<BillingCycle>('bulanan');
+  const [estimatedUsers, setEstimatedUsers] = useState<number>(5000);
 
-  const isSemester = billingCycle === 'semester';
+  const isAnnual = billingCycle === 'tahunan';
 
-  const visiblePrograms = PROGRAM_CATALOGUE.filter((item) => {
-    const matchesLevel = selectedLevelFilter === 'ALL' || item.level === selectedLevelFilter;
-    const matchesTrack = selectedTrackFilter === 'ALL' || item.track === selectedTrackFilter;
-    return matchesLevel && matchesTrack;
-  });
+  const recommendedPlanId: B2BPlanId =
+    estimatedUsers <= 1000
+      ? 'paket-a'
+      : estimatedUsers <= 10000
+      ? 'paket-b'
+      : 'paket-custom';
+
+  const getScaleLabel = (users: number): string => {
+    if (users >= 100000) return '100.000+ Pengguna (Multi-Kampus)';
+    return `${users.toLocaleString('id-ID')} Pengguna Aktif`;
+  };
 
   return (
     <section className="section section-slate" id="paket-belajar">
       <div className="container">
         <div className="section-header">
-          <span className="section-tag">ONLINE PRODUCT CATALOGUE • 3 JENJANG x 3 JALUR = 9 PROGRAM</span>
+          <span className="section-tag">PAKET LANGGANAN B2B INSTITUSI</span>
           <h2 className="section-title">
-            Pilih Jalur &amp; Jenjang Program yang Tepat untuk Anak Anda
+            Skema Lisensi Terukur &amp; Dapat Disesuaikan dengan Kapasitas Kampus
           </h2>
           <p className="section-subtitle">
-            Tiga jalur persiapan utama yang dirancang khusus untuk setiap jenjang SD (Kelas 4-6),
-            SMP (Kelas 7-9), dan SMA (Kelas 10-12).
+            Pilih paket standar berdasarkan jumlah mahasiswa/siswa aktif dan kebutuhan penyimpanan,
+            atau sesuaikan arsitektur penuh melalui Paket Custom untuk skala hingga 100.000+
+            pengguna.
           </p>
         </div>
 
-        {/* Slide 15 Blueprint: 3 Jalur Persiapan Overview Cards */}
-        <div className="track-overview-grid" aria-label="Tiga Jalur Persiapan">
-          {TRACK_OVERVIEWS.map((path) => (
-            <article key={path.track} className="track-overview-card">
-              <div className="track-step-circle">{path.stepNumber}</div>
-              <h3 className="track-overview-title">{path.title}</h3>
-              <p className="track-overview-sub">{path.subtitle}</p>
-
-              <div className="track-meta-block">
-                <span className="track-meta-label">Cocok Untuk</span>
-                <p>{path.suitableFor}</p>
-              </div>
-
-              <div className="track-meta-block">
-                <span className="track-meta-label">Fokus Belajar</span>
-                <ul className="track-focus-list">
-                  {path.learningFocus.map((pt, idx) => (
-                    <li key={idx}>
-                      <span className="dot-bullet" aria-hidden="true" />
-                      <span>{pt}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </article>
-          ))}
-        </div>
-
-        {/* Catalogue Filter Bar (Jenjang + Jalur + Billing Switch with Explicit Dividers) */}
-        <div className="pricing-controls-panel" aria-label="Filter Katalog Program">
-          <div className="pricing-filter-row">
+        {/* Interactive Scale Estimator + Separated Billing Switch */}
+        <div className="pricing-controls-panel" aria-label="Kalkulator Skala dan Siklus Lisensi">
+          <div className="b2b-controls-split">
             <div className="filter-group">
               <div className="filter-group-header">
                 <span className="filter-step-num" aria-hidden="true">1</span>
-                <span className="filter-group-label" id="catalogue-level-label">
-                  Jenjang Pendidikan
-                </span>
+                <label htmlFor="campus-scale-slider" className="filter-group-label">
+                  Simulasi Kapasitas Kampus / Sekolah
+                </label>
               </div>
-              <div
-                className="segmented-control"
-                role="radiogroup"
-                aria-labelledby="catalogue-level-label"
-              >
-                {LEVEL_FILTER_OPTIONS.map((opt) => (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    role="radio"
-                    aria-checked={selectedLevelFilter === opt.value}
-                    className={`segment-btn ${selectedLevelFilter === opt.value ? 'active' : ''}`}
-                    onClick={() => setSelectedLevelFilter(opt.value)}
-                  >
-                    {opt.label}
+              <div className="scale-slider-box">
+                <div className="scale-readout-row">
+                  <strong className="scale-readout-num">{getScaleLabel(estimatedUsers)}</strong>
+                  <span className="scale-recommend-pill">
+                    Rekomendasi:{' '}
+                    {recommendedPlanId === 'paket-a'
+                      ? 'Paket A'
+                      : recommendedPlanId === 'paket-b'
+                      ? 'Paket B'
+                      : 'Paket Custom'}
+                  </span>
+                </div>
+                <input
+                  id="campus-scale-slider"
+                  type="range"
+                  className="sandbox-range-slider"
+                  min={500}
+                  max={100000}
+                  step={500}
+                  value={estimatedUsers}
+                  onChange={(e) => setEstimatedUsers(Number(e.target.value))}
+                />
+                <div className="scale-ticks-row">
+                  <button type="button" onClick={() => setEstimatedUsers(1000)}>
+                    1.000 (Sekolah/Prodi)
                   </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="filter-divider" aria-hidden="true" />
-
-            <div className="filter-group">
-              <div className="filter-group-header">
-                <span className="filter-step-num" aria-hidden="true">2</span>
-                <span className="filter-group-label" id="catalogue-track-label">
-                  Jalur Program
-                </span>
-              </div>
-              <div
-                className="segmented-control"
-                role="radiogroup"
-                aria-labelledby="catalogue-track-label"
-              >
-                {TRACK_FILTER_OPTIONS.map((opt) => (
-                  <button
-                    key={opt.value}
-                    type="button"
-                    role="radio"
-                    aria-checked={selectedTrackFilter === opt.value}
-                    className={`segment-btn ${selectedTrackFilter === opt.value ? 'active' : ''}`}
-                    onClick={() => setSelectedTrackFilter(opt.value)}
-                  >
-                    {opt.label}
+                  <button type="button" onClick={() => setEstimatedUsers(10000)}>
+                    10.000 (Kampus)
                   </button>
-                ))}
+                  <button type="button" onClick={() => setEstimatedUsers(100000)}>
+                    100.000+ (Skala Besar)
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -149,67 +94,84 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onSelectPlan }) 
 
             <div className="filter-group billing-switch-group">
               <div className="filter-group-header">
-                <span className="filter-step-num" aria-hidden="true">3</span>
+                <span className="filter-step-num" aria-hidden="true">2</span>
                 <span className="filter-group-label" id="billing-switch-label">
-                  Siklus Pembayaran
+                  Siklus Tagihan Institusi
                 </span>
               </div>
               <div className="billing-switch-row">
-                <span className={!isSemester ? 'billing-text-active' : 'billing-text-muted'}>
+                <span className={!isAnnual ? 'billing-text-active' : 'billing-text-muted'}>
                   Bulanan
                 </span>
                 <button
                   type="button"
                   role="switch"
-                  aria-checked={isSemester}
+                  aria-checked={isAnnual}
                   aria-labelledby="billing-switch-label"
-                  className={`billing-switch-btn ${isSemester ? 'checked' : ''}`}
+                  className={`billing-switch-btn ${isAnnual ? 'checked' : ''}`}
                   onClick={() =>
-                    setBillingCycle((prev) => (prev === 'bulanan' ? 'semester' : 'bulanan'))
+                    setBillingCycle((prev) => (prev === 'bulanan' ? 'tahunan' : 'bulanan'))
                   }
                 >
                   <span className="billing-switch-thumb" aria-hidden="true" />
                 </button>
-                <span className={isSemester ? 'billing-text-active' : 'billing-text-muted'}>
-                  Paket Semester
-                  <span className="discount-badge">Hemat 10%</span>
+                <span className={isAnnual ? 'billing-text-active' : 'billing-text-muted'}>
+                  Tahunan
+                  <span className="discount-badge">Gratis 2 Bulan</span>
                 </span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Slide 16: All Available Programs Matrix (Up to 9 Programs) */}
-        <div className="catalog-grid">
-          {visiblePrograms.map((program) => {
-            const activePrice = isSemester ? program.semesterPriceRp : program.monthlyPriceRp;
-            const activeSessionQuota = isSemester
-              ? program.sessionQuotaSemester
-              : program.sessionQuotaMonthly;
+        {/* 3 B2B Tiers Grid (Paket A, Paket B, Paket Custom) */}
+        <div className="catalog-grid b2b-pricing-grid">
+          {B2B_PRICING_TIERS.map((tier) => {
+            const isHighlightedBySlider = recommendedPlanId === tier.id;
+            const activePrice = isAnnual ? tier.annualPriceRp : tier.monthlyPriceRp;
 
             return (
               <article
-                key={program.id}
-                className={`catalog-card tone-${program.cardTone}`}
+                key={tier.id}
+                className={`catalog-card b2b-card tone-${tier.tone} ${
+                  tier.featured ? 'b2b-featured' : ''
+                } ${isHighlightedBySlider ? 'slider-matched' : ''}`}
               >
                 <div>
                   <div className="catalog-card-top">
-                    <span className="catalog-level-tag">JENJANG {program.level}</span>
-                    {program.badgeLabel && (
-                      <span className="catalog-highlight-badge">{program.badgeLabel}</span>
+                    <span className="catalog-level-tag">{tier.codeLabel}</span>
+                    {isHighlightedBySlider ? (
+                      <span className="catalog-highlight-badge">Cocok untuk {getScaleLabel(estimatedUsers)}</span>
+                    ) : (
+                      tier.badgeLabel && (
+                        <span className="catalog-highlight-badge">{tier.badgeLabel}</span>
+                      )
                     )}
                   </div>
 
-                  <h3 className="catalog-track-title">{program.trackLabel}</h3>
-                  <p className="catalog-headline">{program.headline}</p>
+                  <h3 className="catalog-track-title">{tier.name}</h3>
+                  <p className="catalog-headline">{tier.targetInstitution}</p>
+
+                  {/* Spec Capacity Chips */}
+                  <div className="b2b-spec-box">
+                    <div>
+                      <strong>Kapasitas:</strong> {tier.userLimitLabel}
+                    </div>
+                    <div>
+                      <strong>Batas Upload:</strong> {tier.uploadLimitLabel}
+                    </div>
+                    <div>
+                      <strong>Cloud Pool:</strong> {tier.storagePoolLabel}
+                    </div>
+                  </div>
 
                   <ul className="catalog-bullets">
-                    {program.bullets.map((b, idx) => (
+                    {tier.highlights.map((item, idx) => (
                       <li key={idx}>
                         <span className="check-icon-mini" aria-hidden="true">
                           <CheckIcon size={12} color="currentColor" />
                         </span>
-                        <span>{b}</span>
+                        <span>{item}</span>
                       </li>
                     ))}
                   </ul>
@@ -217,30 +179,39 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onSelectPlan }) 
 
                 <div className="catalog-footer">
                   <div className="catalog-price-row">
-                    <div>
-                      <span className="catalog-price-amount">{formatRupiah(activePrice)}</span>
-                      <span className="catalog-price-unit">
-                        {isSemester ? ' / 6 bulan' : ' / bulan'}
-                      </span>
-                    </div>
-                    <span className="catalog-session-meta">{activeSessionQuota}</span>
+                    {activePrice !== null ? (
+                      <div>
+                        <span className="catalog-price-amount">{formatRupiah(activePrice)}</span>
+                        <span className="catalog-price-unit">
+                          {isAnnual ? ' / tahun' : ' / bulan'}
+                        </span>
+                      </div>
+                    ) : (
+                      <div>
+                        <span className="catalog-price-amount">Penawaran Kustom</span>
+                        <p className="custom-price-sub">{tier.customPriceNote}</p>
+                      </div>
+                    )}
                   </div>
 
                   <button
                     type="button"
                     className={`btn btn-block ${
-                      program.cardTone === 'navy' ? 'btn-primary' : 'btn-navy'
+                      tier.featured ? 'btn-primary' : 'btn-navy'
                     }`}
                     onClick={() =>
                       onSelectPlan({
-                        level: program.level,
-                        track: program.track,
-                        planName: `Program ${program.trackLabel} ${program.level}`,
+                        planId: tier.id,
+                        planName: tier.name,
                         billingCycle,
+                        userCapacityLabel:
+                          tier.id === 'paket-custom'
+                            ? getScaleLabel(Math.max(estimatedUsers, 15000))
+                            : tier.userLimitLabel,
                       })
                     }
                   >
-                    Pilih Program Ini
+                    {tier.ctaLabel}
                   </button>
                 </div>
               </article>
@@ -248,11 +219,11 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onSelectPlan }) 
           })}
         </div>
 
-        {/* Slide 15 Bottom Navy Strip: Di Semua Program */}
+        {/* Bottom Guarantee Bar */}
         <div className="universal-guarantee-bar">
-          <div className="guarantee-title">Di semua program:</div>
+          <div className="guarantee-title">Standar Layanan TunasCendekia LMS:</div>
           <div className="guarantee-items">
-            {UNIVERSAL_GUARANTEES.map((item) => (
+            {SYSTEM_GUARANTEES.map((item) => (
               <div key={item} className="guarantee-item">
                 <CheckIcon size={15} color="#10B981" />
                 <span>{item}</span>

@@ -21,17 +21,18 @@ export const Footer: React.FC = () => {
             >
               <img
                 src="/logo.png"
-                alt="Logo Resmi TunasCendekia"
+                alt="Logo Resmi TunasCendekia LMS"
                 className="brand-logo-img"
                 width={36}
                 height={36}
               />
               <span className="brand-text">
-                Tunas<span>Cendekia</span>
+                Tunas<span>Cendekia</span> LMS
               </span>
             </a>
             <p className="footer-tagline">
-              Mengasah Nalar Juara, Mengantar Siswa ke Panggung Prestasi Nasional.
+              Platform Learning Management System (LMS) Terpadu untuk Kampus &amp; Sekolah (B2B
+              SaaS).
             </p>
           </div>
 
@@ -42,18 +43,36 @@ export const Footer: React.FC = () => {
               </a>
             </li>
             <li>
-              <a href="#tentang-kami" onClick={(e) => { e.preventDefault(); scrollTo('tentang-kami'); }}>
-                Visi &amp; Solusi
+              <a
+                href="#tentang-kami"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollTo('tentang-kami');
+                }}
+              >
+                Analisis &amp; Solusi
               </a>
             </li>
             <li>
-              <a href="#fitur-program" onClick={(e) => { e.preventDefault(); scrollTo('fitur-program'); }}>
-                Keunggulan
+              <a
+                href="#fitur-program"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollTo('fitur-program');
+                }}
+              >
+                Modul LMS
               </a>
             </li>
             <li>
-              <a href="#paket-belajar" onClick={(e) => { e.preventDefault(); scrollTo('paket-belajar'); }}>
-                Katalog 9 Program
+              <a
+                href="#paket-belajar"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollTo('paket-belajar');
+                }}
+              >
+                Paket Institusi
               </a>
             </li>
             <li>
@@ -70,7 +89,9 @@ export const Footer: React.FC = () => {
         </div>
 
         <p className="footer-copyright">
-          © 2026 TunasCendekia. Disusun oleh Kelompok 7: Julianto Vincent (32230051), Hendrawan Wijaya (32230055), Daniel Irfan Ngawing (32230058), Khetta Ajnatavindriya Likito (32230059), Ferdinand Arya Wijaya (32230071).
+          © 2026 TunasCendekia LMS. Disusun oleh Kelompok 7: Julianto Vincent (32230051), Hendrawan
+          Wijaya (32230055), Daniel Irfan Ngawing (32230058), Khetta Ajnatavindriya Likito
+          (32230059), Ferdinand Arya Wijaya (32230071).
         </p>
       </div>
     </footer>

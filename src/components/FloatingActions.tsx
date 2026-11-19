@@ -74,11 +74,11 @@ export const FloatingActions: React.FC = () => {
       </button>
 
       <a
-        href="https://wa.me/6281234567890?text=Halo%20TunasCendekia%2C%20saya%20ingin%20tanya%20jadwal%20dan%20informasi%20kelas%20persiapan%20TKA%2FOSN."
+        href="https://wa.me/6281234567890?text=Halo%20TunasCendekia%20LMS%2C%20kami%20ingin%20menjadwalkan%20presentasi%20demo%20sistem%20LMS%20untuk%20kampus%2Fsekolah%20kami."
         target="_blank"
         rel="noopener noreferrer"
         className="floating-whatsapp"
-        aria-label="Konsultasi Cepat via WhatsApp"
+        aria-label="Konsultasi Demo B2B via WhatsApp"
       >
         <WhatsAppIcon size={18} color="#FFFFFF" />
         <span>Tanya via WhatsApp</span>
